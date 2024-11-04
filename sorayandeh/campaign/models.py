@@ -25,5 +25,5 @@ class Campaign(models.Model):
 class Participants(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(BaseUser, on_delete=models.CASCADE)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='participants_list')
     participation_type = models.JSONField(verbose_name="Participation Type")

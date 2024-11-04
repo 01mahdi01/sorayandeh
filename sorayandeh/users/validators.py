@@ -27,3 +27,10 @@ def special_char_validator(password):
                 _("password must include special char"),
                 code="password_must_include_special_char"
                 )
+
+
+
+def validate_phone_number(value):
+    pattern = r'^09\d{9}$'  # Matches numbers starting with '09' followed by 9 digits
+    if not re.match(pattern, value):
+        raise ValidationError("Enter a valid phone number.")

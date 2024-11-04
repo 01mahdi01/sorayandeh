@@ -42,12 +42,13 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(verbose_name = "email address",
                               unique=True)
-    is_admin = models.BooleanField(default=False)
-    is_company = models.BooleanField(default=False)
-    name = models.CharField(verbose_name="Name")
+    name = models.CharField(verbose_name="Name",max_length=100)
     phone = models.CharField(verbose_name="Phone number", max_length=20, unique=True)
-    info = models.JSONField(verbose_name="Info") # if it is a company or a person
+    info = models.JSONField(verbose_name="Info") # if it is a company or a person///// its schema is defined in the api serializers
+    is_company = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_admin = models.BooleanField(default=False)
 
     objects = BaseUserManager()
 
@@ -62,7 +63,7 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
 
 class Profile(models.Model):
     user = models.OneToOneField(BaseUser, on_delete=models.CASCADE)
-    donations = models.JSONField(verbose_name="Donations")
+    donations = models.JSONField(verbose_name="Donations", default=dict)
     campaigns_participated_count = models.PositiveIntegerField(default=0)
 
 

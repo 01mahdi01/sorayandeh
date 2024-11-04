@@ -9,3 +9,4 @@ class FinancialLogs(models.Model):
     tracing_code = models.CharField(max_length=100)
     transaction_date = models.DateTimeField()
     transaction_data = models.JSONField()
+
