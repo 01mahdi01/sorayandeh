@@ -109,3 +109,13 @@ def update_password(user_id, password):
     user.set_password(password)
     user.save()
 
+
+
+def delete_user(user):
+    pass
+
+
+def delete_profile(user_id):
+    Profile.objects.filter(user=user_id).delete()
+
+
