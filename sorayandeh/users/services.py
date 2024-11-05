@@ -6,21 +6,19 @@ from django.contrib.sessions.models import Session
 from django.utils import timezone
 
 
-def create_profile(*, user: BaseUser, campaigns_participated_count: int, donations: dict | None) -> Profile:
+def update_profile(*, user: BaseUser, **fields) -> Profile:
     """
-    Creates a profile for the given user.
+    Update a profile for the given user with provided fields.
 
     Args:
         user (BaseUser): The user instance associated with the profile.
-        campaigns_participated_count (int): Number of campaigns the user has participated in.
-        donations (dict, optional): Dictionary of donation details, if any.
+        **fields: Arbitrary fields to update on the profile.
 
     Returns:
-        Profile: The created Profile instance.
+        Profile: The updated Profile instance.
     """
-    return Profile.objects.create(user=user, donations=donations,
-                                  campaigns_participated_count=campaigns_participated_count)
-
+    Profile.objects.filter(user=user).update(**fields)
+    return Profile.objects.get(user=user)
 
 def create_user(*, email: str, password: str, info, phone, name, is_company: bool) -> BaseUser:
     """
@@ -42,14 +40,12 @@ def create_user(*, email: str, password: str, info, phone, name, is_company: boo
 
 
 @transaction.atomic
-def register(*, campaigns_participated_count: int, donations: dict | None, email: str, password: str, info, phone,
+def register(*, email: str, password: str, info, phone,
              name, is_company: bool) -> BaseUser:
     """
     Registers a new user and creates a profile for the user.
 
     Args:
-        campaigns_participated_count (int): Number of campaigns the user has participated in.
-        donations (dict, optional): Dictionary of donation details, if any.
         email (str): User's email address.
         password (str): User's password.
         info (dict): Additional user information (JSON format).
@@ -61,33 +57,36 @@ def register(*, campaigns_participated_count: int, donations: dict | None, email
         BaseUser: The created BaseUser instance.
     """
     user = create_user(email=email, password=password, info=info, phone=phone, name=name, is_company=is_company)
-    # create_profile(user=user, donations=donations,campaigns_participated_count=campaigns_participated_count)
+    Profile.objects.create(user=user)
 
     return user
 
 
-def update_user(user_id, name, phone, email, info):
+def update_user(user_id, **fields) -> BaseUser:
     """
-    Updates the user's information.
+    Updates the user's information with only the fields provided.
 
     Args:
         user_id (int): ID of the user to update.
-        name (str): New name for the user.
-        phone (str): New phone number for the user.
-        email (str): New email for the user.
-        info (dict): Updated additional user information (JSON format).
+        **fields: Keyword arguments for fields to update, such as:
+            - name (str): New name for the user.
+            - phone (str): New phone number for the user.
+            - email (str): New email for the user.
+            - info (dict): Updated additional user information (JSON format).
 
     Returns:
         BaseUser: The updated BaseUser instance.
     """
+    # Fetch user instance
     user = get_object_or_404(BaseUser, id=user_id)
-    user.name = name
-    user.phone = phone
-    user.email = email
-    user.info = info
-    user.save()
-    return user
 
+    # Update only the provided fields
+    for field, value in fields.items():
+        if hasattr(user, field):  # Only update fields that exist on the model
+            setattr(user, field, value)
+
+    user.save()  # Save changes to the database
+    return user
 
 def update_password(user_id, password):
     """
@@ -100,6 +99,7 @@ def update_password(user_id, password):
     Returns:
         None
     """
+    print(user_id)
     user = get_object_or_404(BaseUser, id=user_id)
     # Log the user out of all active sessions
     user_sessions = Session.objects.filter(expire_date__gte=timezone.now())
@@ -109,23 +109,3 @@ def update_password(user_id, password):
     user.set_password(password)
     user.save()
 
-
-# def sign_in(self, request):
-#     phone_number = request.POST.get('phone_number', None)
-#     password = request.POST.get('password', None)
-#
-#     if not phone_number:
-#         messages.error(request, 'شماره تلفن نمیتواند خالی باشد')
-#         return redirect('users:register')
-#
-#     if not password:
-#         messages.error(request, 'پسورد نمیتواند خالی باشد')
-#         return redirect('users:register')
-#
-#     user = User.objects.filter(phone_number=phone_number).first()
-#     if user and user.check_password(password):
-#         return user
-#
-#     messages.error(request,
-#                    'نام کاربری یا پسورد اشتباه است! یا شما یک هکر دیوس هستید که میخواهید به سیستم ما نفوذ کنید کور خوندی دیوس امنیت جنگو بالاس🖕')
-#     return redirect('users:register')

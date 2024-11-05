@@ -20,7 +20,7 @@ LOCAL_APPS = [
     'sorayandeh.campaign.apps.CampaignConfig',
     'sorayandeh.finance.apps.FinanceConfig',
     'sorayandeh.applicant.apps.ApplicantConfig',
-    'sorayandeh.authentication.apps.AuthenticationConfig',
+
 ]
 
 THIRD_PARTY_APPS = [
@@ -147,7 +147,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': []
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication', ],
+
 }
 
 

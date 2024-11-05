@@ -18,6 +18,7 @@ class Campaign(models.Model):
     participants = models.ManyToManyField(BaseUser,through='Participants',related_name='campaigns_participated')
     preview_image = models.ImageField()
     video_link = models.URLField(verbose_name="Video Link",null=True, blank=True)
+    estimated_money = models.IntegerField(verbose_name="Estimated Money", default=0)
 
 
 
