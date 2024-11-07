@@ -24,17 +24,15 @@ class RegisterApi(APIView):
         """
         Serializer for company-specific information.
         """
-        employee_name = serializers.CharField(max_length=255)
-        registration_number = serializers.CharField(max_length=100)
-        address = serializers.CharField(max_length=500)
+        employee_name = serializers.CharField(max_length=100)
+        employee_position = serializers.CharField(max_length=100)
+        company_registration_number = serializers.CharField(max_length=20)
 
     class PersonInfoSerializer(serializers.Serializer):
         """
         Serializer for personal-specific information.
         """
-        first_name = serializers.CharField(max_length=100)
-        last_name = serializers.CharField(max_length=100)
-        date_of_birth = serializers.DateField()
+        national_code = serializers.CharField(max_length=100)
 
     class InputRegisterSerializer(serializers.Serializer):
         """
@@ -43,7 +41,7 @@ class RegisterApi(APIView):
         email = serializers.EmailField(max_length=255)
         name = serializers.CharField(max_length=255)
         phone = serializers.CharField(max_length=11, validators=[validate_phone_number])
-        is_company = serializers.BooleanField()
+        roll = serializers.CharField(max_length=2)
         info = serializers.JSONField()
         password = serializers.CharField(
             validators=[
@@ -73,16 +71,19 @@ class RegisterApi(APIView):
             if data.get("password") != data.get("confirm_password"):
                 raise serializers.ValidationError("confirm password is not equal to password")
 
-            is_company = data.get("is_company")
+            roll = data.get("roll")
             info_data = data.get("info")
 
-            if is_company:
+            if roll == "co":
                 info_serializer = RegisterApi.CompanyInfoSerializer(data=info_data)
-            else:
+            elif roll == "pe":
                 info_serializer = RegisterApi.PersonInfoSerializer(data=info_data)
+            else:
+                return False
 
             info_serializer.is_valid(raise_exception=True)
             data['info'] = info_serializer.validated_data
+            print("*"*10,data)
             return data
 
     class OutPutRegisterSerializer(serializers.ModelSerializer):
@@ -108,7 +109,6 @@ class RegisterApi(APIView):
             data["access"] = str(refresh.access_token)
 
             return data
-
     @extend_schema(
         request=InputRegisterSerializer,
         responses=OutPutRegisterSerializer,
@@ -122,8 +122,8 @@ class RegisterApi(APIView):
                     "is_company": True,
                     "info": {
                         "employee_name": "Example Corp",
-                        "registration_number": "123456789",
-                        "address": "123 Example Street"
+                        "employee_position": "CEO",
+                        "company_registration_number": "123456789",
                     },
                     "password": "SecurePass123!",
                     "confirm_password": "SecurePass123!"
@@ -137,9 +137,8 @@ class RegisterApi(APIView):
                     "phone": "09123456789",
                     "is_company": False,
                     "info": {
-                        "first_name": "John",
-                        "last_name": "Doe",
-                        "date_of_birth": "1990-01-01"
+                        "national_code": "037237400",
+
                     },
                     "password": "SecurePass123!",
                     "confirm_password": "SecurePass123!"
@@ -162,10 +161,10 @@ class RegisterApi(APIView):
             user = register(
                 email=serializer.validated_data.get("email"),
                 password=serializer.validated_data.get("password"),
-                info=info,
                 phone=serializer.validated_data.get("phone"),
                 name=serializer.validated_data.get("name"),
-                is_company=serializer.validated_data.get("is_company"),
+                roll=serializer.validated_data.get("roll"),
+                info=info,
             )
         except Exception as ex:
             return Response(
@@ -207,7 +206,7 @@ class UpdateUser(APIView):
         email = serializers.EmailField(max_length=255, required=False)
         name = serializers.CharField(max_length=255, required=False)
         phone = serializers.CharField(max_length=11, validators=[validate_phone_number], required=False)
-        is_company = serializers.BooleanField(required=False)
+        roll = serializers.CharField(max_length=2 ,required=False)
         info = serializers.JSONField(required=False)
 
 
@@ -244,25 +243,27 @@ class UpdateUser(APIView):
             # Get the current user instance if available
             user = self.instance
 
-            # Check if `is_company` is being updated
-            if 'is_company' in data:
-                is_company = data['is_company']
+            # Check if `roll` is being updated
+            if 'roll' in data:
+                roll = data['roll']
             else:
-                # If `is_company` is not being updated, fallback to the current value
-                is_company = user.is_company
+                # If `roll` is not being updated, fallback to the current value
+                roll = user.roll
 
-            # If `is_company` is updated, ensure the `info` field is updated accordingly
-            if is_company != user.is_company and 'info' not in data:
+            # If `roll` is updated, ensure the `info` field is updated accordingly
+            if roll != user.roll and 'info' not in data:
                 raise serializers.ValidationError(
                     {"info": "You must update the 'info' field when changing 'is_company'."})
 
             # Validate `info` field based on `is_company`
             if 'info' in data:
                 info_data = data['info']
-                if is_company:
+                if roll == "co":
                     info_serializer = RegisterApi.CompanyInfoSerializer(data=info_data)
-                else:
+                elif roll == "pe":
                     info_serializer = RegisterApi.PersonInfoSerializer(data=info_data)
+                else:
+                    return False
 
                 info_serializer.is_valid(raise_exception=True)
                 data['info'] = info_serializer.validated_data

@@ -1,5 +1,8 @@
+from celery.beat import info
 from django.db import transaction
-from .models import BaseUser, Profile
+from sentry_sdk.utils import json_dumps
+
+from .models import BaseUser, Profile, Person, Company
 from django.shortcuts import get_object_or_404
 from django.contrib.sessions.models import Session
 from django.utils import timezone
@@ -20,7 +23,8 @@ def update_profile(*, user: BaseUser, **fields) -> Profile:
     Profile.objects.filter(user=user).update(**fields)
     return Profile.objects.get(user=user)
 
-def create_user(*, email: str, password: str, info, phone, name, is_company: bool) -> BaseUser:
+
+def create_user(*, email: str, password: str, phone, name: str, roll: str) -> BaseUser:
     """
         Creates a new BaseUser with the provided information.
 
@@ -35,13 +39,13 @@ def create_user(*, email: str, password: str, info, phone, name, is_company: boo
         Returns:
             BaseUser: The created BaseUser instance.
         """
-    return BaseUser.objects.create_user(email=email, password=password, info=info, phone=phone, name=name,
-                                        is_company=is_company)
+    return BaseUser.objects.create_user(email=email, password=password, phone=phone, name=name,
+                                        roll=roll)
 
 
 @transaction.atomic
 def register(*, email: str, password: str, info, phone,
-             name, is_company: bool) -> BaseUser:
+             name, roll: str) -> BaseUser:
     """
     Registers a new user and creates a profile for the user.
 
@@ -56,8 +60,18 @@ def register(*, email: str, password: str, info, phone,
     Returns:
         BaseUser: The created BaseUser instance.
     """
-    user = create_user(email=email, password=password, info=info, phone=phone, name=name, is_company=is_company)
+    print("*"*20,info)
+    user = create_user(email=email, password=password, phone=phone, name=name, roll=roll)
     Profile.objects.create(user=user)
+    if roll == 'co':
+        employee_name = info.get('employee_name')
+        employee_position = info.get('employee_position')
+        company_registration_number = info.get('company_registration_number')
+        Company.objects.create(base_user=user, employee_name=employee_name, employee_position=employee_position,
+                               company_registration_number=company_registration_number)
+    if roll == "pe":
+        national_code = info.get('national_code')
+        Person.objects.create(base_user=user, national_code=national_code)
 
     return user
 
@@ -80,13 +94,49 @@ def update_user(user_id, **fields) -> BaseUser:
     # Fetch user instance
     user = get_object_or_404(BaseUser, id=user_id)
 
-    # Update only the provided fields
+    if "roll" in fields:
+        roll_value = fields["roll"]
+        info = fields["info"]
+        if roll_value != user.roll:
+            if user.roll == "co":
+                try:
+                    Company.objects.get(base_user=user).delete()
+                except Person.DoesNotExist:
+                    pass  # Do nothing if the Person instance doesn't exist
+                national_code = info.get('national_code')
+                Person.objects.create(base_user=user, national_code=national_code)
+            else:
+                try:
+                    Person.objects.get(base_user=user).delete()
+                except Person.DoesNotExist:
+                    pass  # Do nothing if the Person instance doesn't exist
+                employee_name = info.get('employee_name')
+                employee_position = info.get('employee_position')
+                company_registration_number = info.get('company_registration_number')
+                Company.objects.create(base_user=user, employee_name=employee_name, employee_position=employee_position,
+                                       company_registration_number=company_registration_number)
+        else:
+            if user.roll == "pe":
+                national_code = info.get('national_code')
+                Person.objects.update_or_create(base_user=user, national_code=national_code)
+            else:
+                employee_name = info.get('employee_name')
+                employee_position = info.get('employee_position')
+                company_registration_number = info.get('company_registration_number')
+                Company.objects.update_or_create(base_user=user, employee_name=employee_name, employee_position=employee_position,
+                                       company_registration_number=company_registration_number)
+                # Update only the provided fields
     for field, value in fields.items():
         if hasattr(user, field):  # Only update fields that exist on the model
             setattr(user, field, value)
 
     user.save()  # Save changes to the database
+
+
+
+
     return user
+
 
 def update_password(user_id, password):
     """
@@ -110,7 +160,6 @@ def update_password(user_id, password):
     user.save()
 
 
-
 def delete_user(user_id):
     try:
         Profile.objects.filter(user=user_id).delete()
@@ -121,5 +170,3 @@ def delete_user(user_id):
 
 # def delete_profile(user_id):
 #     Profile.objects.filter(user=user_id).delete()
-
-
