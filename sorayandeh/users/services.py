@@ -1,9 +1,9 @@
 from django.db import transaction
 from .models import BaseUser, Profile
-from sorayandeh.campaign.models import Campaign
 from django.shortcuts import get_object_or_404
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+from django.db import DatabaseError
 
 
 def update_profile(*, user: BaseUser, **fields) -> Profile:
@@ -111,11 +111,15 @@ def update_password(user_id, password):
 
 
 
-def delete_user(user):
-    pass
+def delete_user(user_id):
+    try:
+        Profile.objects.filter(user=user_id).delete()
+        user = BaseUser.objects.get(id=user_id).update(is_deleted=True)
+        return {"success": True, "object": user}
+    except DatabaseError as e:
+        return {"success": False, "error": "database error occurred: " + str(e)}
 
-
-def delete_profile(user_id):
-    Profile.objects.filter(user=user_id).delete()
+# def delete_profile(user_id):
+#     Profile.objects.filter(user=user_id).delete()
 
 

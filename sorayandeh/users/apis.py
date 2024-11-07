@@ -12,6 +12,8 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema, OpenApiTypes, OpenApiExample
 import json
+from datetime import date, datetime
+
 
 class RegisterApi(APIView):
     """
@@ -234,25 +236,37 @@ class UpdateUser(APIView):
                 data (dict): The input data to be validated.
 
             Raises:
-
-                if `info` data does not pass validation.
+                ValidationError: If `info` data does not pass validation.
 
             Returns:
                 dict: The validated data.
             """
+            # Get the current user instance if available
+            user = self.instance
 
-
-            # Validate `info` based on `is_company`
-            is_company = data.get("is_company", self.instance.is_company)  # fallback to existing value
-            info_data = data.get("info", self.instance.info)
-
-            if is_company:
-                info_serializer = RegisterApi.CompanyInfoSerializer(data=info_data)
+            # Check if `is_company` is being updated
+            if 'is_company' in data:
+                is_company = data['is_company']
             else:
-                info_serializer = RegisterApi.PersonInfoSerializer(data=info_data)
+                # If `is_company` is not being updated, fallback to the current value
+                is_company = user.is_company
 
-            info_serializer.is_valid(raise_exception=True)
-            data['info'] = info_serializer.validated_data
+            # If `is_company` is updated, ensure the `info` field is updated accordingly
+            if is_company != user.is_company and 'info' not in data:
+                raise serializers.ValidationError(
+                    {"info": "You must update the 'info' field when changing 'is_company'."})
+
+            # Validate `info` field based on `is_company`
+            if 'info' in data:
+                info_data = data['info']
+                if is_company:
+                    info_serializer = RegisterApi.CompanyInfoSerializer(data=info_data)
+                else:
+                    info_serializer = RegisterApi.PersonInfoSerializer(data=info_data)
+
+                info_serializer.is_valid(raise_exception=True)
+                data['info'] = info_serializer.validated_data
+
             return data
 
     @extend_schema(request=InputUpdateUserSerializer)
@@ -270,15 +284,24 @@ class UpdateUser(APIView):
             Response: JSON response containing a success message on successful update,
             or an error message on failure with a 400 status code.
         """
-        user_id = request.user.id
-        serializer = self.InputUpdateUserSerializer(data=request.data)
+        user = request.user
+        serializer = self.InputUpdateUserSerializer(data=request.data,instance=user)
         serializer.is_valid(raise_exception=True)
+
 
         # Extract validated fields to update the user
         update_fields = {key: value for key, value in serializer.validated_data.items() if value is not None}
 
+        # date time field is not json serializable so Convert dates in `info` to JSON-serializable strings
+        if 'info' in update_fields:
+            info = update_fields['info']
+            for key, value in info.items():
+                if isinstance(value, (date, datetime)):
+                    info[key] = value.isoformat()
+            update_fields['info'] = info
+
         try:
-            user = update_user(user_id=user_id, **update_fields)
+            user = update_user(user_id=user.id, **update_fields)
             return Response({"message": "User updated successfully"}, status=status.HTTP_200_OK)
         except Exception as ex:
             return Response(

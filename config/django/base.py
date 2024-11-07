@@ -1,5 +1,6 @@
 import os
 from config.env import env, BASE_DIR
+from datetime import timedelta
 
 env.read_env(os.path.join(BASE_DIR, ".env"))
 
@@ -150,7 +151,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication', ],
 
 }
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),  # Adjust this to your desired expiration time
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),  # Adjust this as well if needed
+    # Other configurations you might need:
+    'ROTATE_REFRESH_TOKENS': True,  # Automatically issues a new refresh token with every refresh request
+    'BLACKLIST_AFTER_ROTATION': True,  # Blacklists old refresh tokens upon rotation
+}
 
 # Redis
 CACHES = {

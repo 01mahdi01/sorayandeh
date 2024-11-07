@@ -14,4 +14,5 @@ urlpatterns = [
     path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path('admin/', admin.site.urls),
     path('users/', include(("sorayandeh.users.urls", 'users'))),
+    path('applicant/', include(("sorayandeh.applicant.urls", 'applicant'))),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -48,6 +48,7 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_admin = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
     objects = BaseUserManager()
 
