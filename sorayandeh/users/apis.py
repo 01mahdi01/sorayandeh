@@ -398,6 +398,12 @@ OutputLoginSerializer:
         email = serializers.EmailField(max_length=255)
         password = serializers.CharField(max_length=128, write_only=True)
 
+        def validate(self, data):
+            if data.get("roll") == "ap":
+                raise serializers.ValidationError("you are a school so you cant log in using this endpoint ")
+            else:
+                return data
+
     class OutputLoginSerializer(serializers.Serializer):
         """
         Serializer for login output data.
