@@ -4,10 +4,10 @@ from django.db import DatabaseError
 from sorayandeh.users.services import create_user
 
 
-def register_school(creator_employee_info, postal_code, school_code_num, name, phone, email, password) -> School:
+def register_school(creator_employee_info, postal_code, school_code_num, name, phone, email, password,address) -> School:
     school_user = create_user(email=email, password=password, phone=phone, name=name, roll="ap")
     return School.objects.create(school=school_user, creator_employee_info=creator_employee_info,
-                                 postal_code=postal_code, school_code_num=school_code_num)
+                                 postal_code=postal_code, school_code_num=school_code_num,address=address)
 
 
 def delete_school(school_id):
