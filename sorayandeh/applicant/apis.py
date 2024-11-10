@@ -13,9 +13,25 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 class RegisterSchool(APIView):
     class EmployeeInfoSerializer(serializers.Serializer):
-        employee_name = serializers.CharField(required=True)
-        employee_phone = serializers.CharField(required=True)
-        employee_position = serializers.CharField(required=True)
+        employee_name = serializers.CharField(max_length=100)
+        employee_phone = serializers.CharField(max_length=100)
+        employee_position = serializers.CharField(max_length=100)
+
+        def to_internal_value(self, data):
+            # First, perform the usual validation
+            validated_data = super().to_internal_value(data)
+
+            # Define allowed keys
+            allowed_keys = {"employee_name", "employee_phone", "employee_position"}
+
+            # Get extra keys in the input data
+            extra_keys = set(data.keys()) - allowed_keys
+            if extra_keys:
+                raise serializers.ValidationError(
+                    {"creator_employee_info": f"Unexpected fields: {', '.join(extra_keys)}"}
+                )
+
+            return validated_data
 
     class InputRegisterSchoolSerializer(serializers.Serializer):
         name = serializers.CharField(required=True)
@@ -34,10 +50,7 @@ class RegisterSchool(APIView):
             fields = ('postal_code', 'school_code_num')
 
     def validate(self, data):
-        employee_info = data.get("creator_employee_info")
-        employee_phone_serializer = RegisterSchool.EmployeeInfoSerializer(data=employee_info)
-        employee_phone_serializer.is_valid(raise_exception=True)
-        return data
+        pass
 
     @extend_schema(request=InputRegisterSchoolSerializer, responses=OutputRegisterSchoolSerializer)
     def post(self, request):
