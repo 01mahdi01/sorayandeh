@@ -5,7 +5,7 @@ services:
     image: postgres:14.1
     container_name: postgres
     ports:
-      - 5432:5432
+      - 5439:5432
     environment:
       - POSTGRES_DB=sorayandeh
       - POSTGRES_USER=root
@@ -28,11 +28,10 @@ services:
     command: ./docker/web_entrypoint.sh
     environment:
       - DATABASE_URL=psql://root:123456789@db:5432/sorayandeh
-      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "1064:8000"
     depends_on:
       - db
       - rabbitmq
