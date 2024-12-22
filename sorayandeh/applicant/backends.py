@@ -6,9 +6,11 @@ class SchoolAuthenticationBackend(BaseBackend):
         if not school_code_num:
             return None
         try:
-            school = School.objects.get(school_code_num=school_code_num)
+            school = School.objects.select_related('school').get(school_code_num=school_code_num)
             base_user = school.school
             if base_user and base_user.check_password(password):
+                # Attach the School instance for easier access
+                base_user.school_instance = school
                 return base_user
         except School.DoesNotExist:
             return None
@@ -16,6 +18,7 @@ class SchoolAuthenticationBackend(BaseBackend):
 
     def get_user(self, user_id):
         try:
-            return School.objects.get(school__id=user_id).school
+            school = School.objects.select_related('school').get(school__id=user_id)
+            return school.school
         except School.DoesNotExist:
             return None

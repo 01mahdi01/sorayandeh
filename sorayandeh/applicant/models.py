@@ -4,7 +4,7 @@ from .validators import JSONSchemaValidator,MY_JSON_FIELD_SCHEMA
 from django.core.exceptions import ValidationError
 
 class School (models.Model):
-    school = models.OneToOneField(BaseUser, on_delete=models.CASCADE)
+    school = models.OneToOneField(BaseUser, on_delete=models.CASCADE,related_name='school_user')
     postal_code = models.CharField(max_length=100)
     school_code_num = models.CharField(max_length=100,unique=True)
     creator_employee_info = models.JSONField()
@@ -24,13 +24,6 @@ class School (models.Model):
         json_validator = JSONSchemaValidator(limit_value=MY_JSON_FIELD_SCHEMA)
         json_validator(self.creator_employee_info)
 
-        # Optionally, you can also add custom validation checks
-        if 'employee_name' not in self.creator_employee_info:
-            raise ValidationError("Employee name is required in creator_employee_info.")
-        if 'employee_phone' not in self.creator_employee_info:
-            raise ValidationError("Employee phone is required in creator_employee_info.")
-        if 'employee_position' not in self.creator_employee_info:
-            raise ValidationError("Employee position is required in creator_employee_info.")
 
     def __str__(self):
         return self.school_code_num

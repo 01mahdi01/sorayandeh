@@ -13,13 +13,14 @@ from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema, OpenApiTypes, OpenApiExample
 import json
 from datetime import date, datetime
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
 
-
+@permission_classes([AllowAny])
 class RegisterApi(APIView):
     """
     API view for registering a new user. Handles both company and personal user registration.
     """
-
     class CompanyInfoSerializer(serializers.Serializer):
         """
         Serializer for company-specific information.
@@ -83,7 +84,6 @@ class RegisterApi(APIView):
 
             info_serializer.is_valid(raise_exception=True)
             data['info'] = info_serializer.validated_data
-            print("*"*10,data)
             return data
 
     class OutPutRegisterSerializer(serializers.ModelSerializer):
@@ -370,7 +370,7 @@ class UpdatePassword(APIView):
 
 
 
-
+@permission_classes([AllowAny])
 class LoginApi(APIView):
     """
 LoginApi:
@@ -418,6 +418,7 @@ OutputLoginSerializer:
         """
         Handle POST request for user login.
         """
+
         serializer = self.InputLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

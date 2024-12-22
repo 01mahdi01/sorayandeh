@@ -3,7 +3,7 @@ from django.db import transaction
 from sentry_sdk.utils import json_dumps
 
 from .models import BaseUser, Profile, Person, Company
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import get_object_or_404
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 from django.db import DatabaseError
@@ -131,10 +131,6 @@ def update_user(user_id, **fields) -> BaseUser:
             setattr(user, field, value)
 
     user.save()  # Save changes to the database
-
-
-
-
     return user
 
 

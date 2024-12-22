@@ -15,4 +15,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include(("sorayandeh.users.urls", 'users'))),
     path('applicant/', include(("sorayandeh.applicant.urls", 'applicant'))),
+    path('campaigns/', include(("sorayandeh.campaign.urls", 'campaigns'))),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
