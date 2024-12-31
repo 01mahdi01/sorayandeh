@@ -3,7 +3,7 @@ version: "3.9"
 services:
   db:
     image: postgres:14.1
-    container_name: postgres
+    container_name: postgres_sorayande
     ports:
       - 5439:5432
     environment:
@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: docker/production.Dockerfile
-    container_name: django
+    container_name: django-sorayande
     command: ./docker/web_entrypoint.sh
     environment:
       - DATABASE_URL=psql://root:123456789@db:5432/sorayandeh
