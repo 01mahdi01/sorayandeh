@@ -64,14 +64,20 @@ def register(*, email: str, password: str, info, phone,
     user = create_user(email=email, password=password, phone=phone, name=name, roll=roll)
     Profile.objects.create(user=user)
     if roll == 'co':
-        employee_name = info.get('employee_name')
-        employee_position = info.get('employee_position')
-        company_registration_number = info.get('company_registration_number')
-        Company.objects.create(base_user=user, employee_name=employee_name, employee_position=employee_position,
+        try:
+            employee_name = info.get('employee_name')
+            employee_position = info.get('employee_position')
+            company_registration_number = info.get('company_registration_number')
+            Company.objects.create(base_user=user, employee_name=employee_name, employee_position=employee_position,
                                company_registration_number=company_registration_number)
+        except Exception as e:
+            print(e)
     if roll == "pe":
-        national_code = info.get('national_code')
-        Person.objects.create(base_user=user, national_code=national_code)
+        try:
+            national_code = info.get('national_code')
+            Person.objects.create(base_user=user, national_code=national_code)
+        except Exception as e:
+            print(e)
 
     return user
 

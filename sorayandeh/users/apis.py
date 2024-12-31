@@ -6,7 +6,7 @@ from django.core.validators import MinLengthValidator
 from .validators import number_validator, special_char_validator, letter_validator, validate_phone_number
 from sorayandeh.users.models import BaseUser, Profile
 from sorayandeh.api.mixins import ApiAuthMixin
-from sorayandeh.users.selectors import get_profile
+from sorayandeh.users.selectors import get_profile, get_user
 from sorayandeh.users.services import register, update_user, update_password, update_profile
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from django.contrib.auth import authenticate
@@ -152,11 +152,11 @@ class RegisterApi(APIView):
         """
         serializer = self.InputRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            info_str = request.data.get('info', '{}')
-            info = json.loads(info_str)  # Convert JSON string to dictionary
-        except json.JSONDecodeError:
-            return Response({"info": ["Value must be valid JSON."]}, status=status.HTTP_400_BAD_REQUEST)
+        # try:
+        #     info_str = request.data.get('info', '{}')
+        #     info = json.loads(info_str)  # Convert JSON string to dictionary
+        # except json.JSONDecodeError:
+        #     return Response({"info": ["Value must be valid JSON."]}, status=status.HTTP_400_BAD_REQUEST)
         try:
             user = register(
                 email=serializer.validated_data.get("email"),
@@ -164,7 +164,7 @@ class RegisterApi(APIView):
                 phone=serializer.validated_data.get("phone"),
                 name=serializer.validated_data.get("name"),
                 roll=serializer.validated_data.get("roll"),
-                info=info,
+                info=serializer.validated_data.get("info"),
             )
         except Exception as ex:
             return Response(
@@ -544,3 +544,15 @@ class UpdateProfile(APIView):
                 f"Database Error {ex}",
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+class GetUser(APIView):
+    class GetUserOutputSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = BaseUser
+            exclude = ('password', 'last_login', 'is_superuser','groups','user_permissions')
+
+    @extend_schema(responses=GetUserOutputSerializer)
+    def get(self,request):
+        user_id=request.user.id
+        user=get_user(user_id)
+        return Response(self.GetUserOutputSerializer(user, context={"request": request}).data)
