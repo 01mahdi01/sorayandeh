@@ -11,8 +11,10 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from sorayandeh.applicant.validators import JSONSchemaValidator, MY_JSON_FIELD_SCHEMA
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
 
-
+@permission_classes([AllowAny])
 class RegisterSchool(APIView):
     """
     API endpoint to register a new school.
@@ -174,7 +176,7 @@ class DeleteSchool(APIView):
     class InputDeleteSchoolSerializer(serializers.Serializer):
         name = serializers.CharField(required=True)
 
-
+@permission_classes([AllowAny])
 class LoginSchool(APIView):
     """
     API endpoint to log in as a school.
