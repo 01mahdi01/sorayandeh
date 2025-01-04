@@ -66,7 +66,7 @@ class RegisterSchool(APIView):
     class OutputRegisterSchoolSerializer(serializers.ModelSerializer):
         class Meta:
             model = School
-            fields = ('postal_code', 'school_code_num')
+            fields = ('id','postal_code', 'school_code_num')
 
     def validate(self, data):
         pass
