@@ -20,7 +20,7 @@ jobs:
 
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no user@${{secrets.SERVER_IP}} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_IP}} << 'EOF'
           cd ~/sorayandeh
           git pull origin main
           docker-compose down
