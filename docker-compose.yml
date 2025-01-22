@@ -2,17 +2,17 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:14.1
+    image: docker-mirror.kubarcloud.com/postgres:14.1
     container_name: postgres_sorayande
     ports:
-      - 5439:5432
+      - 5432:5432
     environment:
       - POSTGRES_DB=sorayandeh
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=123456789
 
   rabbitmq:
-    image: "rabbitmq:alpine"
+    image: docker-mirror.kubarcloud.com/rabbitmq:alpine
     container_name: rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -31,7 +31,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "1064:8000"
+      - "8000:8000"
     depends_on:
       - db
       - rabbitmq
