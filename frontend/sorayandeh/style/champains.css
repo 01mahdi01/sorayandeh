@@ -1,0 +1,51 @@
+.champains {
+  margin-top: 80px;
+}
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* محدود کردن به 3 خط */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.row {
+  margin-right: 0; /* حذف فاصله راست */
+  margin-left: 0; /* حذف فاصله چپ */
+}
+.container {
+  padding: 0 1.5rem; /* اضافه کردن فاصله به کناره‌های سایت */
+}
+.progress-bar {
+  background-color: #0aa4d3;
+}
+.campaigns-details-btn {
+  display: inline-block;
+  background-color: #0aa4d3;
+  color: #fff;
+  text-align: center;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+.custom-btn {
+  display: block;
+  width: 100%; /* مشابه w-100 */
+  padding: 0.375rem 0.75rem; /* فضای داخلی مشابه btn */
+  margin-top: auto; /* دکمه را به پایین کارت می‌برد */
+  font-size: 1rem; /* سایز فونت مشابه */
+  font-weight: 400; /* وزن فونت مشابه */
+  color: #fff; /* رنگ متن */
+  background-color: #0aa4d3; /* رنگ پس‌زمینه مشابه btn-primary */
+  border: 1px solid #0aa4d3; /* حاشیه مشابه */
+  border-radius: 0.375rem; /* گوشه‌های گرد */
+  text-align: center; /* متن در وسط */
+  cursor: pointer; /* اشاره‌گر ماوس */
+  transition: all 0.15s ease-in-out; /* انیمیشن تغییرات */
+}

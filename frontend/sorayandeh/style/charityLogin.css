@@ -1,0 +1,30 @@
+body {
+  direction: rtl;
+  background-color: #5a5a5b !important;
+}
+.login-container {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 800px;
+}
+.login-image {
+  background: url("image/bg01.webp") center/cover no-repeat;
+}
+.login-logo img {
+  max-width: 100px;
+}
+.login-btn {
+  background-color: #5454ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin: 10px 5px;
+  width: 100%;
+}
+.login-btn:hover {
+  background-color: #3b3bff;
+}

@@ -1,0 +1,55 @@
+body {
+  direction: rtl;
+  background-color: #5a5a5b !important;
+}
+.login-container {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 800px;
+}
+.login-image {
+  background: url("image/bg01.webp") center/cover no-repeat;
+}
+.login-logo img {
+  max-width: 100px;
+}
+.login-input {
+  all: unset;
+  display: block;
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  border-radius: 5px;
+}
+.login-input:focus {
+  outline: none;
+  border: 1px solid #ccc;
+  background-color: inherit;
+  box-shadow: none;
+}
+.login-btn,
+.register-btn {
+  background-color: #5454ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin: 0px 5px;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+.login-forget {
+  text-decoration: none;
+  color: #3bc0ed;
+}
+.login-forget:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تماس با ما</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Include Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="style/tamasBaMa.css" />
+  </head>
+  <body>
+    <!-- هدر -->
+    <header class="header shadow-sm">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4 container-login">
+            <button class="login-btn">
+              <a href="login.html">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </a>
+            </button>
+            <!-- <a href="register.html">
+              <button class="login-btn">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </button>
+            </a> -->
+          </div>
+          <div class="col-4 menu-hamburger">
+            <!-- دکمه منوی همبرگری -->
+            <button
+              class="btn btn-primary hum-btn"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuCanvas"
+              aria-controls="menuCanvas"
+            >
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <div class="col-4 d-flex justify-content-center container-logo">
+            <a href="home.html" class="logo text-dark text-decoration-none">
+              <img
+                src="image/Screenshot-2024-09-28-140836.png"
+                alt="لوگو"
+                class="logo"
+              />
+            </a>
+          </div>
+          <div class="col-4 container-btn">
+            <a href="soalat.html">
+              <button class="questions-btn">سوالات متداول</button>
+            </a>
+            <a href="hemayat.html">
+              <button class="support-btn">حمایت از سرآینده</button>
+            </a>
+
+            <div class="dropdown">
+              <button
+                class="menu-btn dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu custom-dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="champains.html"
+                    ><i class="bi bi-people"></i> کمپین
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="conditions.html"
+                    ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- منوی همبرگری -->
+      <div
+        class="offcanvas offcanvas-end offcanvas-half"
+        tabindex="-1"
+        id="menuCanvas"
+        aria-labelledby="menuCanvasLabel"
+      >
+        <div class="offcanvas-header">
+          <i class="bi bi-person-circle" style="font-size: 40px"></i>
+          <h6 class="login-btn-hum">
+            <a href="login.html">ورود و ثبت نام</a>
+          </h6>
+        </div>
+        <div class="offcanvas-body">
+          <div class="menu-links">
+            <a href="tamasBaMa.html"
+              ><i class="bi bi-telephone"></i> ارتباط با ما</a
+            >
+            <a href="about.html"><i class="bi bi-info-circle"></i> درباره ما</a>
+            <a href="soalat.html"
+              ><i class="bi bi-question-circle"></i>سوالات متداول</a
+            >
+            <a href="champains.html"><i class="bi bi-people"></i> کمپین </a>
+            <a href="hemayat.html"
+              ><i class="bi bi-suit-heart"></i>حمایت از سرآینده</a
+            >
+            <a href="conditions.html"
+              ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Google Map Section -->
+    <section class="google-map">
+      <div class="container-fluid p-0">
+        <!-- Map container -->
+        <div id="map" style="height: 400px; width: 100%"></div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contant">
+      <div class="container contact-section">
+        <div class="row">
+          <!-- Form Section -->
+          <div class="col-md-7">
+            <!-- <h5 class="mb-4">فرم تماس</h5> -->
+            <form>
+              <div class="mb-3">
+                <label for="name" class="form-label">نام و نام خانوادگی</label>
+                <input type="text" class="form-control" id="name" />
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">شماره تلفن</label>
+                <input type="tel" class="form-control" id="phone" />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">ایمیل</label>
+                <input type="email" class="form-control" id="email" />
+              </div>
+
+              <div class="mb-3">
+                <label for="message" class="form-label">پیام</label>
+                <textarea class="form-control" id="message" rows="3"></textarea>
+              </div>
+              <button type="submit" class="submit-btn">ارسال</button>
+            </form>
+          </div>
+
+          <!-- Contact Info Section -->
+          <div class="col-md-5">
+            <h1 class="mb-4 text-center">با ما در تماس باشید</h1>
+            <div class="container">
+              <div class="row contact-info-item address-info">
+                <div class="col-2 icon">
+                  <i class="bi bi-geo-alt"></i>
+                </div>
+                <div class="col-10 text">
+                  <h3>ملاقات با ما</h3>
+                  <p>تهران</p>
+                </div>
+              </div>
+              <div class="row contact-info-item email-info">
+                <div class="col-2 icon">
+                  <i class="bi bi-envelope"></i>
+                </div>
+                <div class="col-10 text">
+                  <h3>ایمیل ما</h3>
+                  <p>INFO@SRAYANDEH.IR</p>
+                </div>
+              </div>
+              <div class="row contact-info-item phone-info">
+                <div class="col-2 icon">
+                  <i class="bi bi-telephone"></i>
+                </div>
+                <div class="col-10 text">
+                  <h3>تماس با ما</h3>
+                  <p>۰۹۲۳۱۰۵۵۲۰۶</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- فوتر -->
+    <footer class="footer py-4 mt-5 shadow-sm">
+      <div class="container">
+        <div class="row text-md-end">
+          <!-- ستون اول: درباره ما -->
+          <div class="col-md-4 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="about.html" class="">
+                  <i class="bi bi-info-circle"></i> درباره ما
+                </a>
+              </li>
+              <li>
+                <a href="tamasBaMa.html" class="">
+                  <i class="bi bi-envelope"></i> ارتباط با ما
+                </a>
+              </li>
+              <li>
+                <a href="conditions.html" class="">
+                  <i class="bi bi-file-earmark-text"></i> شرایط و ضوابط
+                </a>
+              </li>
+              <li>
+                <a href="soalat.html" class="">
+                  <i class="bi bi-question-circle"></i> سوالات متداول
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ستون دوم: لینک‌های مهم -->
+          <div class="col-md-4 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class=""> با ما در ارتباط باشید</a>
+              </li>
+              <li>
+                <span>09231055206</span>
+              </li>
+            </ul>
+          </div>
+          <!-- ستون سوم: اطلاعات تماس -->
+          <div class="col-md-4 mb-3">
+            <img src="image/logo.png" alt="" />
+          </div>
+        </div>
+        <hr />
+        <div class="social-icons">
+          <a href=""
+            ><img src="icons/whatsapp.svg" alt="" class="icon icon-w"
+          /></a>
+          <a href=""><img src="icons/instagramh.svg" alt="" class="icon" /></a>
+          <a href=""><img src="icons/telegramh.svg" alt="" class="icon" /></a>
+
+          <a href=""><img src="icons/aparath.svg" alt="" class="icon" /></a>
+          <a href=""><img src="icons/baleh.svg" alt="" class="icon" /></a>
+        </div>
+      </div>
+    </footer>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app/logintest.js"></script>
+    <script>
+      // Initialize the map
+      const map = L.map("map", { zoomControl: false }).setView(
+        [35.712965, 51.413379],
+        13
+      );
+
+      // Add OpenStreetMap tiles
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+
+      // Add a marker to the map
+      const marker = L.marker([35.712965, 51.413379]).addTo(map);
+
+      // Add a popup to the marker
+      marker.bindPopup("سراینده").openPopup();
+
+      // State to control zoom (initially set to false)
+      let zoomEnabled = false;
+
+      // Function to toggle zoom
+      function toggleZoom() {
+        if (zoomEnabled) {
+          // Disable zoom
+          map.dragging.disable();
+          map.scrollWheelZoom.disable();
+          map.doubleClickZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+          zoomEnabled = false;
+          console.log("Zoom disabled");
+        } else {
+          // Enable zoom
+          map.dragging.enable();
+          map.scrollWheelZoom.enable();
+          map.doubleClickZoom.enable();
+          map.boxZoom.enable();
+          map.keyboard.enable();
+          zoomEnabled = true;
+          console.log("Zoom enabled");
+        }
+      }
+
+      // Initially disable zoom
+      toggleZoom();
+
+      // Add click event listener to the map
+      map.on("click", toggleZoom);
+    </script>
+  </body>
+</html>

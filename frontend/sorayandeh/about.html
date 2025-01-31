@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>درباره ما - سرآینده</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="style/about.css" />
+  </head>
+  <body>
+    <!-- هدر -->
+    <header class="header shadow-sm">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4 container-login">
+            <button class="login-btn">
+              <a href="login.html">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </a>
+            </button>
+            <!-- <a href="register.html">
+              <button class="login-btn">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </button>
+            </a> -->
+          </div>
+          <div class="col-4 menu-hamburger">
+            <!-- دکمه منوی همبرگری -->
+            <button
+              class="btn btn-primary hum-btn"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuCanvas"
+              aria-controls="menuCanvas"
+            >
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <div class="col-4 d-flex justify-content-center container-logo">
+            <a href="home.html" class="logo text-dark text-decoration-none">
+              <img
+                src="image/Screenshot-2024-09-28-140836.png"
+                alt="لوگو"
+                class="logo"
+              />
+            </a>
+          </div>
+          <div class="col-4 container-btn">
+            <a href="soalat.html">
+              <button class="questions-btn">سوالات متداول</button>
+            </a>
+            <a href="hemayat.html">
+              <button class="support-btn">حمایت از سرآینده</button>
+            </a>
+
+            <div class="dropdown">
+              <button
+                class="menu-btn dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu custom-dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="champains.html"
+                    ><i class="bi bi-people"></i> کمپین
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="conditions.html"
+                    ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- منوی همبرگری -->
+      <div
+        class="offcanvas offcanvas-end offcanvas-half"
+        tabindex="-1"
+        id="menuCanvas"
+        aria-labelledby="menuCanvasLabel"
+      >
+        <div class="offcanvas-header">
+          <i class="bi bi-person-circle" style="font-size: 40px"></i>
+          <h6 class="login-btn-hum">
+            <a href="login.html">ورود و ثبت نام</a>
+          </h6>
+        </div>
+        <div class="offcanvas-body">
+          <div class="menu-links">
+            <a href="tamasBaMa.html"
+              ><i class="bi bi-telephone"></i> ارتباط با ما</a
+            >
+            <a href="about.html"><i class="bi bi-info-circle"></i> درباره ما</a>
+            <a href="soalat.html"
+              ><i class="bi bi-question-circle"></i>سوالات متداول</a
+            >
+            <a href="champains.html"><i class="bi bi-people"></i> کمپین </a>
+            <a href="hemayat.html"
+              ><i class="bi bi-suit-heart"></i>حمایت از سرآینده</a
+            >
+            <a href="conditions.html"
+              ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="about">
+      <div class="container">
+        <h1>همه چیز درباره سرآینده</h1>
+
+        <div class="about-section">
+          <div class="text">
+            <p>
+              ما در سرآینده یه سازمان غیرانتفاعی هستیم که باور داریم هر مدرسه،
+              از کوچیک‌ترین روستا گرفته تا بزرگ‌ترین شهرها، شایسته بهترین‌هاست.
+              هدف ما ساده‌ست: به کمک شما، مدارس رو تجهیز کنیم و امکانات آموزشی
+              بهتر فراهم کنیم. نه، ما نمی‌خواهیم یه NGO خشک و رسمی باشیم! ما
+              اینجا هستیم تا با یه رویکرد صمیمی و خودمونی، دست به کار بشیم و به
+              هر مدرسه‌ای که نیاز داره، کمک کنیم. با هر کمک شما، ما یک قدم به
+              جلو می‌ریم و توی این راه، یه سرود جمعی می‌سازیم. سرودِ اتحاد، کمک،
+              و پیشرفت برای آینده‌سازان فردا. توی سرآینده، هیچ کمکی کوچیک نیست؛
+              هر قدمی که بردارید، بخشی از یه تغییر بزرگ میشه.
+            </p>
+          </div>
+          <img src="image/Screenshot (442).png" alt="سرآینده" />
+        </div>
+
+        <div class="card">
+          <div class="card-header">چرا سرآینده؟</div>
+          <div class="card-body">
+            <p>
+              در شرایطی که بسیاری از مدارس در کشور با کمبود امکانات مواجه‌اند،
+              سرآینده فرصتی است برای همگان تا در ارتقای کیفیت آموزش کشور نقش
+              داشته باشند. این پلتفرم با استفاده از فناوری و ارتباط مستقیم،
+              مسیری نوین برای کمک‌رسانی ایجاد کرده است که هم برای خیرین و هم
+              برای مدارس، نتایج مطلوب‌تری به همراه خواهد داشت.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">سرآینده چگونه کار می‌کند؟</div>
+          <div class="card-body">
+            <p>
+              در سرآینده، نیازهای مدارس به‌صورت دقیق و تاییدشده توسط کارشناسان
+              جمع‌آوری و دسته‌بندی می‌شوند. افراد خیر می‌توانند بر اساس علاقه و
+              توانایی خود از میان این نیازها انتخاب کرده و از سه روش مختلف به
+              مدارس کمک کنند:
+            </p>
+            <ul>
+              <li>کمک نقدی مستقیم: پرداخت مبلغ موردنظر برای تأمین نیاز خاص.</li>
+              <li>
+                راه‌اندازی کمپین همیاری (گلریزون): جمع‌آوری کمک‌های خرد از شبکه
+                دوستان و آشنایان برای تأمین نیازهای مدارس.
+              </li>
+              <li>
+                اهدای کامل کالا یا خدمات: مانند ارائه تجهیزات دست‌دوم سالم یا
+                خدمات تخصصی.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">رویکرد شفاف و بدون رقابت</div>
+          <div class="card-body">
+            <p>
+              سرآینده به‌جای رقابت با خیریه‌ها و سازمان‌های مردم‌نهاد، با آن‌ها
+              همکاری کرده و تلاش می‌کند فرآیند کمک‌رسانی را ساده‌تر، شفاف‌تر و
+              اثربخش‌تر کند. این پلتفرم با شفاف‌سازی نحوه هزینه‌کرد کمک‌ها و
+              ارائه گزارش به خیرین، اعتمادسازی کرده و فرآیند کمک‌رسانی را
+              هدفمندتر از قبل می‌کند.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            سرآینده؛ گامی نو برای ساختن آینده‌ای روشن‌تر
+          </div>
+          <div class="card-body">
+            <p>
+              سرآینده یک قدم بزرگ به جلو است، با هدف ساختن آینده‌ای بهتر برای
+              تمامی دانش‌آموزان کشور و ایجاد تغییرات مثبت در جامعه. با کمک شما،
+              ما قادر به ایجاد آینده‌ای روشن‌تر خواهیم بود.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="questions-content">
+      <div class="container">
+        <div class="center-text">
+          <h1>بیانیه‌های اصول راهبردی</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="questions-servise">
+      <div class="container">
+        <div class="cards-container">
+          <div class="card" style="width: 18rem">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+
+            <div class="card-body">
+              <h2 class="card-title">ارزش‌ها (Values):</h2>
+
+              <p class="card-text">
+                شفافیت: ارائه گزارش دقیق و لحظه‌ای از مراحل جمع‌آوری و استفاده
+                از کمک‌ها برای ایجاد اعتماد میان خیرین و نیازمندان. عدالت
+                آموزشی: تمرکز بر رفع نیازهای مدارسی که در مناطق کم‌برخوردار قرار
+                دارند و دسترسی کمتری به امکانات دارند. همکاری جمعی: تشویق جامعه
+                به کار گروهی و همبستگی برای ایجاد تغییرات مثبت و پایدار. نوآوری:
+                استفاده از فناوری‌های مدرن برای بهبود فرآیندهای کمک‌رسانی و
+                افزایش اثربخشی. مسئولیت‌پذیری: تعهد به پاسخ‌گویی در برابر خیرین،
+                مدارس و جامعه برای اطمینان از اجرای دقیق اهداف پلتفرم. بی‌طرفی:
+                عدم وابستگی به جناح‌های سیاسی و تمرکز صرف بر اهداف آموزشی و
+                کمک‌رسانی.
+              </p>
+            </div>
+          </div>
+          <div class="card" style="width: 18rem">
+            <i class="fa-solid fa-people-carry-box"></i>
+
+            <div class="card-body">
+              <h2 class="card-title">ماموریت (Mission):</h2>
+
+              <p class="card-text">
+                ایجاد بستری شفاف، قابل‌اعتماد و کارآمد برای جلب مشارکت‌های مردمی
+                و تأمین نیازهای مدارس در حوزه‌های زیرساختی، آموزشی و هوشمندسازی؛
+                با هدف بهبود کیفیت آموزش و تحقق عدالت آموزشی در سراسر کشور.
+              </p>
+            </div>
+          </div>
+          <div class="card" style="width: 18rem">
+            <i class="fab fa-phoenix-framework" aria-hidden="true"></i>
+
+            <div class="card-body">
+              <h2 class="card-title">ماموریت (Mission):</h2>
+
+              <p class="card-text">
+                ساختن آینده‌ای که در آن هیچ مدرسه‌ای به دلیل کمبود امکانات از
+                پیشرفت باز نماند و دانش‌آموزان بتوانند در فضایی برابر و باکیفیت،
+                به آموزش و رشد خود ادامه دهند.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- فوتر -->
+    <footer class="footer py-4 mt-5 shadow-sm">
+      <div class="container">
+        <div class="row text-md-end">
+          <!-- ستون اول: درباره ما -->
+          <div class="col-md-4 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="about.html" class="">
+                  <i class="bi bi-info-circle"></i> درباره ما
+                </a>
+              </li>
+              <li>
+                <a href="tamasBaMa.html" class="">
+                  <i class="bi bi-envelope"></i> ارتباط با ما
+                </a>
+              </li>
+              <li>
+                <a href="conditions.html" class="">
+                  <i class="bi bi-file-earmark-text"></i> شرایط و ضوابط
+                </a>
+              </li>
+              <li>
+                <a href="soalat.html" class="">
+                  <i class="bi bi-question-circle"></i> سوالات متداول
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ستون دوم: لینک‌های مهم -->
+          <div class="col-md-4 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class=""> با ما در ارتباط باشید</a>
+              </li>
+              <li>
+                <span>09231055206</span>
+              </li>
+            </ul>
+          </div>
+          <!-- ستون سوم: اطلاعات تماس -->
+          <div class="col-md-4 mb-3">
+            <img src="image/logo.png" alt="" />
+          </div>
+        </div>
+        <hr />
+        <div class="social-icons">
+          <a href=""
+            ><img src="icons/whatsapp.svg" alt="" class="icon icon-w"
+          /></a>
+          <a href=""><img src="icons/instagramh.svg" alt="" class="icon" /></a>
+          <a href=""><img src="icons/telegramh.svg" alt="" class="icon" /></a>
+
+          <a href=""><img src="icons/aparath.svg" alt="" class="icon" /></a>
+          <a href=""><img src="icons/baleh.svg" alt="" class="icon" /></a>
+        </div>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app/logintest.js"></script>
+  </body>
+</html>

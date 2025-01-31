@@ -1,0 +1,86 @@
+.questions {
+  margin: 100px auto 50px auto;
+  max-width: 900px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-button {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+/* جابجایی آیکون به سمت چپ */
+.accordion-button::after {
+  margin-right: auto;
+  margin-left: 10px;
+}
+
+/* تغییر رنگ پس‌زمینه هدر زمانی که سوال باز است */
+.accordion-button:not(.collapsed) {
+  background-color: #0c86ff;
+  color: #fff;
+}
+
+.accordion-body {
+  line-height: 1.7;
+  color: #555;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.faq-header h1 {
+  font-size: 28px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* ریسپانسیو برای صفحه‌های کوچکتر */
+
+@media (max-width: 768px) {
+  .questions {
+    margin: 100px auto 30px auto;
+    padding: 15px;
+  }
+
+  .faq-header h1 {
+    font-size: 24px;
+  }
+
+  .accordion-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .accordion-body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .questions {
+    margin: 100px auto 30px auto;
+    padding: 10px;
+  }
+
+  .faq-header h1 {
+    font-size: 20px;
+  }
+
+  .accordion-button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .accordion-body {
+    font-size: 12px;
+  }
+}

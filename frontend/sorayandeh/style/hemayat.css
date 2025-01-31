@@ -1,0 +1,175 @@
+.support-container {
+  margin: 100px auto 50px auto;
+  max-width: 80%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.support-header {
+  /* text-align: center; */
+  margin-bottom: 30px;
+  background-color: #8ad2fa;
+  padding: 20px;
+  border-radius: 20px;
+}
+.support-container h1 {
+  color: #0aa4d3;
+  text-align: center;
+  margin: 0px 0px 20px 0px;
+}
+.form-container {
+  background-color: #f9f9f9; /* رنگ پس‌زمینه روشن */
+  padding: 30px; /* فاصله داخلی */
+  border-radius: 10px; /* گوشه‌های گرد */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* سایه برای برجسته‌تر کردن */
+  max-width: 800px; /* حداکثر عرض */
+  margin: 30px auto; /* فاصله از بالا و پایین و مرکز کردن فرم */
+}
+#donationAmount {
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 0px 10px 10px 0px;
+}
+
+#donationAmount:active {
+  box-shadow: none;
+  border: none;
+}
+.input-group {
+  width: 250px !important;
+}
+.input-group-text {
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 10px 0px 0px 10px !important;
+}
+.form-control:focus {
+  box-shadow: none !important;
+  border: 1px solid #dee2e6;
+}
+.btn-group button {
+  margin: 5px;
+}
+.donation-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #222;
+}
+#donationAmount {
+  font-size: 0.9rem;
+  width: 100px;
+  text-align: center;
+}
+.name-inputs {
+  display: flex;
+  gap: 10px;
+}
+.name-inputs input {
+  flex: 1;
+}
+.btn-p {
+  background-color: #0aa4d3 !important;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px !important;
+}
+.btn-submit {
+  background-color: #0aa4d3 !important;
+  color: #ffffff;
+}
+.form-check {
+  display: inline-block !important;
+}
+@media (max-width: 768px) {
+  .support-container {
+    max-width: 90%; /* کاهش عرض بخش */
+    padding: 15px; /* فاصله داخلی کم‌تر */
+  }
+
+  .form-container {
+    max-width: 100%; /* فرم را کامل‌عرض کنیم */
+    padding: 20px; /* فاصله داخلی کاهش داده شده */
+  }
+
+  .input-group {
+    width: 100%; /* عرض گروه ورودی 100% */
+  }
+
+  .btn-group {
+    flex-direction: column; /* دکمه‌ها را عمودی نمایش بده */
+    width: 100%;
+  }
+
+  .btn-group button {
+    width: 100%; /* دکمه‌ها عرض کامل بگیرند */
+    margin: 5px 0; /* فاصله عمودی برای دکمه‌ها */
+  }
+
+  .name-inputs {
+    flex-direction: column; /* ورودی‌های نام را عمودی بچینیم */
+  }
+
+  .name-inputs input {
+    width: 100%; /* عرض ورودی‌ها 100% */
+    margin-bottom: 10px; /* فاصله عمودی بین ورودی‌ها */
+  }
+
+  #donationAmount {
+    width: 80%; /* عرض ورودی کمک کمتر */
+    margin-bottom: 10px; /* فاصله عمودی بیشتر */
+  }
+
+  .btn-submit {
+    width: 100%; /* دکمه ارسال کمک عرض کامل */
+  }
+}
+
+/* برای دستگاه‌های با عرض کمتر از 480px (موبایل‌ها) */
+@media (max-width: 480px) {
+  .support-container {
+    max-width: 95%; /* کاهش بیشتر عرض */
+    padding: 10px;
+  }
+
+  .form-container {
+    padding: 15px;
+  }
+
+  .input-group {
+    width: 100%;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-group button {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .name-inputs {
+    flex-direction: column;
+  }
+
+  .name-inputs input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #donationAmount {
+    width: 80%;
+    margin-bottom: 10px;
+  }
+
+  .btn-submit {
+    width: 100%;
+  }
+  .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
