@@ -7,7 +7,6 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 .support-header {
-  /* text-align: center; */
   margin-bottom: 30px;
   background-color: #8ad2fa;
   padding: 20px;
@@ -38,6 +37,7 @@
 }
 .input-group {
   width: 250px !important;
+  flex-wrap: nowrap;
 }
 .input-group-text {
   background-color: #f3f3f3;

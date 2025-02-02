@@ -10,7 +10,7 @@ body {
   max-width: 800px;
 }
 .login-image {
-  background: url("image/bg01.webp") center/cover no-repeat;
+  background: url("../image/bg01.webp") center/cover no-repeat;
 }
 .login-logo img {
   max-width: 100px;

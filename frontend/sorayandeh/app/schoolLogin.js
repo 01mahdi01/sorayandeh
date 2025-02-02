@@ -13,7 +13,7 @@ loginForm.addEventListener("submit", function (e) {
   };
 
   // ارسال داده‌ها به بک‌اند
-  fetch("http://91.107.162.10:1064/applicant/login_school/", {
+  fetch(`${BASE_URL}applicant/login_school/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,8 +48,8 @@ loginForm.addEventListener("submit", function (e) {
       alert("ورود موفقیت‌آمیز بود!");
       console.log("نتیجه:", result);
 
-      // انتقال به صفحه home2
-      window.location.href = "home2.html";
+      // انتقال به صفحه home
+      window.location.href = "home.html";
     })
     .catch((error) => {
       // نمایش پیام خطا

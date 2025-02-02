@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "B Koodak Bold";
+  src: url("../font/B-Koodak-Fontjo.com/B\ Koodak\ Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "B Koodak Outline";
+  src: url("../font/B-Koodak-Fontjo.com/B\ Koodak\ Outline.ttf")
+    format("truetype");
+}
+body {
+  font-family: "B Koodak Bold", sans-serif !important;
+}

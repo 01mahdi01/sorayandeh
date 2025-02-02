@@ -15,7 +15,7 @@ authForm.addEventListener("submit", (e) => {
   };
 
   // ارسال به سرور
-  fetch("http://91.107.162.10:1064/users/login/", {
+  fetch(`${BASE_URL}users/login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -44,7 +44,7 @@ authForm.addEventListener("submit", (e) => {
 
         alert("ورود موفقیت‌آمیز!");
         // انتقال به داشبورد
-        window.location.href = "home2.html";
+        window.location.href = "home.html";
       } else {
         alert("ورود ناموفق! لطفاً دوباره تلاش کنید.");
       }

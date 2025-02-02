@@ -28,7 +28,7 @@ userRegistrationForm.addEventListener("submit", (e) => {
   mainJson.roll = roll;
 
   // ارسال داده به سمت بک‌اند
-  fetch("http://91.107.162.10:1064/users/register/", {
+  fetch(`${BASE_URL}users/register/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +52,7 @@ userRegistrationForm.addEventListener("submit", (e) => {
         }
 
         alert("ثبت‌نام با موفقیت انجام شد!");
-        window.location.href = "home2.html"; // انتقال به صفحه home2
+        window.location.href = "home.html"; // انتقال به صفحه home
       } else if (status === 400) {
         const errorMessages = body.detail;
         if (errorMessages.email) {
