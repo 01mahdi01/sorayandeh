@@ -7,7 +7,7 @@ const menuLinks = document.querySelector(".menu-links");
 
 // بررسی وجود توکن
 if (accessToken) {
-  fetch("http://91.107.162.10:1064/users/get_user/", {
+  fetch(`${BASE_URL}users/get_user/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

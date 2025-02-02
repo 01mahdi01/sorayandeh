@@ -27,7 +27,7 @@ form.addEventListener("submit", function (e) {
   mainJson.creator_employee_info = infoJson;
 
   // ارسال داده‌ها با استفاده از fetch
-  fetch("http://91.107.162.10:1064/applicant/register/", {
+  fetch(`${BASE_URL}applicant/register/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
