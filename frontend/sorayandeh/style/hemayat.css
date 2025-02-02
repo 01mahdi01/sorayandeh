@@ -37,6 +37,7 @@
 }
 .input-group {
   width: 250px !important;
+  flex-wrap: nowrap;
 }
 .input-group-text {
   background-color: #f3f3f3;

@@ -621,6 +621,34 @@ body {
   width: 50px !important;
   margin-top: -5px !important;
 }
+/* نوشته بالای ایکون */
+.social-icons a {
+  position: relative;
+  display: inline-block;
+}
+
+.social-icons a::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #555;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s;
+}
+
+.social-icons a:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ریسپانسیو */
 @media (max-width: 768px) {
   .footer .row {
