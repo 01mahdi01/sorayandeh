@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Vazir", sans-serif !important;
+
   direction: rtl !important;
   background-color: #f0f5f9;
 }
@@ -478,8 +478,8 @@ body {
 }
 #pay {
   padding: 0px 40px;
-  height: 55px;
-  width: 160px;
+  height: 50px;
+  width: 150px;
   font-size: 16px;
   background-color: #3bc0ed;
   color: white;
@@ -529,7 +529,34 @@ body {
   background-color: #dce7ef;
   border-radius: 10px;
 }
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  #pay {
+    padding: 0px 30px;
+    height: 50px;
+    width: 140px;
+    font-size: 16px;
+  }
+  #amount {
+    width: 160px;
+    padding: 10px;
+    font-size: 1.2rem;
 
+    margin: 0 10px;
+  }
+}
+@media (max-width: 576px) {
+  #pay {
+    padding: 0px 30px;
+    height: 40px;
+    width: 120px;
+    font-size: 16px;
+  }
+  #amount {
+    width: 120px;
+    padding: 7px;
+  }
+}
 /* footer */
 .footer {
   background-color: #004b4d;
@@ -621,6 +648,11 @@ body {
     height: 35px;
     margin: 5px;
   }
+  .icon-w {
+    height: 45px !important;
+    width: 45px !important;
+    margin-top: -2px !important;
+  }
 }
 
 @media (max-width: 576px) {
@@ -631,6 +663,11 @@ body {
   .social-icons .icon {
     width: 30px;
     height: 30px;
+  }
+  .icon-w {
+    height: 40px !important;
+    width: 40px !important;
+    margin-top: -2px !important;
   }
 }
 .telephone-btn {
