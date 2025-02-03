@@ -368,8 +368,8 @@ class UpdatePassword(APIView):
             )
 
 
-from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
+
+
 @permission_classes([AllowAny])
 class LoginApi(APIView):
     """
@@ -413,7 +413,6 @@ OutputLoginSerializer:
         user_id = serializers.IntegerField()
         email = serializers.EmailField()
 
-    @csrf_exempt
     @extend_schema(request=InputLoginSerializer, responses=OutputLoginSerializer)
     def post(self, request):
         """
