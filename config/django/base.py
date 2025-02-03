@@ -11,7 +11,7 @@ SECRET_KEY = '=ug_ucl@yi6^mrcjyz%(u0%&g2adt#bz3@yos%#@*t#t!ypx=a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-SAME_ORIGIN = False
+
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 
