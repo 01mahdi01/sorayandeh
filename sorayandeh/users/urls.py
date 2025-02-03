@@ -8,7 +8,7 @@ urlpatterns = [
     # path('delete_profile/', DeleteProfile.as_view(),name="profile"),
     path('update_user/', UpdateUser.as_view(),name="update_user"),
     path('update_password/', UpdatePassword.as_view(),name="update_password"),
-    path('login/', LoginApi.as_view(),name="login"),
+    path('login/', LoginApi,name="login"),
     path('get_user/', GetUser.as_view(),name="get_user"),
 
 
