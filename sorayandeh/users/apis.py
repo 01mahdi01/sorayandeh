@@ -413,6 +413,7 @@ OutputLoginSerializer:
         user_id = serializers.IntegerField()
         email = serializers.EmailField()
 
+    @csrf_exempt
     @extend_schema(request=InputLoginSerializer, responses=OutputLoginSerializer)
     def post(self, request):
         """
