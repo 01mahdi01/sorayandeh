@@ -368,8 +368,8 @@ class UpdatePassword(APIView):
             )
 
 
-
-
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 @permission_classes([AllowAny])
 class LoginApi(APIView):
     """
