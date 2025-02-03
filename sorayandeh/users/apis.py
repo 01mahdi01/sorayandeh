@@ -369,7 +369,7 @@ class UpdatePassword(APIView):
 
 
 
-
+@csrf_exempt
 @permission_classes([AllowAny])
 class LoginApi(APIView):
     """
