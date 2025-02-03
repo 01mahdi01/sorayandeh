@@ -15,6 +15,7 @@ import json
 from datetime import date, datetime
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
+from django.views.decorators.csrf import csrf_exempt
 
 @permission_classes([AllowAny])
 class RegisterApi(APIView):
