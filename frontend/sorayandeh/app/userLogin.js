@@ -44,7 +44,7 @@ authForm.addEventListener("submit", (e) => {
 
         alert("ورود موفقیت‌آمیز!");
         // انتقال به داشبورد
-        window.location.href = "home.html";
+        window.location.href = "../home.html";
       } else {
         alert("ورود ناموفق! لطفاً دوباره تلاش کنید.");
       }
