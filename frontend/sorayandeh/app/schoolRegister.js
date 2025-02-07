@@ -64,3 +64,21 @@ form.addEventListener("submit", function (e) {
       console.error("Error:", error);
     });
 });
+
+// مشاهده رمز
+document.querySelectorAll(".toggle-password").forEach((item) => {
+  item.addEventListener("click", function () {
+    const targetId = this.getAttribute("data-target");
+    const passwordField = document.getElementById(targetId);
+    const icon = this.querySelector("i");
+
+    // تغییر نوع فیلد رمز عبور
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      icon.classList.replace("bi-eye", "bi-eye-slash"); // تغییر به آیکون چشم بسته
+    } else {
+      passwordField.type = "password";
+      icon.classList.replace("bi-eye-slash", "bi-eye"); // تغییر به آیکون چشم باز
+    }
+  });
+});
