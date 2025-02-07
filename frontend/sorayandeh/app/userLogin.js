@@ -44,7 +44,7 @@ authForm.addEventListener("submit", (e) => {
 
         alert("ورود موفقیت‌آمیز!");
         // انتقال به داشبورد
-        window.location.href = "home.html";
+        window.location.href = "../home.html";
       } else {
         alert("ورود ناموفق! لطفاً دوباره تلاش کنید.");
       }
@@ -53,4 +53,23 @@ authForm.addEventListener("submit", (e) => {
       console.error("خطا در ورود:", error.message);
       alert("ایمیل یا رمز اشتباه است");
     });
+});
+
+// نمایش رمز
+
+document.querySelectorAll(".toggle-password").forEach((item) => {
+  item.addEventListener("click", function () {
+    const targetId = this.getAttribute("data-target");
+    const passwordField = document.getElementById(targetId);
+    const icon = this.querySelector("i");
+
+    // تغییر نوع فیلد رمز عبور
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      icon.classList.replace("bi-eye", "bi-eye-slash"); // تغییر به آیکون چشم بسته
+    } else {
+      passwordField.type = "password";
+      icon.classList.replace("bi-eye-slash", "bi-eye"); // تغییر به آیکون چشم باز
+    }
+  });
 });

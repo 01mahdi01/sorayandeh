@@ -52,11 +52,11 @@ if (accessToken) {
         localStorage.removeItem("refreshToken");
 
         // بازگرداندن دکمه‌های ورود
-        loginBtn.innerHTML = `<a href="register.html">
+        loginBtn.innerHTML = `<a href="login.html">
     <i class="bi bi-person"></i>
     ورود | ثبت نام
   </a>`;
-        loginBtnHum.innerHTML = `<a href="register.html">ورود و ثبت نام</a>`;
+        loginBtnHum.innerHTML = `<a href="login.html">ورود و ثبت نام</a>`;
 
         // حذف آیتم‌های پروفایل و خروج از منوی همبرگری
         if (profileItem) profileItem.remove();
