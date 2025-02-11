@@ -3,49 +3,39 @@ const increaseButton = document.getElementById("increase");
 const amountInput = document.getElementById("amount");
 const priceDisplay = document.getElementById("price");
 
-function updatePrice() {
-  const amount = parseInt(amountInput.value) || 0;
-  priceDisplay.textContent = amount;
+// تابع برای فرمت‌بندی عدد با کاما
+function formatAmount(value) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-decreaseButton.addEventListener("click", () => {
-  let amount = parseInt(amountInput.value) || 0;
-  amount = Math.max(0, amount - 10000); // حداقل مبلغ صفر
-  amountInput.value = amount;
-  updatePrice();
-});
+// تابع برای حذف کاماها و تبدیل مقدار به عدد صحیح
+function cleanAmount(value) {
+  return parseInt(value.replace(/,/g, "")) || 0;
+}
 
-increaseButton.addEventListener("click", () => {
-  let amount = parseInt(amountInput.value) || 0;
-  amount += 10000;
-  amountInput.value = amount;
-  updatePrice();
-});
+// مقدار اولیه را فرمت کنید
+amountInput.value = formatAmount(amountInput.value);
 
-amountInput.addEventListener("input", updatePrice);
+// تابع به‌روزرسانی مقدار ورودی و نمایش قیمت
+function updateAmount(value) {
+  if (value > 50000000) value = 50000000;
+  if (value < 0) value = 0;
 
+  amountInput.value = formatAmount(value);
+  if (priceDisplay) priceDisplay.textContent = formatAmount(value);
+}
+
+// رویداد ورودی برای فرمت‌بندی در لحظه
 amountInput.addEventListener("input", () => {
-  let amount = parseInt(amountInput.value) || 0;
-
-  if (amount > 50000000) {
-    amount = 50000000; // محدود کردن به ۵۰,۰۰۰,۰۰۰
-  }
-  amountInput.value = amount;
+  updateAmount(cleanAmount(amountInput.value));
 });
-// مم
-document.addEventListener("DOMContentLoaded", () => {
-  const carousel = document.querySelector("#logoCarousel");
-  const carouselInstance = new bootstrap.Carousel(carousel, {
-    interval: 5000, // جابجایی خودکار هر 5 ثانیه
-    wrap: true,
-  });
 
-  // تنظیم حرکت یکی یکی
-  carousel.addEventListener("slide.bs.carousel", (e) => {
-    const items = carousel.querySelectorAll(".carousel-item");
-    items.forEach((item) => item.classList.remove("active"));
-    if (e.direction === "left") {
-      items[e.to].classList.add("active");
-    }
-  });
+// دکمه کاهش مبلغ
+decreaseButton.addEventListener("click", () => {
+  updateAmount(cleanAmount(amountInput.value) - 10000);
+});
+
+// دکمه افزایش مبلغ
+increaseButton.addEventListener("click", () => {
+  updateAmount(cleanAmount(amountInput.value) + 10000);
 });

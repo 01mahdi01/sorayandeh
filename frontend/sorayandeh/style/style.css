@@ -148,7 +148,10 @@ body {
 .offcanvas-header h6 {
   margin: 20px 10px;
 }
-
+.offcanvas-body a {
+  display: flex !important;
+  justify-content: space-between;
+}
 .menu-links a {
   display: block;
   padding: 10px 15px;
@@ -273,17 +276,9 @@ body {
   text-align: center;
 }
 
-/* .service-cards .card .service-count::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 2px;
-  background-color: red;
-  margin-top: 2px;
-} */
-
+/* hsjal */
 /* محتوای کارت */
-.card-content {
+.service .card-content {
   background-color: rgba(
     0,
     0,
@@ -301,13 +296,13 @@ body {
   align-items: center !important;
 }
 /* عنوان و متن داخل کارت */
-.card-content h3 {
+.service .card-content h3 {
   font-size: 1.5rem !important;
   margin-bottom: 10px !important;
   font-weight: bold !important;
 }
 /* استایل لینک */
-.card-link {
+.service .card-link {
   text-decoration: none !important;
   color: #ff9800 !important;
   font-weight: bold !important;
@@ -318,12 +313,12 @@ body {
   font-size: 1.1rem !important;
 }
 /* اندازه آیکون داخل لینک */
-.card-link img {
+.service .card-link img {
   width: 30px !important;
   height: auto !important;
 }
 /* افکت هاور روی لینک */
-.card-link:hover {
+.service .card-link:hover {
   color: #ff5722 !important;
 }
 /* ریسپانسیو */
@@ -340,11 +335,11 @@ body {
     margin: 0 auto; /* کارت‌ها وسط‌چین می‌شوند */
   }
 
-  .card-content h3 {
+  .service .card-content h3 {
     font-size: 1.2rem !important; /* کاهش اندازه متن عنوان */
   }
 
-  .card-link {
+  .service .card-link {
     font-size: 1rem !important; /* کاهش اندازه متن لینک */
   }
 
@@ -365,7 +360,7 @@ body {
     height: 280px !important; /* ارتفاع کارت‌ها کاهش می‌یابد */
   }
 
-  .card-content h3 {
+  .service .card-content h3 {
     font-size: 1.4rem !important; /* کاهش اندازه متن عنوان */
   }
 
@@ -375,7 +370,7 @@ body {
 }
 
 /* جلوگیری از تاثیر استایل‌های پیش‌فرض بوت‌استرپ */
-.campaigns .card {
+/* .campaigns .card {
   border: 2px solid #f1f1f1;
   border-radius: 8px;
   overflow: hidden;
@@ -383,7 +378,7 @@ body {
 }
 .campaigns .card img {
   border-bottom: 2px solid #f1f1f1;
-  object-fit: cover; /* برای پر کردن فضای تصویر */
+  object-fit: cover; 
   height: 200px;
 }
 .campaigns .card-body {
@@ -415,19 +410,20 @@ body {
 }
 .campaigns .custom-btn {
   display: block;
-  width: 100%; /* مشابه w-100 */
-  padding: 0.375rem 0.75rem; /* فضای داخلی مشابه btn */
-  margin-top: auto; /* دکمه را به پایین کارت می‌برد */
-  font-size: 1rem; /* سایز فونت مشابه */
-  font-weight: 400; /* وزن فونت مشابه */
-  color: #fff; /* رنگ متن */
-  background-color: #0aa4d3; /* رنگ پس‌زمینه مشابه btn-primary */
-  border: 1px solid #0aa4d3; /* حاشیه مشابه */
-  border-radius: 0.375rem; /* گوشه‌های گرد */
-  text-align: center; /* متن در وسط */
-  cursor: pointer; /* اشاره‌گر ماوس */
-  transition: all 0.15s ease-in-out; /* انیمیشن تغییرات */
+  width: 100%; 
+  padding: 0.375rem 0.75rem; 
+  margin-top: auto; 
+  font-size: 1rem; 
+  font-weight: 400; 
+  color: #fff; 
+  background-color: #0aa4d3; 
+  border: 1px solid #0aa4d3; 
+  border-radius: 0.375rem; 
+  text-align: center; 
+  cursor: pointer; 
+  transition: all 0.15s ease-in-out; 
 }
+*/
 .wrapper-champain {
   background-color: #e7eaeb;
   border: 5px solid #0e878b;
@@ -435,11 +431,57 @@ body {
   padding: 20px;
   margin-top: 30px;
 }
-.campaigns button {
+/* .campaigns button {
   border: none;
   background: none;
   padding: 0;
+}  */
+
+/* new champain */
+.campaigns .campaign-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
 }
+
+.campaigns .campaign-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.campaigns .progress-bar {
+  background-color: #0aa4d3;
+  position: relative;
+}
+.campaigns .progress-bar span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+.campaigns .btn-donate {
+  background-color: #0aa4d3;
+  color: white;
+}
+.campaigns .btn-donate:hover {
+  background-color: #088ab8;
+}
+
+.btn-champain-details:hover {
+  background-color: #0aa4d3 !important;
+  border-color: #0aa4d3 !important;
+}
+.campaigns .card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* تعداد خطوط */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5em; /* تنظیم ارتفاع برای ۳ خط */
+}
+
 /* تنظیمات کلی برای بخش پرداخت */
 .payment-section {
   display: flex;
@@ -531,6 +573,10 @@ body {
 }
 /* ریسپانسیو */
 @media (max-width: 768px) {
+  .amount-control {
+    display: flex;
+    flex-wrap: wrap;
+  }
   #pay {
     padding: 0px 30px;
     height: 50px;
