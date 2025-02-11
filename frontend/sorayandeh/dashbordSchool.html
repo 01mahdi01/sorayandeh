@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل مدرسه</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="style/fonts.css" />
+    <style>
+      .school-panel {
+        margin-top: 100px;
+      }
+      .central-container {
+        width: 100%;
+
+        background-color: white;
+
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: stretch;
+      }
+
+      .sidebar {
+        width: 250px;
+
+        background-color: #343a40;
+        padding-top: 20px;
+      }
+
+      .sidebar a {
+        color: white;
+        padding: 15px;
+        text-decoration: none;
+        display: flex;
+        font-size: 16px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .sidebar a i {
+        font-size: 18px;
+      }
+
+      .sidebar a:hover {
+        background-color: #575d63;
+      }
+
+      .sidebar a.active {
+        background-color: #0aa4d3;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .content {
+        display: none;
+      }
+
+      .content.active {
+        display: block;
+      }
+
+      .step {
+        display: none;
+      }
+
+      .step-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .step-number {
+        flex-grow: 1;
+        text-align: center;
+        font-weight: bold;
+      }
+      .password-wrapper {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+      }
+
+      .password-wrapper input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 8px;
+      }
+
+      .toggle-password {
+        padding: 8px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #6c757d;
+      }
+
+      .input-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .input-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        border: none;
+        margin: 0px;
+      }
+
+      .amount-input {
+        padding-left: 50px;
+        text-align: right;
+        width: 50%;
+        border: 1px solid #dee2e6;
+      }
+
+      .currency-label {
+        position: absolute;
+        left: 55%;
+        top: 50%;
+        transform: translateY(-50%);
+        color: gray;
+        font-size: 14px;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      #campaignForm h3 {
+        color: #6c757d;
+        font-size: 1.7rem;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          right: -250px;
+          top: 0;
+          height: 100%;
+          transition: right 0.4s;
+          z-index: 1000;
+        }
+
+        .sidebar.open {
+          right: 0;
+        }
+
+        .sidebar a {
+          font-size: 18px;
+        }
+
+        .hamburger {
+          display: block;
+          cursor: pointer;
+          font-size: 30px;
+          color: black;
+          margin: 10px;
+          height: fit-content;
+        }
+
+        .sidebar a {
+          text-align: right;
+        }
+
+        .menu-link.active {
+          background-color: #0aa4d3;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .hamburger {
+          display: none;
+        }
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table th,
+      .table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+      }
+
+      .table thead th {
+        background-color: #b0b0b0;
+        color: black !important;
+        font-weight: bold;
+      }
+
+      .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      .table-responsive {
+        max-height: 400px;
+        overflow: auto;
+      }
+
+      .table th,
+      .table td {
+        white-space: nowrap;
+        padding: 12px;
+        border: 1px solid #ddd;
+      }
+
+      .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      @media (max-width: 768px) {
+        .table th,
+        .table td {
+          font-size: 14px !important;
+        }
+        #received-donations .card {
+          max-height: 400px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .table th,
+        .table td {
+          font-size: 12px !important;
+        }
+        #received-donations .card {
+          max-height: 400px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- هدر -->
+    <header class="header shadow-sm">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4 container-login">
+            <button class="login-btn">
+              <a href="login.html">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </a>
+            </button>
+          </div>
+          <div class="col-4 menu-hamburger">
+            <!-- دکمه منوی همبرگری -->
+            <button
+              class="btn btn-primary hum-btn"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuCanvas"
+              aria-controls="menuCanvas"
+            >
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <div class="col-4 d-flex justify-content-center container-logo">
+            <a href="home.html" class="logo text-dark text-decoration-none">
+              <img
+                src="image/Screenshot-2024-09-28-140836.png"
+                alt="لوگو"
+                class="logo"
+              />
+            </a>
+          </div>
+          <div class="col-4 container-btn">
+            <a href="soalat.html">
+              <button class="questions-btn">سوالات متداول</button>
+            </a>
+            <a href="hemayat.html">
+              <button class="support-btn">حمایت از سرآینده</button>
+            </a>
+
+            <div class="dropdown">
+              <button
+                class="menu-btn dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu custom-dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="champains.html"
+                    ><i class="bi bi-people"></i> کمپین
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="conditions.html"
+                    ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- منوی همبرگری -->
+      <div
+        class="offcanvas offcanvas-end offcanvas-half"
+        tabindex="-1"
+        id="menuCanvas"
+        aria-labelledby="menuCanvasLabel"
+      >
+        <div class="offcanvas-header">
+          <i class="bi bi-person-circle" style="font-size: 40px"></i>
+          <h6 class="login-btn-hum">
+            <a href="login.html">ورود و ثبت نام</a>
+          </h6>
+        </div>
+        <div class="offcanvas-body">
+          <div class="menu-links">
+            <a href="tamasBaMa.html">
+              ارتباط با ما<i class="bi bi-telephone"></i
+            ></a>
+            <a href="about.html"> درباره ما<i class="bi bi-info-circle"></i></a>
+            <a href="soalat.html"
+              >سوالات متداول<i class="bi bi-question-circle"></i
+            ></a>
+            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
+            <a href="hemayat.html"
+              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
+            </a>
+            <a href="conditions.html">
+              شرایط و ضوابط<i class="bi bi-file-earmark-text"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="school-panel">
+      <div class="container">
+        <div class="central-container">
+          <!-- آیکون همبرگری -->
+          <div class="hamburger" onclick="toggleSidebar()">☰</div>
+          <div class="sidebar">
+            <a href="#edit-profile" class="menu-link active">
+              ویرایش اطلاعات <i class="bi bi-person"></i>
+            </a>
+            <a href="#edit-password" class="menu-link">
+              ویرایش رمز<i class="bi bi-key"></i>
+            </a>
+            <a href="#create-campaign" class="menu-link">
+              ایجاد کمپین جدید<i class="bi bi-plus-circle"></i>
+            </a>
+            <a href="#manage-campaign" class="menu-link">
+              مدیریت کمپین‌ها<i class="bi bi-clipboard-check"></i>
+            </a>
+            <a href="#received-donations" class="menu-link">
+              کمک‌های دریافتی <i class="bi bi-gift"></i>
+            </a>
+            <a href="#reports" class="menu-link">
+              گزارش‌ها و آمار<i class="bi bi-bar-chart-line"></i>
+            </a>
+          </div>
+
+          <div class="main-content">
+            <!-- ویرایش اطلاعات -->
+            <div id="edit-profile" class="content active">
+              <form>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="school-name" class="form-label"
+                      >نام مدرسه :</label
+                    >
+                    <input type="text" class="form-control" id="school-name" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="postal-code" class="form-label"
+                      >کدپستی مدرسه :</label
+                    >
+                    <input type="text" class="form-control" id="postal-code" />
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="school-code" class="form-label"
+                      >کد مدرسه :</label
+                    >
+                    <input type="text" class="form-control" id="school-code" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="school-phone" class="form-label"
+                      >تلفن مدرسه :</label
+                    >
+                    <input type="text" class="form-control" id="school-phone" />
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="school-email" class="form-label"
+                      >ایمیل مدرسه :</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="school-email"
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 mb-3">
+                    <label for="school-address" class="form-label"
+                      >آدرس مدرسه :</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="school-address"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary float-start">
+                  ذخیره تغییرات
+                </button>
+              </form>
+            </div>
+
+            <!-- ویرایش رمز -->
+            <div id="edit-password" class="content">
+              <form>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="currentPassword" class="form-label"
+                      >رمز فعلی :</label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="currentPassword"
+                      />
+                      <span
+                        class="toggle-password"
+                        data-target="currentPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="newPassword" class="form-label"
+                      >رمز جدید :</label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="newPassword"
+                      />
+                      <span class="toggle-password" data-target="newPassword">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="confirmNewPassword" class="form-label"
+                      >تکرار رمز جدید :</label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="confirmNewPassword"
+                      />
+                      <span
+                        class="toggle-password"
+                        data-target="confirmNewPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary float-start">
+                  ذخیره تغییرات
+                </button>
+              </form>
+            </div>
+
+            <!-- ایجاد کمپین -->
+            <div id="create-campaign" class="content">
+              <h2 class="text-center">فرم ایجاد کمپین</h2>
+              <form id="campaignForm">
+                <!-- مرحله 1: اطلاعات درخواست‌دهنده -->
+                <fieldset class="step">
+                  <h3>اطلاعات درخواست‌دهنده</h3>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">نام:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="firstName"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">نام خانوادگی:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="lastName"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">سمت:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="position"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">شماره همراه:</label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        name="mobile"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="step-controls">
+                    <button type="button" class="btn btn-primary next d-none">
+                      مرحله قبل
+                    </button>
+                    <span class="step-number"></span>
+                    <button type="button" class="btn btn-primary next">
+                      مرحله بعد
+                    </button>
+                  </div>
+                </fieldset>
+
+                <!-- مرحله 2: اطلاعات مدرسه -->
+                <fieldset class="step">
+                  <h3>اطلاعات مدرسه</h3>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">نام مدرسه:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="schoolName"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">شماره تماس مدرسه:</label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        name="schoolPhone"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 mb-3">
+                      <label class="form-label">آدرس مدرسه:</label>
+                      <textarea
+                        class="form-control"
+                        name="schoolAddress"
+                        required
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="step-controls">
+                    <button type="button" class="btn btn-secondary prev">
+                      مرحله قبل
+                    </button>
+                    <span class="step-number"></span>
+                    <button type="button" class="btn btn-primary next">
+                      مرحله بعد
+                    </button>
+                  </div>
+                </fieldset>
+
+                <!-- مرحله 3: مشخصات کمپین -->
+                <fieldset class="step">
+                  <h3>مشخصات کمپین</h3>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">دسته‌بندی نیاز:</label>
+                      <select class="form-select" name="category" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="هوشمند سازی مدارس">
+                          هوشمند سازی مدارس
+                        </option>
+                        <option value="حفاظت و ایمنی">حفاظت و ایمنی</option>
+                        <option value="بهداشت و انرژی">بهداشت و انرژی</option>
+                        <option value="سرمایه‌گذاری اجتماعی">
+                          سرمایه‌گذاری اجتماعی
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">عنوان کمپین:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="campaignTitle"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">توضیحات کمپین:</label>
+                    <textarea
+                      class="form-control"
+                      name="campaignDescription"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <div class="mb-3 input-container">
+                    <label class="form-label"
+                      >مبلغ مورد نیاز (حداکثر 50 میلیون تومان):</label
+                    >
+                    <div class="input-wrapper">
+                      <input
+                        type="text"
+                        class="form-control amount-input"
+                        name="amount"
+                        id="amountInput"
+                        required
+                      />
+                      <span class="currency-label">تومان</span>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">تصاویر کمپین:</label>
+                    <input
+                      type="file"
+                      class="form-control"
+                      name="campaignImages"
+                      id="campaignImages"
+                      accept="image/*"
+                      multiple
+                    />
+                    <div id="previewContainer" class="image-preview"></div>
+                  </div>
+                  <div class="step-controls">
+                    <button type="button" class="btn btn-secondary prev">
+                      مرحله قبل
+                    </button>
+                    <span class="step-number"></span>
+                    <button type="submit" class="btn btn-success">
+                      ایجاد کمپین
+                    </button>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+
+            <!-- مدیریت کمپین -->
+            <div id="manage-campaign" class="content">
+              <!-- <h2 class="mb-4">مدیریت کمپین‌ها</h2> -->
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card campaign-card">
+                    <img
+                      src="https://via.placeholder.com/150"
+                      class="card-img-top"
+                      alt="..."
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title">کمپین هوشمند سازی مدارس</h5>
+                      <p class="card-text">تجهیز آزمایشگاه</p>
+                      <p class="card-text">
+                        مبلغ جمع‌آوری شده: 50,000,000 تومان
+                      </p>
+                      <a href="#" class="btn btn-primary">مدیریت کمپین</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card campaign-card">
+                    <img
+                      src="https://via.placeholder.com/150"
+                      class="card-img-top"
+                      alt="..."
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title">کمپین حفاظت و ایمنی</h5>
+                      <p class="card-text">سیستم‌های حفاظتی</p>
+                      <p class="card-text">
+                        مبلغ جمع‌آوری شده: 30,000,000 تومان
+                      </p>
+                      <a href="#" class="btn btn-primary">مدیریت کمپین</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- کمک های دریافتی -->
+            <div id="received-donations" class="content">
+              <div class="card p-4">
+                <div
+                  class="table-responsive"
+                  style="max-height: 400px; overflow: auto"
+                >
+                  <table class="table table-bordered text-center">
+                    <thead class="table-dark">
+                      <tr>
+                        <th class="fs-5 text-nowrap">کمپین</th>
+                        <th class="fs-5 text-nowrap">نام</th>
+                        <th class="fs-5 text-nowrap">مبلغ (تومان)</th>
+                        <th class="fs-5 text-nowrap">تاریخ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">محمد رضایی</td>
+                        <td class="fs-6">10,000,000</td>
+                        <td class="fs-6">1402/11/20</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">علی کریمی</td>
+                        <td class="fs-6">5,000,000</td>
+                        <td class="fs-6">1402/11/21</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">زهرا موسوی</td>
+                        <td class="fs-6">7,500,000</td>
+                        <td class="fs-6">1402/11/22</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">حمید نوری</td>
+                        <td class="fs-6">2,000,000</td>
+                        <td class="fs-6">1402/11/23</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">محمد رضایی</td>
+                        <td class="fs-6">10,000,000</td>
+                        <td class="fs-6">1402/11/20</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">علی کریمی</td>
+                        <td class="fs-6">5,000,000</td>
+                        <td class="fs-6">1402/11/21</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">زهرا موسوی</td>
+                        <td class="fs-6">7,500,000</td>
+                        <td class="fs-6">1402/11/22</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">حمید نوری</td>
+                        <td class="fs-6">2,000,000</td>
+                        <td class="fs-6">1402/11/23</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">محمد رضایی</td>
+                        <td class="fs-6">10,000,000</td>
+                        <td class="fs-6">1402/11/20</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">علی کریمی</td>
+                        <td class="fs-6">5,000,000</td>
+                        <td class="fs-6">1402/11/21</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">زهرا موسوی</td>
+                        <td class="fs-6">7,500,000</td>
+                        <td class="fs-6">1402/11/22</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">حمید نوری</td>
+                        <td class="fs-6">2,000,000</td>
+                        <td class="fs-6">1402/11/23</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">محمد رضایی</td>
+                        <td class="fs-6">10,000,000</td>
+                        <td class="fs-6">1402/11/20</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه امید</td>
+                        <td class="fs-6">علی کریمی</td>
+                        <td class="fs-6">5,000,000</td>
+                        <td class="fs-6">1402/11/21</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">زهرا موسوی</td>
+                        <td class="fs-6">7,500,000</td>
+                        <td class="fs-6">1402/11/22</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">مدرسه دانش</td>
+                        <td class="fs-6">حمید نوری</td>
+                        <td class="fs-6">2,000,000</td>
+                        <td class="fs-6">1402/11/23</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- گزارش و امار -->
+            <div id="reports" class="content">
+              <!-- <h2 class="mb-4">گزارش‌ها و آمار</h2> -->
+              <div class="card p-4">
+                <h4>گزارش مالی</h4>
+                <p>مجموع کمک‌های دریافتی: 200,000,000 تومان</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // تغییر وضعیت منوی سایدبار در حالت موبایل
+      function toggleSidebar() {
+        document.querySelector(".sidebar").classList.toggle("open");
+      }
+
+      // تغییر محتوای صفحه بر اساس انتخاب آیتم منو
+      document.querySelectorAll(".menu-link").forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          document
+            .querySelectorAll(".menu-link")
+            .forEach((l) => l.classList.remove("active"));
+          this.classList.add("active");
+
+          document
+            .querySelectorAll(".content")
+            .forEach((content) => content.classList.remove("active"));
+          document
+            .querySelector(this.getAttribute("href"))
+            .classList.add("active");
+
+          // بستن منو همبرگری پس از انتخاب آیتم
+          if (window.innerWidth <= 768) {
+            document.querySelector(".sidebar").classList.remove("open");
+          }
+        });
+      });
+      // بستن منو وقتی روی جای دیگر صفحه کلیک شود
+      document.addEventListener("click", (e) => {
+        const sidebar = document.querySelector(".sidebar");
+        const hamburger = document.querySelector(".hamburger");
+
+        // اگر کاربر روی منو یا دکمه همبرگری کلیک نکرد، منو بسته شود
+        if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+          sidebar.classList.remove("open");
+        }
+      });
+      document
+        .getElementById("campaignImages")
+        .addEventListener("change", function (event) {
+          const previewContainer = document.getElementById("previewContainer");
+          previewContainer.innerHTML = "";
+          const files = event.target.files;
+          if (files.length > 10) {
+            alert("حداکثر می‌توانید 10 تصویر آپلود کنید.");
+            event.target.value = "";
+            return;
+          }
+          for (let i = 0; i < files.length; i++) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(files[i]);
+            if (i === 0) img.style.border = "2px solid red";
+            previewContainer.appendChild(img);
+          }
+        });
+    </script>
+    <!-- اسکریپت ایجاد کمپین -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const steps = document.querySelectorAll(".step"); // تمام مراحل فرم
+        let currentStep = 0; // مرحله فعلی
+        const stepNumbers = document.querySelectorAll(".step-number");
+
+        function showStep(step) {
+          steps.forEach((fieldset, index) => {
+            fieldset.style.display = index === step ? "block" : "none";
+          });
+          updateStepNumber();
+        }
+
+        function updateStepNumber() {
+          stepNumbers.forEach((span) => {
+            span.textContent = `مرحله ${currentStep + 1} از ${steps.length}`;
+          });
+        }
+
+        // نمایش مرحله اول
+        showStep(currentStep);
+
+        document.querySelectorAll(".next").forEach((button) => {
+          button.addEventListener("click", function () {
+            if (currentStep < steps.length - 1) {
+              currentStep++;
+              showStep(currentStep);
+            }
+          });
+        });
+
+        document.querySelectorAll(".prev").forEach((button) => {
+          button.addEventListener("click", function () {
+            if (currentStep > 0) {
+              currentStep--;
+              showStep(currentStep);
+            }
+          });
+        });
+
+        // ارسال فرم نهایی
+        document
+          .getElementById("campaignForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            alert("فرم با موفقیت ارسال شد!");
+          });
+      });
+    </script>
+    <!-- مشاهده رمز -->
+    <script>
+      document.querySelectorAll(".toggle-password").forEach((item) => {
+        item.addEventListener("click", function () {
+          const targetId = this.getAttribute("data-target");
+          const passwordField = document.getElementById(targetId);
+          const icon = this.querySelector("i");
+
+          // تغییر نوع فیلد رمز عبور
+          if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash"); // تغییر به آیکون چشم بسته
+          } else {
+            passwordField.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye"); // تغییر به آیکون چشم باز
+          }
+        });
+      });
+    </script>
+    <!-- سقف قیمت -->
+    <script>
+      document
+        .getElementById("amountInput")
+        .addEventListener("input", function () {
+          // حذف کاراکترهای غیرعددی
+          let rawValue = this.value.replace(/[^0-9]/g, "");
+
+          // جلوگیری از ورود عدد بیش از 50 میلیون
+          if (rawValue > 50000000) {
+            rawValue = "50000000";
+          }
+
+          // افزودن کاما به عنوان جداکننده هزارگان
+          this.value = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
