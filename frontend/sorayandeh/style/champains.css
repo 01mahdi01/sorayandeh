@@ -1,9 +1,9 @@
 .champains {
   margin-top: 80px;
 }
-.card-text {
+/* .card-text {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* محدود کردن به 3 خط */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -14,11 +14,11 @@
   flex-grow: 1;
 }
 .row {
-  margin-right: 0; /* حذف فاصله راست */
-  margin-left: 0; /* حذف فاصله چپ */
+  margin-right: 0; 
+  margin-left: 0; 
 }
 .container {
-  padding: 0 1.5rem; /* اضافه کردن فاصله به کناره‌های سایت */
+  padding: 0 1.5rem;
 }
 .progress-bar {
   background-color: #0aa4d3;
@@ -36,16 +36,73 @@
 }
 .custom-btn {
   display: block;
-  width: 100%; /* مشابه w-100 */
-  padding: 0.375rem 0.75rem; /* فضای داخلی مشابه btn */
-  margin-top: auto; /* دکمه را به پایین کارت می‌برد */
-  font-size: 1rem; /* سایز فونت مشابه */
-  font-weight: 400; /* وزن فونت مشابه */
-  color: #fff; /* رنگ متن */
-  background-color: #0aa4d3; /* رنگ پس‌زمینه مشابه btn-primary */
-  border: 1px solid #0aa4d3; /* حاشیه مشابه */
-  border-radius: 0.375rem; /* گوشه‌های گرد */
-  text-align: center; /* متن در وسط */
-  cursor: pointer; /* اشاره‌گر ماوس */
-  transition: all 0.15s ease-in-out; /* انیمیشن تغییرات */
+  width: 100%; 
+  padding: 0.375rem 0.75rem; 
+  margin-top: auto;
+  font-size: 1rem;
+  font-weight: 400; 
+  color: #fff;
+  background-color: #0aa4d3; 
+  border: 1px solid #0aa4d3; 
+  border-radius: 0.375rem;
+  text-align: center; 
+  cursor: pointer; 
+  transition: all 0.15s ease-in-out; 
+} */
+/* new */
+.campaign-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.campaign-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.progress-bar {
+  background-color: #0aa4d3;
+  position: relative;
+}
+.progress-bar span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+.btn-donate {
+  background-color: #0aa4d3;
+  color: white;
+}
+.btn-donate:hover {
+  background-color: #088ab8;
+}
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5em;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.campaign-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

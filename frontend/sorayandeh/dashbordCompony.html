@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل کمپانی</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- استایل‌های Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="style/fonts.css" />
+    <style>
+      .school-panel {
+        margin-top: 100px;
+      }
+      .central-container {
+        width: 100%;
+
+        background-color: white;
+
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: stretch;
+      }
+
+      .sidebar {
+        width: 250px;
+
+        background-color: #343a40;
+        padding-top: 20px;
+        min-height: 400px;
+      }
+
+      .sidebar a {
+        color: white;
+        padding: 15px;
+        text-decoration: none;
+
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .sidebar a:hover {
+        background-color: #575d63;
+      }
+
+      .sidebar a.active {
+        background-color: #0aa4d3;
+      }
+      .sidebar a i {
+        font-size: 18px;
+      }
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .content {
+        display: none;
+      }
+
+      .content.active {
+        display: block;
+      }
+
+      #map {
+        height: 350px;
+        width: 100%;
+      }
+      .password-wrapper {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+      }
+
+      .password-wrapper input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 8px;
+      }
+
+      .toggle-password {
+        padding: 8px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #6c757d;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          right: -250px;
+          top: 0;
+          height: 100%;
+          transition: right 0.4s;
+          z-index: 1000;
+        }
+
+        .sidebar.open {
+          right: 0;
+        }
+
+        .sidebar a {
+          font-size: 18px;
+        }
+
+        .hamburger {
+          display: block;
+          cursor: pointer;
+          font-size: 30px;
+          color: black;
+          margin: 10px;
+        }
+
+        .sidebar a {
+          text-align: right;
+        }
+
+        .menu-link.active {
+          background-color: #0aa4d3;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .hamburger {
+          display: none;
+        }
+      }
+      .table-responsive {
+        max-height: 300px;
+        overflow: auto;
+      }
+      .table thead th {
+        background-color: #b0b0b0;
+        color: black;
+        font-weight: bold;
+      }
+      .table th,
+      .table td {
+        white-space: nowrap;
+        padding: 12px;
+        border: 1px solid #ddd;
+      }
+
+      .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      @media (max-width: 768px) {
+        .table th,
+        .table td {
+          font-size: 14px !important;
+        }
+        #transaction-history .card {
+          max-height: 400px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .table th,
+        .table td {
+          font-size: 12px !important;
+        }
+        #transaction-history .card {
+          max-height: 400px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- هدر -->
+    <header class="header shadow-sm">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4 container-login">
+            <button class="login-btn">
+              <a href="login.html">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </a>
+            </button>
+          </div>
+          <div class="col-4 menu-hamburger">
+            <!-- دکمه منوی همبرگری -->
+            <button
+              class="btn btn-primary hum-btn"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuCanvas"
+              aria-controls="menuCanvas"
+            >
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <div class="col-4 d-flex justify-content-center container-logo">
+            <a href="home.html" class="logo text-dark text-decoration-none">
+              <img
+                src="image/Screenshot-2024-09-28-140836.png"
+                alt="لوگو"
+                class="logo"
+              />
+            </a>
+          </div>
+          <div class="col-4 container-btn">
+            <a href="soalat.html">
+              <button class="questions-btn">سوالات متداول</button>
+            </a>
+            <a href="hemayat.html">
+              <button class="support-btn">حمایت از سرآینده</button>
+            </a>
+
+            <div class="dropdown">
+              <button
+                class="menu-btn dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu custom-dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="champains.html"
+                    ><i class="bi bi-people"></i> کمپین
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="conditions.html"
+                    ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- منوی همبرگری -->
+      <div
+        class="offcanvas offcanvas-end offcanvas-half"
+        tabindex="-1"
+        id="menuCanvas"
+        aria-labelledby="menuCanvasLabel"
+      >
+        <div class="offcanvas-header">
+          <i class="bi bi-person-circle" style="font-size: 40px"></i>
+          <h6 class="login-btn-hum">
+            <a href="login.html">ورود و ثبت نام</a>
+          </h6>
+        </div>
+        <div class="offcanvas-body">
+          <div class="menu-links">
+            <a href="tamasBaMa.html">
+              ارتباط با ما<i class="bi bi-telephone"></i
+            ></a>
+            <a href="about.html"> درباره ما<i class="bi bi-info-circle"></i></a>
+            <a href="soalat.html"
+              >سوالات متداول<i class="bi bi-question-circle"></i
+            ></a>
+            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
+            <a href="hemayat.html"
+              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
+            </a>
+            <a href="conditions.html">
+              شرایط و ضوابط<i class="bi bi-file-earmark-text"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="school-panel">
+      <div class="container">
+        <div class="central-container">
+          <!-- آیکون همبرگری -->
+          <div class="hamburger" onclick="toggleSidebar()">☰</div>
+          <div class="sidebar">
+            <a href="#edit-profile" class="menu-link active">
+              ویرایش اطلاعات<i class="bi bi-person"></i>
+            </a>
+            <a href="#edit-password" class="menu-link">
+              ویرایش رمز<i class="bi bi-key"></i>
+            </a>
+            <a href="#transaction-history" class="menu-link">
+              تاریخچه تراکنش‌ها <i class="bi bi-clock-history"></i>
+            </a>
+            <a href="#heat-map" class="menu-link open-map">
+              نقشه کمک‌ها <i class="bi bi-map"></i>
+            </a>
+          </div>
+
+          <div class="main-content">
+            <!-- ویرایش اطلاعات -->
+            <div id="edit-profile" class="content active">
+              <form>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label"
+                      >نام و نام خانوادگی :</label
+                    >
+                    <input type="text" class="form-control" id="name" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">ایمیل :</label>
+                    <input type="email" class="form-control" id="email" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">شماره تماس :</label>
+                    <input type="text" class="form-control" id="phone" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="companyRegNumber" class="form-label"
+                      >شماره ثبت شرکت :</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="companyRegNumber"
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="employeeName" class="form-label"
+                      >نام کارمند :</label
+                    >
+                    <input type="text" class="form-control" id="employeeName" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="employeePosition" class="form-label"
+                      >سمت کارمند :</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="employeePosition"
+                    />
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary float-start">
+                  ذخیره تغییرات
+                </button>
+              </form>
+            </div>
+
+            <!-- ویرایش رمز -->
+            <div id="edit-password" class="content">
+              <form>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="currentPassword" class="form-label"
+                      >رمز فعلی :</label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="currentPassword"
+                      />
+                      <span
+                        class="toggle-password"
+                        data-target="currentPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="newPassword" class="form-label"
+                      >رمز جدید :</label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="newPassword"
+                      />
+                      <span class="toggle-password" data-target="newPassword">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="confirmNewPassword" class="form-label"
+                      >تکرار رمز جدید :</label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="confirmNewPassword"
+                      />
+                      <span
+                        class="toggle-password"
+                        data-target="confirmNewPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary float-start">
+                  ذخیره تغییرات
+                </button>
+              </form>
+            </div>
+
+            <!-- تاریخچه تراکنش ها  -->
+            <div id="transaction-history" class="content">
+              <div class="card p-4">
+                <div
+                  class="table-responsive"
+                  style="max-height: 400px; overflow: auto"
+                >
+                  <table class="table table-bordered text-center">
+                    <thead class="table-dark">
+                      <tr>
+                        <th class="fs-5 text-nowrap">کمپین</th>
+                        <th class="fs-5 text-nowrap">مبلغ (تومان)</th>
+                        <th class="fs-5 text-nowrap">تاریخ</th>
+                        <th class="fs-5 text-nowrap">وضعیت</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه امید</td>
+                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
+                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
+                        <td class="fs-6">در حال بررسی</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه دانش</td>
+                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
+                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
+                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
+                        <td class="fs-6">در انتظار تایید</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه امید</td>
+                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
+                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
+                        <td class="fs-6">در حال بررسی</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه دانش</td>
+                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
+                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
+                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
+                        <td class="fs-6">در انتظار تایید</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه امید</td>
+                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
+                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
+                        <td class="fs-6">در حال بررسی</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه دانش</td>
+                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
+                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
+                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
+                        <td class="fs-6">در انتظار تایید</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!--  نقشه کمک ها -->
+
+            <div id="heat-map" class="content">
+              <h2 class="text-center mb-4">نقشه مدارس کمک شده</h2>
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- اسکریپت‌های Leaflet -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+      document
+        .querySelector(".open-map")
+        .addEventListener("click", function () {
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 300);
+        });
+
+      var map = L.map("map").setView([32.4279, 53.688], 6); // مرکز ایران
+
+      // اضافه کردن OpenStreetMap
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      // تابع برای دریافت مختصات از Nominatim
+      function getCoordinatesFromAddress(address, name) {
+        const encodedAddress = encodeURIComponent(address); // کدگذاری آدرس فارسی
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`;
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.length > 0) {
+              const lat = data[0].lat;
+              const lon = data[0].lon;
+              addCircleToMap(lat, lon, name); // اضافه کردن دایره به نقشه
+            } else {
+              console.log("آدرس پیدا نشد.");
+            }
+          })
+          .catch((error) => {
+            console.log("خطا در درخواست به Nominatim:", error);
+          });
+      }
+
+      // اضافه کردن دایره به نقشه
+      function addCircleToMap(lat, lng, name) {
+        var circle = L.circle([lat, lng], {
+          color: "red", // رنگ حاشیه دایره
+          fillColor: "red", // رنگ داخل دایره
+          fillOpacity: 0.8, // شفافیت داخل دایره
+          radius: 8000, // شعاع دایره به متر
+        }).addTo(map);
+
+        // نمایش نام مدرسه در پاپ‌آپ وقتی کاربر روی دایره کلیک می‌کند
+        circle.bindPopup(name); // نام مدرسه را به عنوان پاپ‌آپ نمایش می‌دهد
+      }
+
+      // آدرس‌های نمونه همراه با نام مدارس
+      const schoolAddresses = [
+        { address: "تهران- میدان انقلاب", name: "مدرسه تهران" },
+        { address: "مشهد- میدان فردوسی", name: "مدرسه مشهد" },
+        { address: "شیراز، میدان نمازی", name: "مدرسه شیراز" },
+        { address: "قم، حرم حضرت معصومه", name: "مدرسه قم" },
+        { address: "یزد، میدان امیرچخماق", name: "مدرسه یزد" },
+        {
+          address: "شهریار",
+          name: "خانه ",
+        },
+      ];
+
+      // درخواست به Nominatim برای هر آدرس
+      schoolAddresses.forEach((school) => {
+        getCoordinatesFromAddress(school.address, school.name);
+      });
+    </script>
+    <script>
+      // تغییر وضعیت منوی سایدبار در حالت موبایل
+      function toggleSidebar() {
+        document.querySelector(".sidebar").classList.toggle("open");
+      }
+
+      // تغییر محتوای صفحه بر اساس انتخاب آیتم منو
+      document.querySelectorAll(".menu-link").forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          document
+            .querySelectorAll(".menu-link")
+            .forEach((l) => l.classList.remove("active"));
+          this.classList.add("active");
+
+          document
+            .querySelectorAll(".content")
+            .forEach((content) => content.classList.remove("active"));
+          document
+            .querySelector(this.getAttribute("href"))
+            .classList.add("active");
+
+          // بستن منو همبرگری پس از انتخاب آیتم
+          if (window.innerWidth <= 768) {
+            document.querySelector(".sidebar").classList.remove("open");
+          }
+        });
+      });
+      // بستن منو وقتی روی جای دیگر صفحه کلیک شود
+      document.addEventListener("click", (e) => {
+        const sidebar = document.querySelector(".sidebar");
+        const hamburger = document.querySelector(".hamburger");
+
+        // اگر کاربر روی منو یا دکمه همبرگری کلیک نکرد، منو بسته شود
+        if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+          sidebar.classList.remove("open");
+        }
+      });
+    </script>
+    <!-- مشاهده رمز -->
+    <script>
+      document.querySelectorAll(".toggle-password").forEach((item) => {
+        item.addEventListener("click", function () {
+          const targetId = this.getAttribute("data-target");
+          const passwordField = document.getElementById(targetId);
+          const icon = this.querySelector("i");
+
+          // تغییر نوع فیلد رمز عبور
+          if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash"); // تغییر به آیکون چشم بسته
+          } else {
+            passwordField.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye"); // تغییر به آیکون چشم باز
+          }
+        });
+      });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

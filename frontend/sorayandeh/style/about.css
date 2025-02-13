@@ -16,7 +16,7 @@ h1 {
 .about-section {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: start;
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -27,8 +27,8 @@ h1 {
 }
 .about-section .text {
   flex: 1;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 1.2rem;
+  line-height: 1.8;
   color: #555;
 }
 .about-section .text p {
@@ -64,6 +64,10 @@ h1 {
   }
   .about-section img {
     display: none;
+  }
+  .about-section .text {
+    font-size: 1rem;
+    line-height: 1.6;
   }
 }
 /* vvvv */
