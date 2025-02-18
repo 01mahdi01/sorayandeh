@@ -10,6 +10,8 @@ services:
       - POSTGRES_DB=sorayandeh
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=123456789
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent storage for database
 
   rabbitmq:
     image: docker-mirror.kubarcloud.com/rabbitmq:alpine
@@ -37,5 +39,5 @@ services:
       - rabbitmq
     restart: on-failure
 
-
-
+volumes:
+  postgres_data:  # Define named volume for database persistence
