@@ -6,7 +6,7 @@ def get_profile(user:BaseUser) -> Profile:
 
 def get_user(user_id: str):
     json_data = {}
-    base_user = BaseUser.objects.select_related("person", "company").get(pk=user_id)
+    base_user = BaseUser.objects.select_related("person", "company","school_user").get(pk=user_id)
 
     # Manually filter out non-serializable fields like '_state'
     base_user_data = {k: v for k, v in base_user.__dict__.items() if not k.startswith('_') if not k.__contains__("password") }
