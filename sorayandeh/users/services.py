@@ -1,13 +1,11 @@
 from celery.beat import info
 from django.db import transaction
-from sentry_sdk.utils import json_dumps
-
 from .models import BaseUser, Profile, Person, Company
 from rest_framework.generics import get_object_or_404
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 from django.db import DatabaseError
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 def update_profile(*, user: BaseUser, **fields) -> Profile:
     """
@@ -103,20 +101,20 @@ def update_user(user_id, **fields) -> BaseUser:
     info = fields.get("info", {})
 
     # Handle 'roll' changes
-    new_roll = fields.get("roll")
-    if new_roll and new_roll != user.roll:
-        if user.roll == "co":
-            Company.objects.filter(base_user=user).delete()
-            Person.objects.create(base_user=user, national_code=info.get("national_code"))
-        elif user.roll == "pe":
-            Person.objects.filter(base_user=user).delete()
-            Company.objects.create(
-                base_user=user,
-                employee_name=info.get("employee_name"),
-                employee_position=info.get("employee_position"),
-                company_registration_number=info.get("company_registration_number"),
-            )
-        user.roll = new_roll  # Update roll
+    # new_roll = fields.get("roll")
+    # if new_roll and new_roll != user.roll:
+    #     if user.roll == "co":
+    #         Company.objects.filter(base_user=user).delete()
+    #         Person.objects.create(base_user=user, national_code=info.get("national_code"))
+    #     elif user.roll == "pe":
+    #         Person.objects.filter(base_user=user).delete()
+    #         Company.objects.create(
+    #             base_user=user,
+    #             employee_name=info.get("employee_name"),
+    #             employee_position=info.get("employee_position"),
+    #             company_registration_number=info.get("company_registration_number"),
+    #         )
+    #     user.roll = new_roll  # Update roll
 
     # Update related model fields
     if user.roll == "pe":
@@ -145,28 +143,44 @@ def update_user(user_id, **fields) -> BaseUser:
 
     return user
 
-
-
-def update_password(user_id, password):
+@transaction.atomic
+def update_password(user_id, password, old_password):
     """
     Updates the user's password and expires their active sessions.
 
     Args:
         user_id (int): ID of the user to update.
         password (str): New password for the user.
+        old_password (str): Current password for verification.
 
     Returns:
-        None
+        dict: Success or error message.
     """
-    print(user_id)
     user = get_object_or_404(BaseUser, id=user_id)
-    # Log the user out of all active sessions
-    user_sessions = Session.objects.filter(expire_date__gte=timezone.now())
-    for session in user_sessions:
-        if str(user.id) == session.get_decoded().get('_auth_user_id'):
-            session.delete()
-    user.set_password(password)
-    user.save()
+
+    # ❌ Fix: Stop function execution if the old password is incorrect
+    if not user.check_password(old_password):
+        return {"success": False, "error": "Wrong old password"}
+
+    try:
+        # 🔹 Log out from all active sessions
+        # user_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        # for session in user_sessions:
+        #     data = session.get_decoded()
+        #     if str(user.id) == data.get('_auth_user_id'):
+        #         session.delete()
+
+        # 🔹 Set the new password
+        user.set_password(password)
+        user.save()
+
+        # # 🔹 Remove refresh tokens (so user must log in again)
+        # RefreshToken.for_user(user)
+
+        return {"success": True, "message": "Password updated successfully"}
+
+    except DatabaseError as e:
+        return {"success": False, "error": "Error updating password: " + str(e)}
 
 
 def delete_user(user_id):

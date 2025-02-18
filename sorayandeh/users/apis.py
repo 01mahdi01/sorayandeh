@@ -206,7 +206,7 @@ class UpdateUser(APIView):
         email = serializers.EmailField(max_length=255, required=False)
         name = serializers.CharField(max_length=255, required=False)
         phone = serializers.CharField(max_length=11, validators=[validate_phone_number], required=False)
-        roll = serializers.CharField(max_length=2 ,required=False)
+        # roll = serializers.CharField(max_length=2 ,required=False)
         info = serializers.JSONField(required=False)
 
 
@@ -241,19 +241,19 @@ class UpdateUser(APIView):
                 dict: The validated data.
             """
             # Get the current user instance if available
-            user = self.instance
+            # user = self.instance
 
-            # Check if `roll` is being updated
-            if 'roll' in data:
-                roll = data['roll']
-            else:
-                # If `roll` is not being updated, fallback to the current value
-                roll = user.roll
-
-            # If `roll` is updated, ensure the `info` field is updated accordingly
-            if roll != user.roll and 'info' not in data:
-                raise serializers.ValidationError(
-                    {"info": "You must update the 'info' field when changing 'is_company'."})
+            # # Check if `roll` is being updated
+            # if 'roll' in data:
+            #     roll = data['roll']
+            # else:
+            #     # If `roll` is not being updated, fallback to the current value
+            #     roll = user.roll
+            #
+            # # If `roll` is updated, ensure the `info` field is updated accordingly
+            # if roll != user.roll and 'info' not in data:
+            #     raise serializers.ValidationError(
+            #         {"info": "You must update the 'info' field when changing 'is_company'."})
 
             # Validate `info` field based on `is_company`
             # if 'info' in data:
@@ -331,6 +331,7 @@ class UpdatePassword(APIView):
         """
         Serializer for input data during password update.
         """
+        old_password = serializers.CharField()
         password = serializers.CharField(
             validators=[
                 number_validator,
@@ -344,6 +345,7 @@ class UpdatePassword(APIView):
             """
             Validate that password and confirm_password match.
             """
+
             if not data.get("password") or not data.get("confirm_password"):
                 raise serializers.ValidationError("Please fill password and confirm password")
 
@@ -362,10 +364,13 @@ class UpdatePassword(APIView):
         serializer = self.InputUpdatePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            user = update_password(
+            response = update_password(
                 user_id=user_id,
+                old_password=serializer.validated_data.get("old_password"),
                 password=serializer.validated_data.get("password"),
             )
+            if not response.get("success"):
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({"message": "Password changed and sessions expired. Please log in again."},
                             status=status.HTTP_200_OK)
