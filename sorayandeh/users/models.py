@@ -24,12 +24,14 @@ class BaseUserManager(BUM):
 
         return user
 
-    def create_superuser(self, email, password=None):
-        user = self.create_user(
+    def create_superuser(self,phone, email, password=None):
+        user = self.model(
             email=email,
+            phone=phone,
+            roll="admin",
             is_admin=True,
-            password=password,
         )
+        user.set_password(password)
 
         user.is_superuser = True
         user.save(using=self._db)
@@ -59,6 +61,7 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
     objects = BaseUserManager()
 
     USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["phone"]
 
     def __str__(self):
         return self.email

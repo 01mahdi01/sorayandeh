@@ -256,19 +256,26 @@ class UpdateUser(APIView):
                     {"info": "You must update the 'info' field when changing 'is_company'."})
 
             # Validate `info` field based on `is_company`
-            if 'info' in data:
-                info_data = data['info']
-                if roll == "co":
-                    info_serializer = RegisterApi.CompanyInfoSerializer(data=info_data)
-                elif roll == "pe":
-                    info_serializer = RegisterApi.PersonInfoSerializer(data=info_data)
-                else:
-                    return False
+            # if 'info' in data:
+            #     info_data = data['info']
+            #     if roll == "co":
+            #         info_serializer = RegisterApi.CompanyInfoSerializer(data=info_data)
+            #     elif roll == "pe":
+            #         info_serializer = RegisterApi.PersonInfoSerializer(data=info_data)
+            #     else:
+            #         return False
 
-                info_serializer.is_valid(raise_exception=True)
-                data['info'] = info_serializer.validated_data
+                # info_serializer.is_valid(raise_exception=True)
+                # data['info'] = info_serializer.validated_data
 
             return data
+
+    class OutputUpdateUserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = BaseUser
+            fields = "__all__"
+
+
 
     @extend_schema(request=InputUpdateUserSerializer)
     def put(self, request):
@@ -303,7 +310,8 @@ class UpdateUser(APIView):
 
         try:
             user = update_user(user_id=user.id, **update_fields)
-            return Response({"message": "User updated successfully"}, status=status.HTTP_200_OK)
+            print(type(user))
+            return Response(self.OutputUpdateUserSerializer(user).data, status=status.HTTP_200_OK)
         except Exception as ex:
             return Response(
                 f"Database Error {ex}",
@@ -546,13 +554,11 @@ class UpdateProfile(APIView):
             )
 
 class GetUser(APIView):
-    class GetUserOutputSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = BaseUser
-            exclude = ('password', 'last_login', 'is_superuser','groups','user_permissions')
+    class GetUserOutputSerializer(serializers.Serializer):
+        json_data = serializers.JSONField()
 
     @extend_schema(responses=GetUserOutputSerializer)
     def get(self,request):
         user_id=request.user.id
-        user=get_user(user_id)
-        return Response(self.GetUserOutputSerializer(user, context={"request": request}).data)
+        json_data=get_user(user_id)
+        return Response(self.GetUserOutputSerializer({"json_data":json_data}, context={"request": request}).data)
