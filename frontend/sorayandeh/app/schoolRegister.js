@@ -40,9 +40,8 @@ form.addEventListener("submit", function (e) {
       if (response.status === 200) {
         return response.json().then((result) => {
           alert("ثبت‌نام با موفقیت انجام شد!");
+          window.location.href = "home.html";
           console.log("پاسخ سرور:", result);
-
-          window.location.href = "schoolLogin.html";
         });
       } else if (response.status === 400) {
         alert("درخواست نامعتبر است. لطفاً داده‌ها را بررسی کنید.");
