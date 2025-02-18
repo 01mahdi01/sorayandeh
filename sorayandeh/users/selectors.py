@@ -21,7 +21,7 @@ def get_user(user_id: str):
         json_data.update(company_data)
 
     elif hasattr(base_user, "school_user"):
-        school_user = {k: v for k, v in base_user.company.__dict__.items() if not k.startswith('_')}
+        school_user = {k: v for k, v in base_user.school_user.__dict__.items() if not k.startswith('_')}
         json_data.update(school_user)
 
     return json_data
