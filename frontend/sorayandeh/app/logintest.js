@@ -31,7 +31,7 @@ if (accessToken) {
 
       // افزودن آیتم "پروفایل" و "خروج" به منوی همبرگری
       const profileItem = document.createElement("a");
-      profileItem.href = "/BDS.html";
+      profileItem.href = "/BDC.html";
       profileItem.className = "menu-item profile-item";
       profileItem.innerHTML = `پروفایل <i class="bi bi-person-circle"></i> `;
       menuLinks.prepend(profileItem);
