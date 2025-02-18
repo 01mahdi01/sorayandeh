@@ -22,8 +22,8 @@ if (accessToken) {
     })
     .then((data) => {
       // اطلاعات کاربر از پاسخ سرور
-      const userInfo = data;
-
+      const userInfo = data.json_data;
+      console.log(userInfo);
       // نمایش نام کاربر و افزودن آیکون خروج
       loginBtn.innerHTML = `<i class="bi bi-person"></i> ${userInfo.name} 
   <i class="fa fa-sign-out fa-flip-horizontal logout-icon" style:"margin-right: 20px;"></i>`;
@@ -31,13 +31,13 @@ if (accessToken) {
 
       // افزودن آیتم "پروفایل" و "خروج" به منوی همبرگری
       const profileItem = document.createElement("a");
-      profileItem.href = "#";
+      profileItem.href = "/BDS.html";
       profileItem.className = "menu-item profile-item";
-      profileItem.innerHTML = `<i class="bi bi-person-circle"></i> پروفایل`;
+      profileItem.innerHTML = `پروفایل <i class="bi bi-person-circle"></i> `;
       menuLinks.prepend(profileItem);
 
       const logoutItem = document.createElement("a");
-      logoutItem.href = "#";
+      logoutItem.href = "/home.html";
       logoutItem.className = "menu-item logout-item";
       logoutItem.innerHTML = `<i class="fa fa-sign-out fa-flip-horizontal"></i> خروج`;
       menuLinks.appendChild(logoutItem);
@@ -74,3 +74,5 @@ if (accessToken) {
 } else {
   console.log("توکن دسترسی موجود نیست.");
 }
+
+// مدرسه

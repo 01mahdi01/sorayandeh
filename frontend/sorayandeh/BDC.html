@@ -12,6 +12,10 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <!-- استایل‌های Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style/style.css" />
@@ -306,9 +310,9 @@
             <a href="#transaction-history" class="menu-link">
               تاریخچه تراکنش‌ها <i class="bi bi-clock-history"></i>
             </a>
-            <a href="#heat-map" class="menu-link open-map">
+            <!-- <a href="#heat-map" class="menu-link open-map">
               نقشه کمک‌ها <i class="bi bi-map"></i>
-            </a>
+            </a> -->
           </div>
 
           <div class="main-content">
@@ -451,80 +455,7 @@
                         <th class="fs-5 text-nowrap">وضعیت</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه امید</td>
-                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
-                        <td class="fs-6">تکمیل شده</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
-                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
-                        <td class="fs-6">در حال بررسی</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه دانش</td>
-                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
-                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
-                        <td class="fs-6">تکمیل شده</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
-                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
-                        <td class="fs-6">در انتظار تایید</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه امید</td>
-                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
-                        <td class="fs-6">تکمیل شده</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
-                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
-                        <td class="fs-6">در حال بررسی</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه دانش</td>
-                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
-                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
-                        <td class="fs-6">تکمیل شده</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
-                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
-                        <td class="fs-6">در انتظار تایید</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه امید</td>
-                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
-                        <td class="fs-6">تکمیل شده</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
-                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
-                        <td class="fs-6">در حال بررسی</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین مدرسه دانش</td>
-                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
-                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
-                        <td class="fs-6">تکمیل شده</td>
-                      </tr>
-                      <tr>
-                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
-                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
-                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
-                        <td class="fs-6">در انتظار تایید</td>
-                      </tr>
-                    </tbody>
+                    <tbody></tbody>
                   </table>
                 </div>
               </div>
@@ -540,6 +471,218 @@
         </div>
       </div>
     </section>
+    <script src="app/baseConfig.js"></script>
+    <script src="app/logintest.js"></script>
+    <!-- اتصال ویرایش پروفایل به بک اند  -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+          console.error("Access token not found!");
+          return;
+        }
+
+        // انتخاب فیلدهای فرم
+        const nameField = document.getElementById("name");
+        const emailField = document.getElementById("email");
+        const phoneField = document.getElementById("phone");
+        const companyRegField = document.getElementById("companyRegNumber");
+        const employeeNameField = document.getElementById("employeeName");
+        const employeePositionField =
+          document.getElementById("employeePosition");
+
+        // دریافت اطلاعات از بک‌اند و نمایش در فرم
+        fetch(`${BASE_URL}users/get_user/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("مشکلی در دریافت اطلاعات رخ داده است.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            nameField.value = data.json_data.name || "";
+            emailField.value = data.json_data.email || "";
+            phoneField.value = data.json_data.phone || "";
+            companyRegField.value =
+              data.json_data.company_registration_number || "";
+            employeeNameField.value = data.json_data.employee_name || "";
+            employeePositionField.value =
+              data.json_data.employee_position || "";
+          })
+          .catch((error) => {
+            console.error("Error fetching profile data:", error);
+          });
+
+        // ارسال تغییرات به بک‌اند
+        document
+          .querySelector("#edit-profile form")
+          .addEventListener("submit", (e) => {
+            e.preventDefault(); // جلوگیری از رفرش شدن صفحه
+
+            const updatedData = {
+              name: nameField.value.trim(),
+              email: emailField.value.trim(),
+              phone: phoneField.value.trim(),
+              companyRegNumber: companyRegField.value.trim(),
+              employeeName: employeeNameField.value.trim(),
+              employeePosition: employeePositionField.value.trim(),
+            };
+
+            fetch("YOUR_BACKEND_API_URL_FOR_PROFILE_UPDATE", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(updatedData),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("مشکلی در ذخیره اطلاعات رخ داده است.");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                alert("تغییرات با موفقیت ذخیره شد!");
+              })
+              .catch((error) => {
+                console.error("Error updating profile:", error);
+                alert("خطا در ذخیره تغییرات، لطفاً دوباره تلاش کنید.");
+              });
+          });
+      });
+    </script>
+    <!-- اتصال ویرایش رمز به بک اند  -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+          console.error("Access token not found!");
+          return;
+        }
+
+        // ارسال درخواست تغییر رمز
+        document
+          .querySelector("#edit-password form")
+          .addEventListener("submit", (e) => {
+            e.preventDefault(); // جلوگیری از رفرش شدن صفحه
+
+            const currentPassword = document
+              .getElementById("currentPassword")
+              .value.trim();
+            const newPassword = document
+              .getElementById("newPassword")
+              .value.trim();
+            const confirmNewPassword = document
+              .getElementById("confirmNewPassword")
+              .value.trim();
+
+            // بررسی خالی نبودن فیلدها
+            if (!currentPassword || !newPassword || !confirmNewPassword) {
+              alert("لطفاً همه فیلدها را پر کنید.");
+              return;
+            }
+
+            // بررسی تطابق رمز جدید با تکرار آن
+            if (newPassword !== confirmNewPassword) {
+              alert("رمز جدید و تکرار آن یکسان نیستند.");
+              return;
+            }
+
+            // بررسی حداقل طول رمز عبور
+            if (newPassword.length < 6) {
+              alert("رمز عبور جدید باید حداقل ۶ کاراکتر باشد.");
+              return;
+            }
+
+            // ارسال اطلاعات به بک‌اند
+            fetch("YOUR_BACKEND_API_URL_FOR_PASSWORD_CHANGE", {
+              method: "PUT", // یا "POST" بسته به API شما
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify({
+                currentPassword,
+                newPassword,
+              }),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("تغییر رمز عبور ناموفق بود.");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                alert("رمز عبور با موفقیت تغییر کرد!");
+                document.getElementById("currentPassword").value = "";
+                document.getElementById("newPassword").value = "";
+                document.getElementById("confirmNewPassword").value = "";
+              })
+              .catch((error) => {
+                console.error("Error changing password:", error);
+                alert("خطا در تغییر رمز عبور، لطفاً دوباره تلاش کنید.");
+              });
+          });
+      });
+    </script>
+    <!-- اتصال تاریخچه تراکنش ها به بک اند  -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+          console.error("Access token not found!");
+          return;
+        }
+
+        const transactionTableBody = document.querySelector(
+          "#transaction-history tbody"
+        );
+
+        // دریافت اطلاعات تراکنش‌ها از بک‌اند
+        fetch("YOUR_BACKEND_API_URL_FOR_TRANSACTIONS", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("خطا در دریافت اطلاعات تراکنش‌ها");
+            }
+            return response.json();
+          })
+          .then((transactions) => {
+            transactions.forEach((transaction) => {
+              const row = document.createElement("tr");
+
+              row.innerHTML = `
+          <td class="fs-6">${transaction.campaign}</td>
+          <td class="fs-6">${transaction.amount}</td>
+          <td class="fs-6">${transaction.date}</td>
+          <td class="fs-6">${transaction.status}</td>
+        `;
+
+              transactionTableBody.appendChild(row);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching transactions:", error);
+            transactionTableBody.innerHTML = `<tr><td colspan="4" class="text-danger">خطا در دریافت اطلاعات</td></tr>`;
+          });
+      });
+    </script>
     <!-- اسکریپت‌های Leaflet -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
