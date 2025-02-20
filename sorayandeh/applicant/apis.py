@@ -123,7 +123,7 @@ class UpdateSchool(APIView):
     class InputUpdateSchoolSerializer(serializers.Serializer):
         name = serializers.CharField(required=False)
         postal_code = serializers.CharField(required=False)
-        school_code_num = serializers.CharField(required=True)
+        # school_code_num = serializers.CharField(required=True)
         creator_employee_info = serializers.JSONField(required=False)
         phone = serializers.CharField(required=False)
         email = serializers.EmailField(required=False)
@@ -140,10 +140,10 @@ class UpdateSchool(APIView):
         serializer = self.InputUpdateSchoolSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = request.data
-        school_code = data.get('school_code_num')
+        user_id=request.user.id
         update_fields = {field: value for field, value in data.items() if value is not None}
         try:
-            updated_school = update_school(school_code=school_code, **update_fields)
+            updated_school = update_school(user_id=user_id, **update_fields)
             return Response(self.OutputUpdateSchoolSerializer(updated_school, context={"request": request}).data)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

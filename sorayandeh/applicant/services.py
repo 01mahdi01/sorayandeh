@@ -32,33 +32,25 @@ def register_school(creator_employee_info, postal_code, school_code_num, name, p
 def delete_school(school_id):
     return School.objects.filter(id=school_id).update(is_deleted=True)
 
-
-def update_school(school_code, **kwargs):
+@transaction.atomic
+def update_school(user_id, **kwargs):
     try:
-        # Fetch the School instance
-        school = get_object_or_404(School, school_code_num=school_code)
+        # Fetch BaseUser and related School object in one query
+        school_user = get_object_or_404(BaseUser.objects.select_related("school_user"), pk=user_id)
 
-        # Update School fields
-        school_fields_to_update = {}
-        user_fields_to_update = {}
-
+        # Update fields for BaseUser and School
         for field, value in kwargs.items():
-            if hasattr(school, field):  # Update School-specific fields
-                setattr(school, field, value)
-                school_fields_to_update[field] = value
-            elif hasattr(school.school, field):  # Prepare fields for User update
-                user_fields_to_update[field] = value
+            if hasattr(school_user, field):
+                setattr(school_user, field, value)  # Update BaseUser fields
+            elif hasattr(school_user.school_user, field):
+                setattr(school_user.school_user, field, value)  # Update School fields
 
-        # Validate and save the School instance
-        school.full_clean()
-        school.save()
+        # Validate and save both instances
+        school_user.full_clean()
+        school_user.save()
+        school_user.school_user.save()
 
-        # Update the User (BaseUser) instance
-        if user_fields_to_update:
-            update_user(school.school.id, **user_fields_to_update)
+        return school_user.school_user  # Return updated School instance
 
-        return school
-    except DatabaseError as er:
-        return {"error": f"Database error occurred: {str(er)}"}
-    except ValidationError as ve:
-        return {"error": f"Validation error: {str(ve)}"}
+    except (DatabaseError, ValidationError) as e:
+        return {"error": str(e)}
