@@ -527,16 +527,26 @@
           .addEventListener("submit", (e) => {
             e.preventDefault(); // جلوگیری از رفرش شدن صفحه
 
-            const updatedData = {
+            const data = {
               name: nameField.value.trim(),
               email: emailField.value.trim(),
               phone: phoneField.value.trim(),
-              companyRegNumber: companyRegField.value.trim(),
-              employeeName: employeeNameField.value.trim(),
-              employeePosition: employeePositionField.value.trim(),
+
+              // companyRegNumber: companyRegField.value.trim(),
+              // employeeName: employeeNameField.value.trim(),
+              // employeePosition: employeePositionField.value.trim(),
+            };
+            const info = {
+              employee_name: employeeNameField.value.trim(),
+              employee_position: employeePositionField.value.trim(),
+              company_registration_number: companyRegField.value.trim(),
             };
 
-            fetch("YOUR_BACKEND_API_URL_FOR_PROFILE_UPDATE", {
+            const updatedData = JSON.parse(JSON.stringify(data));
+            const infoJson = JSON.parse(JSON.stringify(info));
+
+            updatedData.info = infoJson;
+            fetch(`${BASE_URL}users/update_user/`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
@@ -548,10 +558,12 @@
                 if (!response.ok) {
                   throw new Error("مشکلی در ذخیره اطلاعات رخ داده است.");
                 }
+
                 return response.json();
               })
               .then((data) => {
                 alert("تغییرات با موفقیت ذخیره شد!");
+                window.location.reload(); // بارگذاری مجدد صفحه
               })
               .catch((error) => {
                 console.error("Error updating profile:", error);
