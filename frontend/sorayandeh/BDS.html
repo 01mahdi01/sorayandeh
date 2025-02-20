@@ -842,15 +842,16 @@
           }
 
           // ارسال اطلاعات به بک‌اند
-          fetch("YOUR_BACKEND_API_URL_FOR_CHANGE_PASSWORD", {
-            method: "POST",
+          fetch(`${BASE_URL}users/update_password/`, {
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({
-              currentPassword: currentPassword,
-              newPassword: newPassword,
+              old_password: currentPassword,
+              password: newPassword,
+              confirm_password: confirmNewPassword,
             }),
           })
             .then((response) => {

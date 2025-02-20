@@ -550,13 +550,6 @@
     <!-- اتصال ویرایش رمز به بک اند  -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const currentPasswordInput = document.getElementById("currentPassword");
-        const newPasswordInput = document.getElementById("newPassword");
-        const confirmNewPasswordInput =
-          document.getElementById("confirmNewPassword");
-        const saveButton = document.getElementById("savePasswordChanges");
-
-        // دریافت توکن از localStorage
         const accessToken = localStorage.getItem("accessToken");
 
         if (!accessToken) {
@@ -564,55 +557,65 @@
           return;
         }
 
+        const currentPasswordField = document.getElementById("currentPassword");
+        const newPasswordField = document.getElementById("newPassword");
+        const confirmNewPasswordField =
+          document.getElementById("confirmNewPassword");
+        const form = document.querySelector("#edit-password form");
+
         // ارسال درخواست تغییر رمز عبور به بک‌اند
-        saveButton.addEventListener("click", (event) => {
-          event.preventDefault(); // جلوگیری از ارسال فرم
+        form.addEventListener("submit", (event) => {
+          event.preventDefault(); // جلوگیری از ارسال فرم به صورت پیش‌فرض
 
-          const currentPassword = currentPasswordInput.value.trim();
-          const newPassword = newPasswordInput.value.trim();
-          const confirmNewPassword = confirmNewPasswordInput.value.trim();
+          const currentPassword = currentPasswordField.value.trim();
+          const newPassword = newPasswordField.value.trim();
+          const confirmNewPassword = confirmNewPasswordField.value.trim();
 
-          // بررسی صحت مقدار رمز جدید و تطابق با تکرار آن
+          // اعتبارسنجی فیلدها
           if (!currentPassword || !newPassword || !confirmNewPassword) {
-            alert("لطفا تمامی فیلدها را پر کنید.");
+            alert("لطفاً تمام فیلدها را پر کنید.");
             return;
           }
 
           if (newPassword !== confirmNewPassword) {
-            alert("رمز جدید و تکرار آن مطابقت ندارند!");
+            alert("رمز جدید و تکرار آن مطابقت ندارند.");
             return;
           }
 
           if (newPassword.length < 6) {
-            alert("رمز عبور باید حداقل ۶ کاراکتر باشد.");
+            alert("رمز جدید باید حداقل ۶ کاراکتر باشد.");
             return;
           }
 
           // ارسال اطلاعات به بک‌اند
-          fetch("", {
+          fetch(`${BASE_URL}users/update_password/`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({
-              currentPassword,
-              newPassword,
+              old_password: currentPassword,
+              password: newPassword,
+              confirm_password: confirmNewPassword,
             }),
           })
             .then((response) => {
               if (!response.ok) {
-                throw new Error("Failed to update password");
+                throw new Error(
+                  "رمز فعلی اشتباه است یا مشکلی در سرور وجود دارد."
+                );
               }
               return response.json();
             })
             .then((data) => {
-              alert("رمز عبور با موفقیت تغییر کرد!");
-              currentPasswordInput.value = "";
-              newPasswordInput.value = "";
-              confirmNewPasswordInput.value = "";
+              alert("رمز عبور با موفقیت تغییر یافت!");
+              form.reset();
             })
-            .catch((error) => console.error("Error updating password:", error));
+            .catch((error) => {
+              console.error("Error changing password:", error);
+              alert("مشکلی در تغییر رمز عبور رخ داده است.");
+            });
         });
       });
     </script>
