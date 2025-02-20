@@ -770,16 +770,19 @@
           event.preventDefault(); // جلوگیری از ارسال فرم به صورت پیش‌فرض
 
           const updatedData = {
-            schoolName: schoolNameField.value,
-            postalCode: postalCodeField.value,
-            schoolCode: schoolCodeField.value,
-            schoolPhone: schoolPhoneField.value,
-            schoolEmail: schoolEmailField.value,
-            schoolAddress: schoolAddressField.value,
+            name: schoolNameField.value,
+            email: schoolEmailField.value,
+            phone: schoolPhoneField.value,
+            postal_code: postalCodeField.value,
+            school_code_num: schoolCodeField.value,
+            address: schoolAddressField.value,
           };
-
-          fetch("YOUR_BACKEND_API_URL_FOR_UPDATE_PROFILE", {
-            method: "PUT", // یا "PATCH" اگر بک‌اند شما به این روش نیاز دارد
+          console.log("Updated Data:", updatedData);
+          console.log("Postal Code:", postalCodeField.value);
+          console.log("School Code:", schoolCodeField.value);
+          console.log("School Address:", schoolAddressField.value);
+          fetch(`${BASE_URL}users/update_user/`, {
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
@@ -793,6 +796,8 @@
               return response.json();
             })
             .then((data) => {
+              console.log("Response Data:", data); // چاپ پاسخ سرور
+              window.location.reload(); // بارگذاری مجدد صفحه
               alert("تغییرات با موفقیت ذخیره شد!");
             })
             .catch((error) => {
