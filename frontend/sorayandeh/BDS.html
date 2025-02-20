@@ -781,7 +781,7 @@
           console.log("Postal Code:", postalCodeField.value);
           console.log("School Code:", schoolCodeField.value);
           console.log("School Address:", schoolAddressField.value);
-          fetch(`${BASE_URL}users/update_user/`, {
+          fetch(`${BASE_URL}applicant/update_school/`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -797,7 +797,7 @@
             })
             .then((data) => {
               console.log("Response Data:", data); // چاپ پاسخ سرور
-              window.location.reload(); // بارگذاری مجدد صفحه
+              window.location.reload();
               alert("تغییرات با موفقیت ذخیره شد!");
             })
             .catch((error) => {
