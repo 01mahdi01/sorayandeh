@@ -34,23 +34,27 @@ def delete_school(school_id):
 
 @transaction.atomic
 def update_school(user_id, **kwargs):
+    base_user = get_object_or_404(BaseUser.objects.select_related("school_user"), pk=user_id)
+    school = base_user.school_user
     try:
         # Fetch BaseUser and related School object in one query
-        school_user = get_object_or_404(BaseUser.objects.select_related("school_user"), pk=user_id)
+
+
+        # filtered_kwargs = {k: v for k, v in kwargs.items() if "school_code_num" not in k.lower()}
 
         # Update fields for BaseUser and School
         for field, value in kwargs.items():
-            if hasattr(school_user, field):
-                setattr(school_user, field, value)  # Update BaseUser fields
-            elif hasattr(school_user.school_user, field):
-                setattr(school_user.school_user, field, value)  # Update School fields
+            if hasattr(base_user, field):
+                setattr(base_user, field, value)  # Update BaseUser fields
+            elif hasattr(school, field):
+                setattr(school, field, value)  # Update School fields
 
         # Validate and save both instances
-        school_user.full_clean()
-        school_user.save()
-        school_user.school_user.save()
+        base_user.full_clean()
+        base_user.save()
+        base_user.school_user.save()
 
-        return school_user.school_user  # Return updated School instance
+        return school  # Return updated School instance
 
     except (DatabaseError, ValidationError) as e:
         return {"error": str(e)}

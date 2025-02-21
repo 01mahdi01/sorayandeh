@@ -13,7 +13,7 @@ class Campaign(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     applicant_info = models.JSONField()   # name and the position of the actual person
     participants = models.ManyToManyField(BaseUser,through='Participants',related_name='campaigns_participated')
-    preview_image = models.ImageField()
+    preview_image = models.ImageField(upload_to='preview_images/')
     video_link = models.URLField(verbose_name="Video Link",null=True, blank=True)
     estimated_money = models.IntegerField(verbose_name="Estimated Money", default=0)
     is_active = models.BooleanField(default=True)

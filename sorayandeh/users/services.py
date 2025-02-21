@@ -80,7 +80,7 @@ def register(*, email: str, password: str, info, phone,
     return user
 
 @transaction.atomic
-def update_user(user_id, **fields) -> BaseUser:
+def update_user(user_id, **fields):
     """
     Updates the user's information with only the fields provided.
 
@@ -96,52 +96,55 @@ def update_user(user_id, **fields) -> BaseUser:
         BaseUser: The updated BaseUser instance.
     """
     # Fetch user instance
+
     user = get_object_or_404(BaseUser, id=user_id)
+    if user.roll in ["co","pe"]:
+        info = fields.get("info", {})
 
-    info = fields.get("info", {})
+        # Handle 'roll' changes
+        # new_roll = fields.get("roll")
+        # if new_roll and new_roll != user.roll:
+        #     if user.roll == "co":
+        #         Company.objects.filter(base_user=user).delete()
+        #         Person.objects.create(base_user=user, national_code=info.get("national_code"))
+        #     elif user.roll == "pe":
+        #         Person.objects.filter(base_user=user).delete()
+        #         Company.objects.create(
+        #             base_user=user,
+        #             employee_name=info.get("employee_name"),
+        #             employee_position=info.get("employee_position"),
+        #             company_registration_number=info.get("company_registration_number"),
+        #         )
+        #     user.roll = new_roll  # Update roll
 
-    # Handle 'roll' changes
-    # new_roll = fields.get("roll")
-    # if new_roll and new_roll != user.roll:
-    #     if user.roll == "co":
-    #         Company.objects.filter(base_user=user).delete()
-    #         Person.objects.create(base_user=user, national_code=info.get("national_code"))
-    #     elif user.roll == "pe":
-    #         Person.objects.filter(base_user=user).delete()
-    #         Company.objects.create(
-    #             base_user=user,
-    #             employee_name=info.get("employee_name"),
-    #             employee_position=info.get("employee_position"),
-    #             company_registration_number=info.get("company_registration_number"),
-    #         )
-    #     user.roll = new_roll  # Update roll
+        # Update related model fields
+        if user.roll == "pe":
+            person_data = {}
+            if "national_code" in info:
+                person_data["national_code"] = info["national_code"]
 
-    # Update related model fields
-    if user.roll == "pe":
-        person_data = {}
-        if "national_code" in info:
-            person_data["national_code"] = info["national_code"]
+            if person_data:  # Only update if data is present
+                Person.objects.update_or_create(base_user=user, defaults=person_data)
 
-        if person_data:  # Only update if data is present
-            Person.objects.update_or_create(base_user=user, defaults=person_data)
+        elif user.roll == "co":
+            company_data = {}
+            for field in ["employee_name", "employee_position", "company_registration_number"]:
+                if field in info:
+                    company_data[field] = info[field]
 
-    elif user.roll == "co":
-        company_data = {}
-        for field in ["employee_name", "employee_position", "company_registration_number"]:
-            if field in info:
-                company_data[field] = info[field]
+            if company_data:  # Only update if data is present
+                Company.objects.update_or_create(base_user=user, defaults=company_data)
 
-        if company_data:  # Only update if data is present
-            Company.objects.update_or_create(base_user=user, defaults=company_data)
+        # Update user model fields
+        user_fields = {key: value for key, value in fields.items() if hasattr(user, key)}
+        for field, value in user_fields.items():
+            setattr(user, field, value)
 
-    # Update user model fields
-    user_fields = {key: value for key, value in fields.items() if hasattr(user, key)}
-    for field, value in user_fields.items():
-        setattr(user, field, value)
+        user.save()  # Save changes to the user
 
-    user.save()  # Save changes to the user
-
-    return user
+        return {"success": True, "user":user }
+    else:
+        return {"success": False, "error": 'you are an school'}
 
 @transaction.atomic
 def update_password(user_id, password, old_password):

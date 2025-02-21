@@ -273,7 +273,7 @@ class UpdateUser(APIView):
     class OutputUpdateUserSerializer(serializers.ModelSerializer):
         class Meta:
             model = BaseUser
-            fields = "__all__"
+            exclude = ("password",'updated_at','is_admin')
 
 
 
@@ -292,6 +292,7 @@ class UpdateUser(APIView):
             Response: JSON response containing a success message on successful update,
             or an error message on failure with a 400 status code.
         """
+
         user = request.user
         serializer = self.InputUpdateUserSerializer(data=request.data,instance=user)
         serializer.is_valid(raise_exception=True)
@@ -308,15 +309,12 @@ class UpdateUser(APIView):
                     info[key] = value.isoformat()
             update_fields['info'] = info
 
-        try:
-            user = update_user(user_id=user.id, **update_fields)
-            print(type(user))
+        output = update_user(user_id=user.id, **update_fields)
+        if output.get("success"):
             return Response(self.OutputUpdateUserSerializer(user).data, status=status.HTTP_200_OK)
-        except Exception as ex:
-            return Response(
-                f"Database Error {ex}",
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        else:
+            return Response(output)
+
 
 
 
