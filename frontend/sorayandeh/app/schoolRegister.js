@@ -40,7 +40,7 @@ form.addEventListener("submit", function (e) {
       if (response.status === 200) {
         return response.json().then((result) => {
           alert("ثبت‌نام با موفقیت انجام شد!");
-          window.location.href = "home.html";
+          window.location.href = "schoolLogin.html";
           console.log("پاسخ سرور:", result);
         });
       } else if (response.status === 400) {

@@ -517,14 +517,22 @@
         saveButton.addEventListener("click", (event) => {
           event.preventDefault(); // جلوگیری از ارسال فرم
 
-          const updatedUserData = {
+          const data = {
             name: nameInput.value.trim(),
             email: emailInput.value.trim(),
             phone: phoneInput.value.trim(),
-            nationalCode: nationalCodeInput.value.trim(),
           };
 
-          fetch("YOUR_BACKEND_API_UPDATE_URL", {
+          const info = {
+            national_code: nationalCodeInput.value.trim(),
+          };
+
+          const updatedUserData = JSON.parse(JSON.stringify(data));
+          const infoJson = JSON.parse(JSON.stringify(info));
+
+          updatedUserData.info = infoJson;
+
+          fetch(`${BASE_URL}users/update_user/`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -540,6 +548,7 @@
             })
             .then((data) => {
               alert("اطلاعات با موفقیت ذخیره شد!");
+              window.location.reload(); // بارگذاری مجدد صفحه
             })
             .catch((error) =>
               console.error("Error updating user data:", error)

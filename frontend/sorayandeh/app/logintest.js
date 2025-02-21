@@ -24,22 +24,36 @@ if (accessToken) {
       // اطلاعات کاربر از پاسخ سرور
       const userInfo = data.json_data;
       console.log(userInfo);
+
+      // تعیین لینک پروفایل بر اساس نوع کاربر
+      let profileLink = "";
+      if (userInfo.roll === "ap") {
+        profileLink = "./BDS.html"; // مدرسه
+      } else if (userInfo.roll === "pe") {
+        profileLink = "./BDU.html"; // کاربر حقیقی
+      } else if (userInfo.roll === "co") {
+        profileLink = "./BDC.html"; // کمپانی
+      } else {
+        console.error("نوع کاربر نامعتبر است.");
+        return;
+      }
+
       // نمایش نام کاربر و افزودن آیکون خروج
-      loginBtn.innerHTML = `<i class="bi bi-person"></i> ${userInfo.name} 
+      loginBtn.innerHTML = `<a href="${profileLink}"><i class="bi bi-person"></i> ${userInfo.name}</a> 
   <i class="fa fa-sign-out fa-flip-horizontal logout-icon" style:"margin-right: 20px;"></i>`;
-      loginBtnHum.innerHTML = `<a href="#">${userInfo.name}</a>`;
+      loginBtnHum.innerHTML = `<a href="${profileLink}">${userInfo.name}</a>`;
 
       // افزودن آیتم "پروفایل" و "خروج" به منوی همبرگری
       const profileItem = document.createElement("a");
-      profileItem.href = "/BDC.html";
+      profileItem.href = profileLink; // لینک پروفایل بر اساس نوع کاربر
       profileItem.className = "menu-item profile-item";
       profileItem.innerHTML = `پروفایل <i class="bi bi-person-circle"></i> `;
       menuLinks.prepend(profileItem);
 
       const logoutItem = document.createElement("a");
-      logoutItem.href = "/home.html";
+      logoutItem.href = "./home.html";
       logoutItem.className = "menu-item logout-item";
-      logoutItem.innerHTML = `<i class="fa fa-sign-out fa-flip-horizontal"></i> خروج`;
+      logoutItem.innerHTML = ` خروج <i class="fa fa-sign-out fa-flip-horizontal"></i>`;
       menuLinks.appendChild(logoutItem);
 
       // اضافه کردن Event Listener برای دکمه خروج
@@ -63,6 +77,9 @@ if (accessToken) {
         if (logoutItem) logoutItem.remove();
 
         console.log("کاربر از سیستم خارج شد.");
+
+        // هدایت کاربر به صفحه home.html
+        window.location.href = "./home.html";
       };
 
       logoutIcon.addEventListener("click", logoutHandler);
@@ -74,5 +91,3 @@ if (accessToken) {
 } else {
   console.log("توکن دسترسی موجود نیست.");
 }
-
-// مدرسه
