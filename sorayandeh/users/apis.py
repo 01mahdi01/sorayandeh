@@ -565,3 +565,6 @@ class GetUser(APIView):
         user_id=request.user.id
         json_data=get_user(user_id)
         return Response(self.GetUserOutputSerializer({"json_data":json_data}, context={"request": request}).data)
+
+
+

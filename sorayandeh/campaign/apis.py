@@ -2,8 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from drf_spectacular.utils import extend_schema
-from .models import Campaign
-from .services import create_campaign
+from .models import Campaign, Participants
+from .services import create_campaign,contribute
+from rest_framework.pagination import PageNumberPagination
 from django.core.files.storage import default_storage
 import os
 
@@ -39,3 +40,58 @@ class CreateCampaign(APIView):
                 {"error": f"Database Error {ex}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class ContributeCampaign(APIView):
+    class InputContributeCampaignSerializer(serializers.Serializer):
+        participation_type = serializers.CharField(max_length=10)
+        campaign_id=serializers.IntegerField()
+
+    class OutputContributeCampaignSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Participants
+            fields = "__all__"
+
+    def post(self, request):
+        user_id = request.user.id
+        # finance=Finance.objects.get.........///////////////////////////////\\\\\\\\\\\\\\\\\\\\\#$%!##@4
+        serializer = self.InputContributeCampaignSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        campaign_id = serializer.validated_data['campaign_id']
+        participation_type = serializer.validated_data['participation_type']
+        print("*"*20,campaign_id,participation_type)
+        try:
+            contributed= contribute(user_id=user_id, campaign_id=campaign_id, participation_type = participation_type)
+            return Response(self.OutputContributeCampaignSerializer(contributed).data)
+        except Exception as ex:
+            return Response(
+                f"Database Error {ex}",
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class CampaignList(APIView):
+    class OutputCampaignListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Campaign
+            fields = "__all__"
+
+    class CustomPagination(PageNumberPagination):
+        page_size = 10  # Set the page size to 10
+
+    def get(self, request):
+        # Get all campaigns
+        campaigns = Campaign.objects.all()
+
+        # Initialize pagination
+        paginator = self.CustomPagination()
+        result_page = paginator.paginate_queryset(campaigns, request)
+
+        # Serialize the paginated data
+        serializer = self.OutputCampaignListSerializer(result_page, many=True)
+
+        # Return paginated response
+        return paginator.get_paginated_response(serializer.data)
+
+
+
