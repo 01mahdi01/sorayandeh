@@ -25,6 +25,7 @@ class CreateCampaign(APIView):
     @extend_schema(responses=OutputCreateCampaignSerializer, request=InputCreateCampaignSerializer)
     def post(self, request):
         data = request.data
+        print(request.data)
 
         serializer = self.InputCreateCampaignSerializer(data=data)
         if not serializer.is_valid():
@@ -70,21 +71,23 @@ class ContributeCampaign(APIView):
             )
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 10  # Set the page size to 10
+
+
 class CampaignList(APIView):
     class OutputCampaignListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Campaign
             fields = "__all__"
 
-    class CustomPagination(PageNumberPagination):
-        page_size = 10  # Set the page size to 10
 
     def get(self, request):
         # Get all campaigns
         campaigns = Campaign.objects.all()
 
         # Initialize pagination
-        paginator = self.CustomPagination()
+        paginator = CustomPagination()
         result_page = paginator.paginate_queryset(campaigns, request)
 
         # Serialize the paginated data
@@ -94,4 +97,23 @@ class CampaignList(APIView):
         return paginator.get_paginated_response(serializer.data)
 
 
+class FilterByCategory(APIView):
+    class InputFilterByCategorySerializer(serializers.Serializer):
+        category_id = serializers.IntegerField()
+    class OutputFilterByCategorySerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Campaign
+            fields = "__all__"
+    def get(self, request):
+        serializer = self.InputFilterByCategorySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        category = serializer.validated_data['category_id']
+        campaigns = Campaign.objects.filter(category_id=category)
+        # Initialize pagination
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(campaigns, request)
+
+        # Serialize the paginated data
+        serializer = self.OutputFilterByCategorySerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
