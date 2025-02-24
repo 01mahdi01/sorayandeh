@@ -18,7 +18,7 @@ class CampaignAdmin(admin.ModelAdmin):
     # You could also add more fields to the form if you want to customize it more:
     fieldsets = (
         (None, {
-            'fields': ('title', 'category', 'school', 'applicant_info', 'estimated_money', 'is_active', 'gallery')
+            'fields': ('title', 'category', 'school', 'applicant_info', 'estimated_money', 'is_active', 'gallery','description','steel_needed_money')
         }),
         ('Important Dates', {
             'fields': ('created_date',),
