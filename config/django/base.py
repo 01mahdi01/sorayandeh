@@ -204,9 +204,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #     "https://sorayandeh-mahdi01.kubarcloud.net",
 # ]
 
-CSRF_USE_SESSIONS = False
-CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+CSRF_USE_SESSIONS = False
+CSRF_TRUSTED_ORIGINS = []  # Clear trusted origins if defined
+
 
 
 from config.settings.cors import *  # noqa
