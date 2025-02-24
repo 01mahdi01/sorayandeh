@@ -1,3 +1,5 @@
+from symtable import Class
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -16,6 +18,7 @@ class CreateCampaign(APIView):
         applicant_info = serializers.JSONField()
         preview_images = serializers.ListField(child=serializers.ImageField(), required=True)
         estimated_money = serializers.IntegerField(required=True)
+        description = serializers.CharField(required=False)
 
     class OutputCreateCampaignSerializer(serializers.ModelSerializer):
         class Meta:
@@ -77,14 +80,15 @@ class CustomPagination(PageNumberPagination):
 
 class CampaignList(APIView):
     class OutputCampaignListSerializer(serializers.ModelSerializer):
+        category = serializers.CharField(source="category.title", read_only=True)
+
         class Meta:
             model = Campaign
             fields = "__all__"
 
-
     def get(self, request):
-        # Get all campaigns
-        campaigns = Campaign.objects.all()
+        # Optimize query by using select_related for category
+        campaigns = Campaign.objects.select_related("category").all()
 
         # Initialize pagination
         paginator = CustomPagination()
@@ -116,4 +120,35 @@ class FilterByCategory(APIView):
         # Serialize the paginated data
         serializer = self.OutputFilterByCategorySerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+class SearchCampaignBySchool(APIView):
+    class InputSearchBySchoolSerializer(serializers.Serializer):
+        name = serializers.CharField(max_length=100)  # School name
+
+    class OutputSearchBySchoolSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Campaign
+            fields = "__all__"
+
+    def get(self, request):
+        serializer = self.InputSearchBySchoolSerializer(data=request.query_params)  # Use query_params for GET requests
+        serializer.is_valid(raise_exception=True)
+
+        school_name = serializer.validated_data["name"]
+
+        # Use select_related to optimize queries and avoid N+1 problem
+        campaigns = Campaign.objects.select_related("school").filter(school__name__icontains=school_name)
+
+        # Initialize pagination
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(campaigns, request)
+
+        # Serialize the paginated data
+        serializer = self.OutputSearchBySchoolSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+
+class GetSingleCampaign(APIView):
+    pass
 

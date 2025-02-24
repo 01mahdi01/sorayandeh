@@ -18,6 +18,7 @@ class Campaign(models.Model):
     # video_link = models.URLField(verbose_name="Video Link",null=True, blank=True)
     estimated_money = models.IntegerField(verbose_name="Estimated Money", default=0)
     is_active = models.BooleanField(default=True)
+    description = models.TextField(null=True, blank=True)
 
 
 

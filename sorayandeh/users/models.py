@@ -47,7 +47,7 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
     ]
     email = models.EmailField(verbose_name="email address",
                               unique=True)
-    name = models.CharField(verbose_name="Name", max_length=100)
+    name = models.CharField(verbose_name="Name", max_length=100,db_index=True)
     phone = models.CharField(verbose_name="Phone number", max_length=20, unique=True)
     # info = models.JSONField(
     #     verbose_name="Info")  # if it is a company or a person///// its schema is defined in the api serializers
