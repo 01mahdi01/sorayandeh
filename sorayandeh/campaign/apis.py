@@ -148,6 +148,9 @@ class SearchCampaignBySchool(APIView):
         serializer = self.OutputSearchBySchoolSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+class SearchByAddress(APIView):
+    pass
+
 
 
 class GetSingleCampaign(APIView):

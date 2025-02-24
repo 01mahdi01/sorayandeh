@@ -86,23 +86,30 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+DB_HOST = env.str('DB_HOST', default='127.0.0.1')
+DB_PORT = env.str('DB_PORT', default='5432')
+DB_NAME = env.str('DB_NAME', default='sorayandeh')
+DB_USER = env.str('DB_USER', default='root')
+DB_PASSWORD = env.str('DB_PASSWORD', default='123456789')
+
+# Default database configuration using environment variables
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='psql://root:123456789@127.0.0.1:5432/sorayandeh'),
+    'default': env.db('DATABASE_URL', default=f'psql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
+# GitHub Workflow specific configuration
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'sorayandeh',
-            'USER': 'root',
-            'PASSWORD': '123456789',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
