@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -209,7 +209,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://sorayandeh-mahdi01.kubarcloud.net",
     "http://sorayandeh-mahdi01.kubarcloud.net",
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 from config.settings.cors import *  # noqa
