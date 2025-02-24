@@ -81,8 +81,8 @@ class CustomPagination(PageNumberPagination):
 
 class CampaignList(APIView):
     class OutputCampaignListSerializer(serializers.ModelSerializer):
-        category = serializers.CharField(source="category.title", read_only=True)
 
+        category = serializers.CharField(source="category.title", read_only=True)
         class Meta:
             model = Campaign
             fields = "__all__"
@@ -151,5 +151,19 @@ class SearchCampaignBySchool(APIView):
 
 
 class GetSingleCampaign(APIView):
-    pass
+    class InputGetSingleCampaignSerializer(serializers.Serializer):
+        campaign_id = serializers.IntegerField()
+    class OutputGetSingleCampaignSerializer(serializers.ModelSerializer):
+        category = serializers.CharField(source="category.title", read_only=True)
+        school = serializers.CharField(source="school.school.name", read_only=True)
+        class Meta:
+            model = Campaign
+            fields = "__all__"
+    def get(self, request):
+        serializer = self.InputGetSingleCampaignSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        campaign_id = serializer.validated_data['campaign_id']
+        campaign = Campaign.objects.select_related('category','school').get(pk=campaign_id)
+        return Response(self.OutputGetSingleCampaignSerializer(campaign).data)
+
 

@@ -7,5 +7,6 @@ urlpatterns = [
     path('contribute/',ContributeCampaign.as_view(),name='contribute'),
     path('campaign_list/',CampaignList.as_view(),name='campaign_list'),
     path('filter_by_category/',FilterByCategory.as_view(),name='filter_by_category'),
+    path('singe_campaign/',GetSingleCampaign.as_view(),name='GetSingleCampaign'),
 
 ]
