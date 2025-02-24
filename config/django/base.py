@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -204,10 +204,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #     "https://sorayandeh-mahdi01.kubarcloud.net",
 # ]
 
-CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False
-CSRF_USE_SESSIONS = False
-CSRF_TRUSTED_ORIGINS = []  # Clear trusted origins if defined
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sorayandeh-mahdi01.kubarcloud.net",
+    "http://sorayandeh-mahdi01.kubarcloud.net",
+]
 
 
 
