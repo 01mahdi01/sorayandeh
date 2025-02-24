@@ -20,6 +20,7 @@ class CreateCampaign(APIView):
         estimated_money = serializers.IntegerField(required=True)
         description = serializers.CharField(required=False)
 
+
     class OutputCreateCampaignSerializer(serializers.ModelSerializer):
         class Meta:
             model = Campaign

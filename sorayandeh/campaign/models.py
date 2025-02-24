@@ -19,6 +19,7 @@ class Campaign(models.Model):
     estimated_money = models.IntegerField(verbose_name="Estimated Money", default=0)
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
+    steel_needed_money = models.IntegerField(verbose_name="Steel Needed Money", null=True, blank=True)
 
 
 
