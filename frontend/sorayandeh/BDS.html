@@ -250,6 +250,12 @@
           max-height: 400px;
         }
       }
+      /* استایل بخش تصاویر کمپین */
+
+      .form-control:focus {
+        box-shadow: none !important;
+        border: 1px solid #dee2e6;
+      }
     </style>
   </head>
   <body>
@@ -530,6 +536,7 @@
                       <input
                         type="text"
                         class="form-control"
+                        id="firstName"
                         name="firstName"
                         required
                       />
@@ -539,6 +546,7 @@
                       <input
                         type="text"
                         class="form-control"
+                        id="lastName"
                         name="lastName"
                         required
                       />
@@ -550,6 +558,7 @@
                       <input
                         type="text"
                         class="form-control"
+                        id="position"
                         name="position"
                         required
                       />
@@ -559,6 +568,7 @@
                       <input
                         type="tel"
                         class="form-control"
+                        id="mobile"
                         name="mobile"
                         required
                       />
@@ -578,16 +588,17 @@
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">دسته‌بندی نیاز:</label>
-                      <select class="form-select" name="category" required>
+                      <select
+                        class="form-select"
+                        name="category"
+                        id="category"
+                        required
+                      >
                         <option value="">انتخاب کنید</option>
-                        <option value="هوشمند سازی مدارس">
-                          هوشمند سازی مدارس
-                        </option>
-                        <option value="حفاظت و ایمنی">حفاظت و ایمنی</option>
-                        <option value="بهداشت و انرژی">بهداشت و انرژی</option>
-                        <option value="سرمایه‌گذاری اجتماعی">
-                          سرمایه‌گذاری اجتماعی
-                        </option>
+                        <option value="1">هوشمند سازی مدارس</option>
+                        <option value="2">حفاظت و ایمنی</option>
+                        <option value="3">بهداشت و انرژی</option>
+                        <option value="4">سرمایه‌گذاری اجتماعی</option>
                       </select>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -595,6 +606,7 @@
                       <input
                         type="text"
                         class="form-control"
+                        id="campaignTitle"
                         name="campaignTitle"
                         required
                       />
@@ -623,9 +635,11 @@
                   </div>
                   <div class="mb-3">
                     <label class="form-label">تصاویر کمپین:</label>
+                    <label for="campaignImages" class="label-upload"
+                      >انتخاب تصاویر</label
+                    >
                     <input
                       type="file"
-                      class="form-control"
                       name="campaignImages"
                       id="campaignImages"
                       accept="image/*"
@@ -878,6 +892,132 @@
         });
       });
     </script>
+    <!-- اتصال ایجاد کمپین به بک اند  -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const accessToken = localStorage.getItem("accessToken"); // دریافت توکن دسترسی
+
+        // دریافت اطلاعات کاربر از سرور
+        fetch(`${BASE_URL}users/get_user/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // افزودن توکن به هدر
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("خطا در دریافت اطلاعات کاربر");
+            }
+            return response.json();
+          })
+          .then((userData) => {
+            const campaignForm = document.getElementById("campaignForm");
+
+            campaignForm.addEventListener("submit", function (event) {
+              event.preventDefault(); // جلوگیری از ارسال خودکار فرم
+
+              // ایجاد FormData
+              const formData = new FormData();
+
+              // افزودن فیلدهای متنی
+              formData.append(
+                "title",
+                document.getElementById("campaignTitle").value
+              );
+              formData.append(
+                "campaign_category",
+                document.getElementById("category").value
+              );
+
+              // دریافت و تبدیل مقدار estimated_money به عدد صحیح
+              const amountInput = document.getElementById("amountInput").value;
+              const rawAmount = amountInput.replace(/,/g, ""); // حذف کاماها
+              const estimatedMoney = parseInt(rawAmount, 10); // تبدیل به عدد صحیح
+
+              // اعتبارسنجی مقدار estimated_money
+              if (isNaN(estimatedMoney)) {
+                alert("لطفاً مبلغ مورد نیاز را به درستی وارد کنید.");
+                return;
+              }
+
+              formData.append("estimated_money", estimatedMoney); // ارسال مقدار به عنوان عدد صحیح
+              formData.append(
+                "description",
+                document.querySelector("textarea[name='campaignDescription']")
+                  .value
+              );
+
+              // افزودن اطلاعات درخواست‌دهنده به صورت JSON
+              const applicantInfo = {
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                position: document.getElementById("position").value,
+                mobile: document.getElementById("mobile").value,
+                schoolName: userData.json_data.name || "", // اضافه کردن schoolName از userData
+                schoolPhone: userData.json_data.phone || "", // اضافه کردن schoolPhone از userData
+                schoolAddress: userData.json_data.address || "", // اضافه کردن schoolAddress از userData
+              };
+              formData.append("applicant_info", JSON.stringify(applicantInfo));
+
+              // افزودن فایل‌های تصویر
+              const imageFiles =
+                document.getElementById("campaignImages").files;
+              if (imageFiles.length === 0) {
+                alert("لطفاً حداقل یک تصویر انتخاب کنید.");
+                return;
+              }
+              for (let i = 0; i < imageFiles.length; i++) {
+                formData.append("preview_images", imageFiles[i]);
+              }
+
+              // نمایش محتوای FormData در کنسول (برای دیباگ)
+              for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+              }
+
+              // ارسال داده‌ها به سرور
+              sendDataToServer(formData);
+            });
+          })
+          .catch((error) => {
+            console.error("خطا در دریافت اطلاعات کاربر:", error);
+            alert("خطا در دریافت اطلاعات کاربر. لطفاً دوباره تلاش کنید.");
+          });
+
+        // تابع برای ارسال داده‌ها به سرور
+        function sendDataToServer(formData) {
+          const accessToken = localStorage.getItem("accessToken"); // دریافت توکن دسترسی
+
+          fetch(`${BASE_URL}campaigns/create_campaign/`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // افزودن توکن به هدر
+            },
+            body: formData, // ارسال FormData (نیازی به تنظیم Content-Type نیست، مرورگر خودش انجام می‌دهد)
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((errorData) => {
+                  console.error("جزئیات خطا از سرور:", errorData);
+                  throw new Error("خطا در ارسال داده‌ها به سرور");
+                });
+              }
+              return response.json();
+            })
+            .then((responseData) => {
+              console.log("کمپین با موفقیت ایجاد شد:", responseData);
+              alert("کمپین با موفقیت ایجاد شد!");
+              // هدایت کاربر به صفحه‌ی دیگر (اختیاری)
+              // window.location.href = "./campaigns.html";
+            })
+            .catch((error) => {
+              console.error("خطا در ایجاد کمپین:", error);
+              alert("خطا در ایجاد کمپین. لطفاً دوباره تلاش کنید.");
+            });
+        }
+      });
+    </script>
     <!-- اتصال کمک های دریافتی به بک اند  -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -1023,16 +1163,10 @@
             }
           });
         });
-
-        // ارسال فرم نهایی
-        document
-          .getElementById("campaignForm")
-          .addEventListener("submit", function (event) {
-            event.preventDefault();
-            alert("فرم با موفقیت ارسال شد!");
-          });
       });
     </script>
+    <!-- اسکریپت عکس  -->
+
     <!-- مشاهده رمز -->
     <script>
       document.querySelectorAll(".toggle-password").forEach((item) => {
