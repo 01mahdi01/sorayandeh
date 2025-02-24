@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from drf_spectacular.utils import extend_schema
-from .models import Campaign, Participants
+from .models import Campaign, Participants,CampaignCategory
 from .services import create_campaign,contribute
 from rest_framework.pagination import PageNumberPagination
 from django.core.files.storage import default_storage
@@ -167,3 +167,12 @@ class GetSingleCampaign(APIView):
         return Response(self.OutputGetSingleCampaignSerializer(campaign).data)
 
 
+class GetCategories(APIView):
+    class OutputGetCategoriesSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = CampaignCategory
+            fields = '__all__'
+    def get(self, request):
+        categories= CampaignCategory.objects.all()
+        print(categories)
+        return Response(self.OutputGetCategoriesSerializer(categories,many=True).data)
