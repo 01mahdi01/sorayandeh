@@ -80,3 +80,8 @@ textarea:focus {
   font-size: 1.2rem;
   color: #6c757d;
 }
+
+.form-control:focus {
+  box-shadow: none !important;
+  border: 1px solid #dee2e6;
+}
