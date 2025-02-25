@@ -314,9 +314,9 @@
             <a href="#transaction-history" class="menu-link">
               تاریخچه تراکنش‌ها <i class="bi bi-clock-history"></i>
             </a>
-            <!-- <a href="#heat-map" class="menu-link open-map">
+            <a href="#heat-map" class="menu-link open-map">
               نقشه کمک‌ها <i class="bi bi-map"></i>
-            </a> -->
+            </a>
           </div>
 
           <div class="main-content">
@@ -459,7 +459,32 @@
                         <th class="fs-5 text-nowrap">وضعیت</th>
                       </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه امید</td>
+                        <td class="fs-6">۱۰,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۲۳ آذر ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه گل‌ها</td>
+                        <td class="fs-6">۵,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۱۵ دی ۱۴۰۲</td>
+                        <td class="fs-6">در حال بررسی</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین مدرسه دانش</td>
+                        <td class="fs-6">۷,۵۰۰,۰۰۰</td>
+                        <td class="fs-6">۳۰ دی ۱۴۰۲</td>
+                        <td class="fs-6">تکمیل شده</td>
+                      </tr>
+                      <tr>
+                        <td class="fs-6">کمپین کودکان بی‌سرپرست</td>
+                        <td class="fs-6">۲,۰۰۰,۰۰۰</td>
+                        <td class="fs-6">۵ بهمن ۱۴۰۲</td>
+                        <td class="fs-6">در انتظار تایید</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -650,7 +675,7 @@
       });
     </script>
     <!-- اتصال تاریخچه تراکنش ها به بک اند  -->
-    <script>
+    <!-- <script>
       document.addEventListener("DOMContentLoaded", () => {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -663,7 +688,7 @@
           "#transaction-history tbody"
         );
 
-        // دریافت اطلاعات تراکنش‌ها از بک‌اند
+        دریافت اطلاعات تراکنش‌ها از بک‌اند
         fetch("YOUR_BACKEND_API_URL_FOR_TRANSACTIONS", {
           method: "GET",
           headers: {
@@ -696,7 +721,7 @@
             transactionTableBody.innerHTML = `<tr><td colspan="4" class="text-danger">خطا در دریافت اطلاعات</td></tr>`;
           });
       });
-    </script>
+    </script> -->
     <!-- اسکریپت‌های Leaflet -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 

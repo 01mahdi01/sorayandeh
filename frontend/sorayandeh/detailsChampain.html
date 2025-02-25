@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>جزئیات کمپین</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* استایل‌های عکس در بخش اطلاعات کلی */
+      #campaign-image {
+        width: 100%; /* عرض عکس */
+        height: 300px; /* ارتفاع عکس */
+        object-fit: cover; /* حفظ نسبت ابعاد و پر کردن فضای تعیین‌شده */
+        border-radius: 8px; /* گوشه‌های گرد */
+      }
+
+      .donors-list {
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .donor-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .donor-item:last-child {
+        border-bottom: none;
+      }
+
+      .donor-name {
+        font-weight: bold;
+      }
+
+      .donor-amount {
+        color: #28a745; /* رنگ سبز برای مبلغ */
+      }
+
+      .campaign-gallery img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 5px;
+        border-radius: 5px;
+      }
+
+      .donation-section {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+
+      .suggested-amounts {
+        display: flex;
+        gap: 10px;
+        margin: 10px 0;
+        flex-wrap: wrap;
+      }
+
+      .suggested-amounts .btn {
+        flex: 1 1 calc(25% - 10px);
+        max-width: calc(25% - 10px);
+      }
+
+      .amount-input-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .amount-input-container input {
+        flex: 1;
+      }
+
+      .amount-input-container span {
+        white-space: nowrap;
+      }
+
+      /* استایل‌های نشان‌دهنده دایره‌ای درصد پیشرفت */
+      .circle-progress {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 20px auto;
+      }
+
+      .circle-progress svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .circle-progress circle {
+        fill: none;
+        stroke: #e0e0e0; /* رنگ پس‌زمینه دایره */
+        stroke-width: 10;
+      }
+
+      .circle-progress .circle-progress-bar {
+        fill: none;
+        stroke: #28a745; /* رنگ پیشرفت */
+        stroke-width: 10;
+        stroke-dasharray: 314; /* محیط دایره (2 * π * r) */
+        stroke-dashoffset: 314; /* مقدار اولیه (دایره خالی) */
+        transition: stroke-dashoffset 0.5s ease;
+      }
+
+      .circle-progress .circle-progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+        font-weight: bold;
+        color: #28a745; /* رنگ متن درصد */
+      }
+    </style>
+  </head>
+  <body>
+    <section class="campaign-details">
+      <div class="container py-5">
+        <div class="row">
+          <!-- بخش تصویر و اطلاعات کلی -->
+          <div class="col-md-8">
+            <div class="card mb-4">
+              <img
+                id="campaign-image"
+                src="/image/bg001.jpg"
+                class="card-img-top"
+                alt="عنوان کمپین"
+              />
+              <div class="card-body">
+                <h1 id="campaign-title" class="card-title">عنوان کمپین</h1>
+                <!-- بخش جدید: آدرس مدرسه -->
+                <div class="mb-3">
+                  <p>
+                    <strong>آدرس مدرسه:</strong>
+                    <span id="school-address"
+                      >تهران، خیابان آزادی، کوچه شهید فلانی، پلاک ۱۲</span
+                    >
+                  </p>
+                </div>
+                <p id="campaign-category" class="text-muted">
+                  دسته‌بندی: هوشمند سازی مدارس
+                </p>
+                <p id="campaign-description" class="card-text">
+                  توضیحات کامل کمپین در این بخش قرار می‌گیرد. این توضیحات
+                  می‌تواند شامل اهداف، روش‌ها، و سایر اطلاعات مرتبط با کمپین
+                  باشد.
+                </p>
+              </div>
+            </div>
+
+            <!-- بخش گالری تصاویر -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">گالری تصاویر</h5>
+                <div id="campaign-gallery" class="campaign-gallery">
+                  <img
+                    src="image/بهداشت-و-انرژی-768x672.jpg"
+                    class="img-thumbnail"
+                    alt="تصویر کمپین"
+                  />
+                  <img
+                    src="image/بهداشت-و-انرژی-768x672.jpg"
+                    class="img-thumbnail"
+                    alt="تصویر کمپین"
+                  />
+                  <img
+                    src="image/بهداشت-و-انرژی-768x672.jpg"
+                    class="img-thumbnail"
+                    alt="تصویر کمپین"
+                  />
+                  <img
+                    src="image/بهداشت-و-انرژی-768x672.jpg"
+                    class="img-thumbnail"
+                    alt="تصویر کمپین"
+                  />
+                  <img
+                    src="image/بهداشت-و-انرژی-768x672.jpg"
+                    class="img-thumbnail"
+                    alt="تصویر کمپین"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- بخش کمک کردن -->
+            <div class="donation-section">
+              <h5>کمک به این کمپین</h5>
+              <form id="donation-form">
+                <div class="mb-3">
+                  <label for="donation-amount" class="form-label"
+                    >مبلغ کمک</label
+                  >
+                  <div class="amount-input-container">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="donation-amount"
+                      placeholder="مبلغ را وارد کنید"
+                      required
+                    />
+                    <span>تومان</span>
+                  </div>
+                </div>
+                <div class="suggested-amounts">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-amount="50000"
+                  >
+                    ۵۰,۰۰۰ تومان
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-amount="100000"
+                  >
+                    ۱۰۰,۰۰۰ تومان
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-amount="200000"
+                  >
+                    ۲۰۰,۰۰۰ تومان
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-amount="500000"
+                  >
+                    ۵۰۰,۰۰۰ تومان
+                  </button>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                  کمک کردن
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- بخش اطلاعات جانبی و لیست کمک‌کنندگان -->
+          <div class="col-md-4">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">اطلاعات کمپین</h5>
+                <!-- نشان‌دهنده دایره‌ای درصد پیشرفت -->
+                <div class="circle-progress">
+                  <svg>
+                    <circle cx="60" cy="60" r="50"></circle>
+                    <circle
+                      class="circle-progress-bar"
+                      cx="60"
+                      cy="60"
+                      r="50"
+                    ></circle>
+                  </svg>
+                  <div class="circle-progress-text">60%</div>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <strong>تاریخ شروع:</strong>
+                    <span id="campaign-start-date">1402/01/01</span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>هدف مالی:</strong>
+                    <span id="campaign-target-amount">10,000,000 تومان</span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>جمع‌آوری شده:</strong>
+                    <span id="campaign-raised-amount">5,000,000 تومان</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- بخش لیست کمک‌کنندگان -->
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">لیست کمک‌کنندگان</h5>
+                <div id="donors-list" class="donors-list">
+                  <p class="text-muted">
+                    در حال بارگذاری اطلاعات کمک‌کنندگان...
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="detailsChampain.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // داده‌های محلی برای کمک‌کنندگان
+        const mockDonors = [
+          { full_name: "علی احمدی", amount: 1000000 },
+          { full_name: "مریم محمدی", amount: 500000 },
+          { full_name: "ناشناس", amount: 200000 },
+          { full_name: "رضا حسینی", amount: 300000 },
+          { full_name: "فاطمه کریمی", amount: 150000 },
+        ];
+
+        // تابع برای نمایش لیست کمک‌کنندگان
+        function populateDonorsList(donors) {
+          const donorsListContainer = document.getElementById("donors-list");
+
+          if (donors.length > 0) {
+            donorsListContainer.innerHTML = donors
+              .map(
+                (donor) => `
+            <div class="donor-item">
+              <span class="donor-name">${donor.full_name || "ناشناس"}</span>
+              <span class="donor-amount">${donor.amount.toLocaleString()} تومان</span>
+            </div>
+          `
+              )
+              .join("");
+          } else {
+            donorsListContainer.innerHTML =
+              "<p class='text-muted'>هنوز هیچ کمک‌کننده‌ای ثبت نشده است.</p>";
+          }
+        }
+
+        // نمایش داده‌های محلی
+        populateDonorsList(mockDonors);
+
+        // مدیریت دکمه‌های پیشنهادی
+        const suggestedAmountButtons = document.querySelectorAll(
+          ".suggested-amounts .btn"
+        );
+        const donationAmountInput = document.getElementById("donation-amount");
+
+        suggestedAmountButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const amount = this.getAttribute("data-amount");
+            donationAmountInput.value = parseInt(amount).toLocaleString();
+          });
+        });
+
+        // فرمت‌دهی مبلغ وارد‌شده توسط کاربر
+        donationAmountInput.addEventListener("input", function () {
+          let value = this.value.replace(/,/g, ""); // حذف کاماهای موجود
+          if (!isNaN(value)) {
+            this.value = parseInt(value).toLocaleString(); // افزودن کاما به صورت سه‌رقمی
+          }
+        });
+
+        // مدیریت فرم کمک کردن
+        const donationForm = document.getElementById("donation-form");
+        donationForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const amount = donationAmountInput.value.replace(/,/g, ""); // حذف کاماها برای محاسبه
+          if (amount && amount > 0) {
+            alert(
+              `مبلغ ${parseInt(
+                amount
+              ).toLocaleString()} تومان با موفقیت ثبت شد.`
+            );
+            donationForm.reset();
+          } else {
+            alert("لطفاً مبلغ معتبری وارد کنید.");
+          }
+        });
+
+        // تنظیم نشان‌دهنده دایره‌ای درصد پیشرفت
+        const circleProgressBar = document.querySelector(
+          ".circle-progress-bar"
+        );
+        const circleProgressText = document.querySelector(
+          ".circle-progress-text"
+        );
+        const progress = 60; // درصد پیشرفت (مقدار داینامیک می‌تواند از سرور دریافت شود)
+
+        const circumference = 2 * Math.PI * 50; // محیط دایره (2 * π * r)
+        const offset = circumference - (progress / 100) * circumference;
+        circleProgressBar.style.strokeDasharray = circumference;
+        circleProgressBar.style.strokeDashoffset = offset;
+        circleProgressText.textContent = `${progress}%`;
+      });
+    </script>
+  </body>
+</html>
