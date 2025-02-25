@@ -293,13 +293,7 @@
                   <label for="category" class="form-label"
                     >دسته‌بندی کمپین‌ها</label
                   >
-                  <select class="form-select" id="category">
-                    <option selected>همه</option>
-                    <option>هوشمند سازی مدارس</option>
-                    <option>بهداشت و انرژی</option>
-                    <option>سرمایه‌گذاری اجتماعی</option>
-                    <option>حفاظت و ایمنی</option>
-                  </select>
+                  <select class="form-select" id="category"></select>
                 </div>
                 <div class="mb-3">
                   <label for="rangeSlider" class="form-label"
@@ -446,42 +440,43 @@
 
         // تابع برای ایجاد کارت‌ها
         function createCampaignCard(campaign) {
-          // ساخت آدرس کامل اولین عکس
           const firstImage =
             campaign.gallery && campaign.gallery.length > 0
               ? `${BASE_URL}media/${campaign.gallery[0]}`
               : "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
 
           return `
-      <div class="col-md-4">
-        <div class="card campaign-card" data-city="${
-          campaign.address || "بدون آدرس"
-        }">
-          <img src="${firstImage}" class="campaign-image" alt="${campaign.title || "بدون عنوان"}" />
-          <div class="card-body">
-            <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
-            <p class="card-text text-muted">دسته‌بندی: ${
-              campaign.category || "بدون توضیحات"
-            }</p>
-            <p class="card-text">${campaign.description}</p>
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-                <span>60%</span>
-              </div>
+    <div class="col-md-4">
+      <div class="card campaign-card" data-city="${
+        campaign.address || "بدون آدرس"
+      }">
+        <img src="${firstImage}" class="campaign-image" alt="${campaign.title || "بدون عنوان"}" />
+        <div class="card-body">
+          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
+          <p class="card-text text-muted">دسته‌بندی: ${
+            campaign.category || "بدون توضیحات"
+          }</p>
+          <p class="card-text">${campaign.description}</p>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+              <span>60%</span>
             </div>
-            <div class="amount-info mt-3">
-              <p><strong>${
-                campaign.steel_needed_money
-              } از ${campaign.estimated_money} تومان</strong></p>
-            </div>
-            <div class="d-flex justify-content-between mt-3">
-              <button class="btn btn-donate">کمک کردن</button>
-              <a href="#" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
-            </div>
+          </div>
+          <div class="amount-info mt-3">
+            <p><strong>${
+              campaign.steel_needed_money
+            } از ${campaign.estimated_money} تومان</strong></p>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-donate">کمک کردن</button>
+            <a href="detailsChampain.html?id=${
+              campaign.id
+            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
           </div>
         </div>
       </div>
-    `;
+    </div>
+  `;
         }
 
         // دریافت داده‌ها از بک‌اند با ارسال توکن
@@ -521,61 +516,156 @@
           });
       });
     </script>
-
-    <!-- اسکریپت سرچ  -->
+    <!-- اسکریپپت ساخت دسته بندی  -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("searchInput");
-        const searchButton = document.getElementById("searchButton");
+        const accessToken = localStorage.getItem("accessToken");
 
-        // رویداد کلیک روی دکمه جستجو
-        searchButton.addEventListener("click", function () {
-          const searchTerm = searchInput.value.trim().toLowerCase();
-          filterCampaignsBySearch(searchTerm);
-        });
-
-        // تابع برای فیلتر کردن کمپین‌ها بر اساس جستجو
-        function filterCampaignsBySearch(searchTerm) {
-          const campaigns = document.querySelectorAll(".campaign-card");
-
-          campaigns.forEach((campaign) => {
-            const title = campaign
-              .querySelector(".card-title")
-              .textContent.toLowerCase();
-
-            if (title.includes(searchTerm)) {
-              campaign.style.display = "block"; // نمایش کمپین
-            } else {
-              campaign.style.display = "none"; // مخفی کردن کمپین
+        fetch(`${BASE_URL}campaigns/get_categories/`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
             }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            populateCategories(data);
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with the fetch operation:",
+              error
+            );
+          });
+
+        function populateCategories(categories) {
+          const categorySelect = document.getElementById("category");
+
+          // افزودن گزینه پیش‌فرض
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "همه";
+          categorySelect.appendChild(defaultOption);
+
+          // افزودن گزینه‌های دریافتی از API
+          categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.id; // یا هر فیلد دیگری که نیاز دارید
+            option.textContent = category.title;
+            categorySelect.appendChild(option);
           });
         }
       });
     </script>
-    <!-- اسکریپت فیلتر بر اساس شهر  -->
+    <!-- اسکریپت فیلتر دسته بندی  -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const cityFilter = document.getElementById("city");
+        const filterForm = document.querySelector("form"); // انتخاب فرم فیلترها
+        const campaignsContainer = document.getElementById(
+          "campaigns-container"
+        );
+        const accessToken = localStorage.getItem("accessToken");
 
-        // رویداد تغییر شهر
-        cityFilter.addEventListener("change", function () {
-          const selectedCity = this.value;
-          filterCampaignsByCity(selectedCity);
-        });
+        // تابع برای ایجاد کارت‌ها
+        function createCampaignCard(campaign) {
+          const firstImage =
+            campaign.gallery && campaign.gallery.length > 0
+              ? `${BASE_URL}media/${campaign.gallery[0]}`
+              : "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
 
-        // تابع برای فیلتر کردن کمپین‌ها بر اساس شهر
-        function filterCampaignsByCity(city) {
-          const campaigns = document.querySelectorAll(".campaign-card");
-
-          campaigns.forEach((campaign) => {
-            const campaignCity = campaign.getAttribute("data-city"); // فرض کنید شهر در data-city ذخیره شده است
-            if (city === "همه" || campaignCity === city) {
-              campaign.style.display = "block"; // نمایش کمپین
-            } else {
-              campaign.style.display = "none"; // مخفی کردن کمپین
-            }
-          });
+          return `
+    <div class="col-md-4">
+      <div class="card campaign-card" data-city="${
+        campaign.address || "بدون آدرس"
+      }">
+        <img src="${firstImage}" class="campaign-image" alt="${campaign.title || "بدون عنوان"}" />
+        <div class="card-body">
+          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
+          <p class="card-text text-muted">دسته‌بندی: ${
+            campaign.category || "بدون توضیحات"
+          }</p>
+          <p class="card-text">${campaign.description}</p>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+              <span>60%</span>
+            </div>
+          </div>
+          <div class="amount-info mt-3">
+            <p><strong>${
+              campaign.steel_needed_money
+            } از ${campaign.estimated_money} تومان</strong></p>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-donate">کمک کردن</button>
+            <a href="detailsChampain.html?id=${
+              campaign.id
+            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
         }
+
+        // تابع برای دریافت کمپین‌ها بر اساس دسته‌بندی
+        function fetchCampaignsByCategory(categoryId) {
+          fetch(`${BASE_URL}campaigns/filter_by_category/`, {
+            method: "POST", // استفاده از متد POST
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json", // ارسال داده‌ها به صورت JSON
+            },
+            body: JSON.stringify({ category_id: categoryId }), // ارسال category_id در بدنه درخواست
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data); // بررسی ساختار پاسخ سرور
+              campaignsContainer.innerHTML = ""; // پاک کردن محتوای قبلی
+              if (data.results && Array.isArray(data.results)) {
+                if (data.results.length > 0) {
+                  data.results.forEach((campaign) => {
+                    const cardHTML = createCampaignCard(campaign);
+                    campaignsContainer.insertAdjacentHTML(
+                      "beforeend",
+                      cardHTML
+                    );
+                  });
+                } else {
+                  campaignsContainer.innerHTML = "<p>هیچ کمپینی یافت نشد.</p>";
+                }
+              } else {
+                console.error("Expected an array but got:", data);
+                campaignsContainer.innerHTML = "<p>خطا در دریافت داده‌ها.</p>";
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching campaigns:", error);
+              campaignsContainer.innerHTML = "<p>خطا در اتصال به سرور.</p>";
+            });
+        }
+
+        // اضافه کردن Event Listener به دکمه اعمال فیلتر
+        filterForm.addEventListener("submit", function (event) {
+          event.preventDefault(); // جلوگیری از ارسال فرم به صورت پیش‌فرض
+
+          // دریافت دسته‌بندی انتخاب شده
+          const categoryId = document.getElementById("category").value;
+
+          // ارسال درخواست به بک‌اند برای دریافت کمپین‌ها
+          fetchCampaignsByCategory(categoryId);
+        });
       });
     </script>
     <!-- اسکریپت فیلتر قیمت  -->

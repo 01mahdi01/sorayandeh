@@ -7,7 +7,6 @@ loginForm.addEventListener("submit", function (e) {
 
   // گرفتن اطلاعات فرم
   const loginData = {
-    postal_code: document.getElementById("postal_code").value,
     school_code_num: document.getElementById("school_code_num").value,
     password: document.getElementById("password").value,
   };
