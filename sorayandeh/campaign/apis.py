@@ -177,7 +177,7 @@ class GetCategories(APIView):
         class Meta:
             model = CampaignCategory
             fields = '__all__'
-    def post(self, request):
+    def get(self, request):
         categories= CampaignCategory.objects.all()
         print(categories)
         return Response(self.OutputGetCategoriesSerializer(categories,many=True).data)
