@@ -132,6 +132,9 @@
       .col-md-4 {
         display: flex;
       }
+      .col-md-4 .card {
+        min-width: 259px !important;
+      }
       /* استایل دکمه جستجو */
       #searchButton {
         border-top-left-radius: 5px;
@@ -278,7 +281,7 @@
               <h4>فیلترها</h4>
               <form>
                 <!-- بخش جدید: فیلتر شهر -->
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                   <label for="city" class="form-label">شهر</label>
                   <select class="form-select" id="city">
                     <option selected>همه</option>
@@ -288,14 +291,14 @@
                     <option>شیراز</option>
                     <option>تبریز</option>
                   </select>
-                </div>
+                </div> -->
                 <div class="mb-3">
                   <label for="category" class="form-label"
                     >دسته‌بندی کمپین‌ها</label
                   >
                   <select class="form-select" id="category"></select>
                 </div>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                   <label for="rangeSlider" class="form-label"
                     >محدوده مبلغ</label
                   >
@@ -324,7 +327,7 @@
                     <span id="minAmountValue">0 تومان</span>
                     <span id="maxAmountValue">10,000,000 تومان</span>
                   </div>
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-primary">
                   اعمال فیلتر
                 </button>
@@ -522,7 +525,7 @@
         const accessToken = localStorage.getItem("accessToken");
 
         fetch(`${BASE_URL}campaigns/get_categories/`, {
-          method: "POST",
+          method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",

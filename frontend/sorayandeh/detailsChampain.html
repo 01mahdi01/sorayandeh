@@ -305,7 +305,159 @@
         </div>
       </div>
     </section>
-    <script src="detailsChampain.js"></script>
+
+    <!-- اسکریپت اتصال به بک اند  -->
+    <script>
+      function displayCampaignDetails(campaign) {
+        // نمایش اولین عکس گالری در قسمت عکس اطلاعات کلی
+        const campaignImage = document.getElementById("campaign-image");
+        if (campaign.gallery && campaign.gallery.length > 0) {
+          campaignImage.src = `${BASE_URL}media/${campaign.gallery[0]}`;
+        } else {
+          campaignImage.src = "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
+        }
+
+        // نمایش عنوان کمپین
+        const campaignTitle = document.getElementById("campaign-title");
+        campaignTitle.textContent = campaign.title || "بدون عنوان";
+
+        // نمایش توضیحات کمپین
+        const campaignDescription = document.getElementById(
+          "campaign-description"
+        );
+        campaignDescription.textContent =
+          campaign.description || "بدون توضیحات";
+
+        // نمایش هدف مالی کمپین
+        const campaignTargetAmount = document.getElementById(
+          "campaign-target-amount"
+        );
+        campaignTargetAmount.textContent = `${campaign.estimated_money.toLocaleString()} تومان`;
+
+        // نمایش مبلغ جمع‌آوری شده
+        const campaignRaisedAmount = document.getElementById(
+          "campaign-raised-amount"
+        );
+        campaignRaisedAmount.textContent = campaign.steel_needed_money
+          ? `${campaign.steel_needed_money.toLocaleString()} تومان`
+          : "0 تومان";
+
+        // نمایش تاریخ شروع کمپین
+        const campaignStartDate = document.getElementById(
+          "campaign-start-date"
+        );
+        const createdDate = new Date(campaign.created_date);
+        const formattedDate = createdDate.toLocaleDateString("fa-IR"); // تاریخ به فرمت فارسی
+        campaignStartDate.textContent = formattedDate || "بدون تاریخ";
+
+        // نمایش آدرس مدرسه
+        const schoolAddress = document.getElementById("school-address");
+        schoolAddress.textContent = campaign.school || "بدون آدرس";
+
+        // نمایش درصد پیشرفت
+        const progress = campaign.steel_needed_money
+          ? Math.round(
+              (campaign.steel_needed_money / campaign.estimated_money) * 100
+            )
+          : 0;
+        const circleProgressBar = document.querySelector(
+          ".circle-progress-bar"
+        );
+        const circleProgressText = document.querySelector(
+          ".circle-progress-text"
+        );
+        const circumference = 2 * Math.PI * 50; // محیط دایره (2 * π * r)
+        const offset = circumference - (progress / 100) * circumference;
+        circleProgressBar.style.strokeDasharray = circumference;
+        circleProgressBar.style.strokeDashoffset = offset;
+        circleProgressText.textContent = `${progress}%`;
+
+        // نمایش گالری تصاویر
+        const campaignGallery = document.getElementById("campaign-gallery");
+        if (campaign.gallery && campaign.gallery.length > 0) {
+          campaignGallery.innerHTML = campaign.gallery
+            .map(
+              (image) => `
+      <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
+    `
+            )
+            .join("");
+        } else {
+          campaignGallery.innerHTML = "<p>هیچ تصویری وجود ندارد.</p>";
+        }
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        const accessToken = localStorage.getItem("accessToken");
+
+        // دریافت id کمپین از URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const campaignId = urlParams.get("id");
+
+        if (!campaignId) {
+          console.error("Campaign ID not found in URL");
+          return;
+        }
+
+        // ارسال درخواست به سرور برای دریافت اطلاعات کمپین
+        fetch(`${BASE_URL}campaigns/singe_campaign/`, {
+          method: "POST", // استفاده از متد POST
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json", // ارسال داده‌ها به صورت JSON
+          },
+          body: JSON.stringify({ campaign_id: campaignId }), // ارسال id کمپین در بدنه درخواست
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data); // بررسی ساختار پاسخ سرور
+            displayCampaignDetails(data); // نمایش اطلاعات کمپین
+          })
+          .catch((error) => {
+            console.error("Error fetching campaign details:", error);
+          });
+      });
+      // مدیریت دکمه‌های پیشنهادی
+      const suggestedAmountButtons = document.querySelectorAll(
+        ".suggested-amounts .btn"
+      );
+      const donationAmountInput = document.getElementById("donation-amount");
+
+      suggestedAmountButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          const amount = this.getAttribute("data-amount");
+          donationAmountInput.value = parseInt(amount).toLocaleString();
+        });
+      });
+
+      // فرمت‌دهی مبلغ وارد‌شده توسط کاربر
+      donationAmountInput.addEventListener("input", function () {
+        let value = this.value.replace(/,/g, ""); // حذف کاماهای موجود
+        if (!isNaN(value)) {
+          this.value = parseInt(value).toLocaleString(); // افزودن کاما به صورت سه‌رقمی
+        }
+      });
+
+      // مدیریت فرم کمک کردن
+      const donationForm = document.getElementById("donation-form");
+      donationForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const amount = donationAmountInput.value.replace(/,/g, ""); // حذف کاماها برای محاسبه
+        if (amount && amount > 0) {
+          alert(
+            `مبلغ ${parseInt(amount).toLocaleString()} تومان با موفقیت ثبت شد.`
+          );
+          donationForm.reset();
+        } else {
+          alert("لطفاً مبلغ معتبری وارد کنید.");
+        }
+      });
+    </script>
+    <!-- اسکریپت داده محلی  -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // داده‌های محلی برای کمک‌کنندگان
@@ -340,60 +492,8 @@
 
         // نمایش داده‌های محلی
         populateDonorsList(mockDonors);
-
-        // مدیریت دکمه‌های پیشنهادی
-        const suggestedAmountButtons = document.querySelectorAll(
-          ".suggested-amounts .btn"
-        );
-        const donationAmountInput = document.getElementById("donation-amount");
-
-        suggestedAmountButtons.forEach((button) => {
-          button.addEventListener("click", function () {
-            const amount = this.getAttribute("data-amount");
-            donationAmountInput.value = parseInt(amount).toLocaleString();
-          });
-        });
-
-        // فرمت‌دهی مبلغ وارد‌شده توسط کاربر
-        donationAmountInput.addEventListener("input", function () {
-          let value = this.value.replace(/,/g, ""); // حذف کاماهای موجود
-          if (!isNaN(value)) {
-            this.value = parseInt(value).toLocaleString(); // افزودن کاما به صورت سه‌رقمی
-          }
-        });
-
-        // مدیریت فرم کمک کردن
-        const donationForm = document.getElementById("donation-form");
-        donationForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-          const amount = donationAmountInput.value.replace(/,/g, ""); // حذف کاماها برای محاسبه
-          if (amount && amount > 0) {
-            alert(
-              `مبلغ ${parseInt(
-                amount
-              ).toLocaleString()} تومان با موفقیت ثبت شد.`
-            );
-            donationForm.reset();
-          } else {
-            alert("لطفاً مبلغ معتبری وارد کنید.");
-          }
-        });
-
-        // تنظیم نشان‌دهنده دایره‌ای درصد پیشرفت
-        const circleProgressBar = document.querySelector(
-          ".circle-progress-bar"
-        );
-        const circleProgressText = document.querySelector(
-          ".circle-progress-text"
-        );
-        const progress = 60; // درصد پیشرفت (مقدار داینامیک می‌تواند از سرور دریافت شود)
-
-        const circumference = 2 * Math.PI * 50; // محیط دایره (2 * π * r)
-        const offset = circumference - (progress / 100) * circumference;
-        circleProgressBar.style.strokeDasharray = circumference;
-        circleProgressBar.style.strokeDashoffset = offset;
-        circleProgressText.textContent = `${progress}%`;
       });
     </script>
+    <script src="app/baseConfig.js"></script>
   </body>
 </html>
