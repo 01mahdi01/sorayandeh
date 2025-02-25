@@ -34,6 +34,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django_extensions',
+
 ]
 
 INSTALLED_APPS = [
@@ -210,6 +211,22 @@ CSRF_TRUSTED_ORIGINS = [
     "http://sorayandeh-mahdi01.kubarcloud.net",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://sorayandeh-mahdi01.kubarcloud.net",
+    "http://sorayandeh-mahdi01.kubarcloud.net",
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.yourdomain\.com$",
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
 
 
 from config.settings.cors import *  # noqa
