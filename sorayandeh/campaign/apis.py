@@ -109,7 +109,7 @@ class FilterByCategory(APIView):
         class Meta:
             model = Campaign
             fields = "__all__"
-    def get(self, request):
+    def post(self, request):
         serializer = self.InputFilterByCategorySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         category = serializer.validated_data['category_id']
@@ -131,7 +131,7 @@ class SearchCampaignBySchool(APIView):
             model = Campaign
             fields = "__all__"
 
-    def get(self, request):
+    def post(self, request):
         serializer = self.InputSearchBySchoolSerializer(data=request.query_params)  # Use query_params for GET requests
         serializer.is_valid(raise_exception=True)
 
@@ -162,8 +162,9 @@ class GetSingleCampaign(APIView):
         class Meta:
             model = Campaign
             fields = "__all__"
-    def get(self, request):
+    def post(self, request):
         serializer = self.InputGetSingleCampaignSerializer(data=request.data)
+        print(request.data)
         serializer.is_valid(raise_exception=True)
         campaign_id = serializer.validated_data['campaign_id']
         campaign = Campaign.objects.select_related('category','school').get(pk=campaign_id)
@@ -175,7 +176,7 @@ class GetCategories(APIView):
         class Meta:
             model = CampaignCategory
             fields = '__all__'
-    def get(self, request):
+    def post(self, request):
         categories= CampaignCategory.objects.all()
         print(categories)
         return Response(self.OutputGetCategoriesSerializer(categories,many=True).data)
