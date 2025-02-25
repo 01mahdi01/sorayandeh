@@ -106,6 +106,7 @@ class FilterByCategory(APIView):
     class InputFilterByCategorySerializer(serializers.Serializer):
         category_id = serializers.IntegerField()
     class OutputFilterByCategorySerializer(serializers.ModelSerializer):
+        category = serializers.CharField(source="category.title", read_only=True)
         class Meta:
             model = Campaign
             fields = "__all__"
