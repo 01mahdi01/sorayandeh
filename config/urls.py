@@ -7,6 +7,7 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from azbankgateways.urls import az_bank_gateways_urls
 
 urlpatterns = [
     path("schema/", SpectacularAPIView.as_view(api_version="v1"), name="schema"),
@@ -16,4 +17,6 @@ urlpatterns = [
     path('users/', include(("sorayandeh.users.urls", 'users'))),
     path('applicant/', include(("sorayandeh.applicant.urls", 'applicant'))),
     path('campaigns/', include(("sorayandeh.campaign.urls", 'campaigns'))),
+    path('finance/', include(("sorayandeh.finance.urls", 'finance'))),
+    path("bankgateways/", az_bank_gateways_urls()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

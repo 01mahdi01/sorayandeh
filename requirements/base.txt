@@ -1,30 +1,33 @@
-Django==4.0.7
-django-environ==0.9.0
-psycopg2-binary==2.9.5
-djangorestframework==3.13.1
+Django==5.0.2
+django-environ
+psycopg2-binary
+djangorestframework
 
-celery==5.2.7
-django-celery-results==2.4.0
-django-celery-beat==2.3.0
+celery
+django-celery-results
+django-celery-beat
 
-whitenoise==6.2.0
+whitenoise
 
-django-filter==22.1
-django-extensions==3.2.1
-django-cors-headers==3.13.0
-django-storages==1.13.1
+django-filter
+django-extensions
+django-cors-headers
+django-storages
 
-drf-jwt==1.19.2
+drf-jwt
 
-boto3==1.24.71
-attrs==22.1.0
+boto3
+attrs
 
-djangorestframework-simplejwt==5.2.2
-drf-spectacular==0.24.2
+djangorestframework-simplejwt
+drf-spectacular
 
-django-redis==5.2.0
-Faker==15.1.1
-factory-boy==3.2.1
-pytest==7.2.0
-pytest-django==4.5.2
+django-redis
+Faker
+factory-boy
+pytest
+pytest-django
 pillow
+elasticsearch-dsl
+django-elasticsearch-dsl
+az-iranian-bank-gateways

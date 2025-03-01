@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: docker.arvancloud.ir/postgres:17.2
+    container_name: postgres-17.2
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=sorayandeh
+      - POSTGRES_USER=sorayandeh
+      - POSTGRES_PASSWORD=123456789
+    volumes:
+      - postgres-data-17.2:/var/lib/postgresql
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 'pg_pass'
+    ports:
+      - "5050:80"
+
+  rabbitmq:
+    image: "rabbitmq:alpine"
+    container_name: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  elasticsearch:
+    image: elasticsearch:8.10.3
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node  # Required for single-node clusters
+      - xpack.security.enabled=false  # Disable authentication for dev mode
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m  # Adjust heap size (512MB)
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+
+volumes:
+  postgres-data-17.2:
+  redis-data:
+  elasticsearch_data:
+

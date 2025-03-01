@@ -3,34 +3,38 @@ from .models import Campaign, CampaignCategory, Participants
 
 
 class CampaignCategoryAdmin(admin.ModelAdmin):
-    list_display = ('title',)  # Show the title of the category in the list view
-    search_fields = ('title',)  # Enable searching by title
+    list_display = ('title',)
+    search_fields = ('title',)
+
+
+class ParticipantsInline(admin.TabularInline):  # Inline admin for Participants model
+    model = Participants
+    extra = 1  # Shows 1 empty form for adding new participants
+    autocomplete_fields = ['user']  # Helps in selecting users efficiently
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'school', 'created_date', 'is_active')  # Show relevant fields in the list view
-    list_filter = ('category', 'school', 'is_active')  # Enable filtering by category, school, and active status
-    search_fields = (
-    'title', 'school__name')  # Enable searching by title and school name (assuming `name` is a field in `School`)
-    filter_horizontal = ('participants',)  # To display the Many-to-Many relationship in a more user-friendly way
-    readonly_fields = ('created_date',)  # Make the created_date field read-only
+    list_display = ('title', 'category', 'school', 'created_date', 'is_active')
+    list_filter = ('category', 'school', 'is_active')
+    search_fields = ('title', 'school__name')
+    readonly_fields = ('created_date',)
+    inlines = [ParticipantsInline]  # Use an inline admin instead of filter_horizontal
 
-    # You could also add more fields to the form if you want to customize it more:
     fieldsets = (
         (None, {
-            'fields': ('title', 'category', 'school', 'applicant_info', 'estimated_money', 'is_active', 'gallery','description','steel_needed_money')
+            'fields': ('title', 'category', 'school', 'applicant_info', 'estimated_money', 'is_active', 'gallery', 'description', 'steel_needed_money')
         }),
         ('Important Dates', {
             'fields': ('created_date',),
-            'classes': ('collapse',)  # Make this section collapsible
+            'classes': ('collapse',)
         }),
     )
 
 
 class ParticipantsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'campaign', 'created_date', 'participation_type')  # Show relevant fields in the list view
-    list_filter = ('campaign', 'user')  # Enable filtering by campaign and user
-    search_fields = ('user__username', 'campaign__title')  # Enable searching by user username and campaign title
+    list_display = ('user', 'campaign', 'created_date', 'participation_type')
+    list_filter = ('campaign', 'user')
+    search_fields = ('user__username', 'campaign__title')
 
 
 # Register the models with the admin site
