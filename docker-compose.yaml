@@ -40,7 +40,7 @@ services:
     restart: on-failure
 
   elasticsearch:
-    image: elasticsearch:8.10.3
+    image: docker-mirror.kubarcloud.com/elasticsearch:8.10.3
     container_name: elasticsearch
     environment:
       - discovery.type=single-node  # Required for single-node clusters
