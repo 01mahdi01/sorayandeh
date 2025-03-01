@@ -29,7 +29,7 @@ services:
     container_name: django-sorayande
     command: ./docker/web_entrypoint.sh
     environment:
-      - DATABASE_URL=psql://root:123456789@db:5432/sorayandeh
+      - DATABASE_URL=psql://sorayandeh:123456789@db:5432/sorayandeh
     volumes:
       - .:/app
     ports:
