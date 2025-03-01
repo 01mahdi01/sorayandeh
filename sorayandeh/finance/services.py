@@ -1,9 +1,10 @@
 from django.urls import reverse
 from azbankgateways import bankfactories, models as bank_models
 from azbankgateways.exceptions import AZBankGatewaysException
+from .models import FinancialLogs
 
 
-def generate_payment_url(amount, callback_url, bank_type=bank_models.BankType.ZARINPAL):
+def generate_payment_url(amount, callback_url, user,campaign, bank_type=bank_models.BankType.ZARINPAL):
     """
     Generates a payment URL for the specified bank gateway.
 
@@ -13,12 +14,16 @@ def generate_payment_url(amount, callback_url, bank_type=bank_models.BankType.ZA
     :return: Payment URL or error message
     """
     try:
+
         bank = bankfactories.BankFactory().create(bank_type)
+        print(100 * "*")
         bank.set_amount(amount)
         bank.set_client_callback_url(callback_url)
         bank_record = bank.ready()
+        bank.set_mobile_number(user.phone)
 
-        return {"payment_url": bank.redirect_gateway()}
+        FinancialLogs.objects.create(user=user, campaign=campaign, transaction=bank_record)
+        return {"payment_url": bank.get_gateway()}
 
     except AZBankGatewaysException as e:
         return {"error": str(e)}
