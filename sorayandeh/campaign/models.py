@@ -19,13 +19,9 @@ class Campaign(models.Model):
     estimated_money = models.IntegerField(verbose_name="Estimated Money", default=0)
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
-    steel_needed_money = models.IntegerField(verbose_name="Estimated Money", default=0)
+    steel_needed_money = models.IntegerField(verbose_name="steel_needed_money")
 
-    # if it is the innitiation of campaign equalize the needed monet money to the estimated money
-    def save(self, *args, **kwargs):
-        if  self.steel_needed_money==self.estimated_money:
-            self.steel_needed_money = self.estimated_money
-        super().save(*args, **kwargs)
+
 
 class Participants(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)

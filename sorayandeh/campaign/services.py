@@ -28,9 +28,9 @@ def create_campaign(user_id, **kwargs):
     # Remove preview_images from kwargs to prevent conflicts
     for key in ["preview_images", "campaign_category"]:
         kwargs.pop(key, None)
-
+    steel_needed_money=kwargs.get('estimated_money')
     # Create the campaign
-    campaign = Campaign.objects.create(category=campaign_category, school=school.school_user, gallery=image_paths, **kwargs)
+    campaign = Campaign.objects.create(category=campaign_category, school=school.school_user, gallery=image_paths,steel_needed_money=steel_needed_money, **kwargs)
 
 
     return campaign
