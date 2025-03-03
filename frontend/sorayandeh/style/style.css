@@ -138,6 +138,13 @@ body {
   color: #fff;
 }
 /* منوی همبرگری */
+.offcanvas {
+  overflow: auto;
+  direction: ltr;
+}
+.offcanvas > * {
+  direction: rtl; /* بازگرداندن جهت متن به چپ به راست برای محتوای داخلی */
+}
 .offcanvas-header {
   background-color: #007bff; /* رنگ آبی */
   color: #fff;
@@ -152,6 +159,7 @@ body {
   display: flex !important;
   justify-content: space-between;
 }
+
 .menu-links a {
   display: block;
   padding: 10px 15px;
@@ -615,6 +623,7 @@ body {
 .footer ul li {
   margin-bottom: 0.5rem;
 }
+
 .footer ul li a {
   transform: scale(1);
   transition: all 0.3s ease;

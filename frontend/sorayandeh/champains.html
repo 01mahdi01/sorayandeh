@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>نمایش کمپین‌ها</title>
+    <title>سرآینده | کمپین‌ها</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -20,145 +20,7 @@
     <link rel="stylesheet" href="style/style.css" />
     <link rel="stylesheet" href="style/champains.css" />
 
-    <style>
-      /* استایل کلی اسلایدر */
-      .range-slider {
-        position: relative;
-        width: 100%;
-        height: 8px;
-        background: #e0e0e0; /* رنگ پس‌زمینه اسلایدر */
-        border-radius: 10px; /* گوشه‌های گرد */
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* سایه داخلی */
-        direction: rtl; /* تغییر جهت اسلایدر به راست به چپ */
-      }
-
-      .range-slider input[type="range"] {
-        position: absolute;
-        -webkit-appearance: none;
-        top: -5px; /* بالا بردن دکمه‌های اسلایدر */
-        width: 100%;
-        height: 8px;
-        background: transparent; /* پس‌زمینه شفاف */
-        pointer-events: none; /* جلوگیری از تداخل */
-        z-index: 3; /* قرار دادن دکمه‌ها روی اسلایدر */
-      }
-
-      /* استایل دکمه‌ها */
-      .range-slider input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 24px; /* عرض دکمه */
-        height: 24px; /* ارتفاع دکمه */
-        background: #007bff; /* رنگ دکمه */
-        border: 3px solid #fff; /* حاشیه سفید */
-        border-radius: 50%; /* دکمه را گرد می‌کند */
-        cursor: pointer; /* تغییر شکل موس به pointer */
-        pointer-events: auto; /* فعال کردن رویدادهای موس */
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* سایه برای دکمه */
-        transition: transform 0.2s ease, box-shadow 0.2s ease; /* انیمیشن */
-        z-index: 2; /* دکمه‌ها بالای اسلایدر قرار می‌گیرند */
-      }
-
-      .range-slider input[type="range"]::-moz-range-thumb {
-        width: 24px; /* عرض دکمه */
-        height: 24px; /* ارتفاع دکمه */
-        background: #007bff; /* رنگ دکمه */
-        border: 3px solid #fff; /* حاشیه سفید */
-        border-radius: 50%; /* دکمه را گرد می‌کند */
-        cursor: pointer; /* تغییر شکل موس به pointer */
-        pointer-events: auto; /* فعال کردن رویدادهای موس */
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* سایه برای دکمه */
-        transition: transform 0.2s ease, box-shadow 0.2s ease; /* انیمیشن */
-        z-index: 2; /* دکمه‌ها بالای اسلایدر قرار می‌گیرند */
-      }
-      .range-slider input[type="range"]::-webkit-slider-thumb:hover {
-        transform: scale(1.1); /* بزرگ‌تر شدن دکمه هنگام hover */
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4); /* سایه بیشتر هنگام hover */
-      }
-
-      .range-slider input[type="range"]::-moz-range-thumb:hover {
-        transform: scale(1.1); /* بزرگ‌تر شدن دکمه هنگام hover */
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4); /* سایه بیشتر هنگام hover */
-      }
-
-      /* قسمت آبی اسلایدر */
-      .range-track {
-        position: absolute;
-        top: 0;
-        left: 0; /* شروع از چپ */
-        right: 0; /* شروع از راست */
-        height: 8px;
-        background: #007bff; /* رنگ مسیر پر شده */
-        border-radius: 10px; /* گوشه‌های گرد */
-        border: none;
-        z-index: 1; /* قرار دادن زیر دکمه‌ها */
-      }
-
-      /* استایل نمایش مقادیر */
-      #minAmountValue,
-      #maxAmountValue {
-        font-size: 14px;
-        color: #007bff;
-        font-weight: bold; /* متن پررنگ */
-        margin-top: 10px;
-      }
-      .range-slider input[type="range"]::-webkit-slider-runnable-track {
-        background: transparent;
-      }
-
-      .range-slider input[type="range"]::-moz-range-track {
-        background: transparent;
-      }
-
-      .range-slider input[type="range"]::-ms-track {
-        background: transparent;
-        border-color: transparent;
-        color: transparent;
-      }
-
-      /* استایل بخش فیلترها */
-      .filter-section {
-        position: sticky;
-        top: 120px; /* فاصله از بالای صفحه */
-        z-index: 100; /* مطمئن شوید که بالای سایر عناصر قرار می‌گیرد */
-      }
-
-      /* استایل بخش کارت‌ها */
-      .row.g-4 {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      .col-md-4 {
-        display: flex;
-      }
-      .col-md-4 .card {
-        min-width: 259px !important;
-      }
-      /* استایل دکمه جستجو */
-      #searchButton {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-      #searchInput {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-      }
-
-      /* حذف outline و box-shadow برای select ها */
-      select:focus {
-        box-shadow: none !important;
-        border: 1px solid #dee2e6 !important;
-      }
-      .form-control:focus {
-        box-shadow: none !important;
-        border: 1px solid #dee2e6;
-      }
-    </style>
+    <style></style>
   </head>
   <body class="bg-light">
     <!-- هدر -->
@@ -213,19 +75,25 @@
               </button>
               <ul class="dropdown-menu custom-dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="tamasBaMa.html"
-                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" href="about.html"
-                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  <a class="dropdown-item" href="home.html"
+                    ><i class="bi bi-house-door"></i> خانه</a
                   >
                 </li>
                 <li>
                   <a class="dropdown-item" href="champains.html"
                     ><i class="bi bi-people"></i> کمپین
                   </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
                 </li>
                 <li>
                   <a class="dropdown-item" href="conditions.html"
@@ -253,6 +121,11 @@
         </div>
         <div class="offcanvas-body">
           <div class="menu-links">
+            <a href="champains.html"> خانه <i class="bi bi-house-door"></i></a>
+            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
+            <a href="hemayat.html"
+              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
+            </a>
             <a href="tamasBaMa.html">
               ارتباط با ما<i class="bi bi-telephone"></i
             ></a>
@@ -260,10 +133,7 @@
             <a href="soalat.html"
               >سوالات متداول<i class="bi bi-question-circle"></i
             ></a>
-            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
-            <a href="hemayat.html"
-              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
-            </a>
+
             <a href="conditions.html">
               شرایط و ضوابط<i class="bi bi-file-earmark-text"></i
             ></a>
@@ -376,22 +246,22 @@
             <ul class="list-unstyled">
               <li>
                 <a href="about.html" class="">
-                  <i class="bi bi-info-circle"></i> درباره ما
+                  درباره ما <i class="bi bi-info-circle"></i>
                 </a>
               </li>
               <li>
                 <a href="tamasBaMa.html" class="">
-                  <i class="bi bi-envelope"></i> ارتباط با ما
+                  ارتباط با ما <i class="bi bi-envelope"></i>
                 </a>
               </li>
               <li>
                 <a href="conditions.html" class="">
-                  <i class="bi bi-file-earmark-text"></i> شرایط و ضوابط
+                  شرایط و ضوابط <i class="bi bi-file-earmark-text"></i>
                 </a>
               </li>
               <li>
                 <a href="soalat.html" class="">
-                  <i class="bi bi-question-circle"></i> سوالات متداول
+                  سوالات متداول <i class="bi bi-question-circle"></i>
                 </a>
               </li>
             </ul>
@@ -401,7 +271,7 @@
           <div class="col-md-4 mb-3">
             <ul class="list-unstyled">
               <li>
-                <a href="#" class=""> با ما در ارتباط باشید</a>
+                <a href="tamasBaMa.html"> با ما در ارتباط باشید</a>
               </li>
               <li>
                 <span>09231055206</span>
@@ -433,56 +303,93 @@
         </div>
       </div>
     </footer>
-    <!-- اسکریپت ساخت کارت ها  -->
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const campaignsContainer = document.getElementById(
-          "campaigns-container"
-        );
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryId = urlParams.get("category_id");
+
+        // دریافت دسته‌بندی‌ها از بک‌اند
+        fetchCategories().then(() => {
+          // اگر categoryId وجود داشت، گزینه مربوطه را انتخاب کنید
+          if (categoryId) {
+            const categorySelect = document.getElementById("category");
+            categorySelect.value = categoryId;
+          }
+        });
+
+        // دریافت کمپین‌ها بر اساس دسته‌بندی
+        if (categoryId) {
+          fetchCampaignsByCategory(categoryId);
+        } else {
+          fetchAllCampaigns();
+        }
+      });
+
+      // تابع برای دریافت دسته‌بندی‌ها از بک‌اند
+      function fetchCategories() {
         const accessToken = localStorage.getItem("accessToken");
 
-        // تابع برای ایجاد کارت‌ها
-        function createCampaignCard(campaign) {
-          const firstImage =
-            campaign.gallery && campaign.gallery.length > 0
-              ? `${BASE_URL}media/${campaign.gallery[0]}`
-              : "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
+        return fetch(`${BASE_URL}campaigns/get_categories/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            populateCategories(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching categories:", error);
+          });
+      }
 
-          return `
-    <div class="col-md-4">
-      <div class="card campaign-card" data-city="${
-        campaign.address || "بدون آدرس"
-      }">
-        <img src="${firstImage}" class="campaign-image" alt="${campaign.title || "بدون عنوان"}" />
-        <div class="card-body">
-          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
-          <p class="card-text text-muted">دسته‌بندی: ${
-            campaign.category || "بدون توضیحات"
-          }</p>
-          <p class="card-text">${campaign.description}</p>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-              <span>60%</span>
-            </div>
-          </div>
-          <div class="amount-info mt-3">
-            <p><strong>${
-              campaign.steel_needed_money
-            } از ${campaign.estimated_money} تومان</strong></p>
-          </div>
-          <div class="d-flex justify-content-between mt-3">
-            <button class="btn btn-donate">کمک کردن</button>
-            <a href="detailsChampain.html?id=${
-              campaign.id
-            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-        }
+      // تابع برای پر کردن منوی دسته‌بندی‌ها
+      function populateCategories(categories) {
+        const categorySelect = document.getElementById("category");
 
-        // دریافت داده‌ها از بک‌اند با ارسال توکن
+        // افزودن گزینه پیش‌فرض
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "همه";
+        categorySelect.appendChild(defaultOption);
+
+        // افزودن گزینه‌های دریافتی از API
+        categories.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category.id;
+          option.textContent = category.title;
+          categorySelect.appendChild(option);
+        });
+      }
+
+      // تابع برای دریافت کمپین‌ها بر اساس دسته‌بندی
+      function fetchCampaignsByCategory(categoryId) {
+        const accessToken = localStorage.getItem("accessToken");
+
+        fetch(`${BASE_URL}campaigns/filter_by_category/`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ category_id: categoryId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            displayCampaigns(data.results);
+          })
+          .catch((error) => {
+            console.error("Error fetching campaigns:", error);
+          });
+      }
+
+      // تابع برای دریافت همه کمپین‌ها
+      function fetchAllCampaigns() {
+        const accessToken = localStorage.getItem("accessToken");
+
         fetch(`${BASE_URL}campaigns/campaign_list/`, {
           method: "GET",
           headers: {
@@ -490,187 +397,97 @@
             "Content-Type": "application/json",
           },
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
+          .then((response) => response.json())
           .then((data) => {
-            console.log(data); // بررسی ساختار پاسخ سرور
-            if (data.results && Array.isArray(data.results)) {
-              campaignsContainer.innerHTML = ""; // پاک کردن محتوای قبلی
-              if (data.results.length > 0) {
-                data.results.forEach((campaign) => {
-                  const cardHTML = createCampaignCard(campaign);
-                  campaignsContainer.insertAdjacentHTML("beforeend", cardHTML);
-                });
-              } else {
-                campaignsContainer.innerHTML = "<p>هیچ کمپینی یافت نشد.</p>";
-              }
-            } else {
-              console.error("Expected an array but got:", data);
-              campaignsContainer.innerHTML = "<p>خطا در دریافت داده‌ها.</p>";
-            }
+            displayCampaigns(data.results);
           })
           .catch((error) => {
             console.error("Error fetching campaigns:", error);
-            campaignsContainer.innerHTML = "<p>خطا در اتصال به سرور.</p>";
           });
-      });
-    </script>
-    <!-- اسکریپپت ساخت دسته بندی  -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const accessToken = localStorage.getItem("accessToken");
+      }
 
-        fetch(`${BASE_URL}campaigns/get_categories/`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-            populateCategories(data);
-          })
-          .catch((error) => {
-            console.error(
-              "There was a problem with the fetch operation:",
-              error
-            );
-          });
-
-        function populateCategories(categories) {
-          const categorySelect = document.getElementById("category");
-
-          // افزودن گزینه پیش‌فرض
-          const defaultOption = document.createElement("option");
-          defaultOption.value = "";
-          defaultOption.textContent = "همه";
-          categorySelect.appendChild(defaultOption);
-
-          // افزودن گزینه‌های دریافتی از API
-          categories.forEach((category) => {
-            const option = document.createElement("option");
-            option.value = category.id; // یا هر فیلد دیگری که نیاز دارید
-            option.textContent = category.title;
-            categorySelect.appendChild(option);
-          });
-        }
-      });
-    </script>
-    <!-- اسکریپت فیلتر دسته بندی  -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const filterForm = document.querySelector("form"); // انتخاب فرم فیلترها
+      // تابع برای نمایش کمپین‌ها
+      function displayCampaigns(campaigns) {
         const campaignsContainer = document.getElementById(
           "campaigns-container"
         );
-        const accessToken = localStorage.getItem("accessToken");
+        campaignsContainer.innerHTML = "";
 
-        // تابع برای ایجاد کارت‌ها
-        function createCampaignCard(campaign) {
-          const firstImage =
-            campaign.gallery && campaign.gallery.length > 0
-              ? `${BASE_URL}media/${campaign.gallery[0]}`
-              : "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
+        if (campaigns && campaigns.length > 0) {
+          campaigns.forEach((campaign) => {
+            const cardHTML = createCampaignCard(campaign);
+            campaignsContainer.insertAdjacentHTML("beforeend", cardHTML);
+          });
+        } else {
+          campaignsContainer.innerHTML = "<p>هیچ کمپینی یافت نشد.</p>";
+        }
+      }
 
-          return `
-    <div class="col-md-4">
-      <div class="card campaign-card" data-city="${
-        campaign.address || "بدون آدرس"
-      }">
-        <img src="${firstImage}" class="campaign-image" alt="${campaign.title || "بدون عنوان"}" />
-        <div class="card-body">
-          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
-          <p class="card-text text-muted">دسته‌بندی: ${
-            campaign.category || "بدون توضیحات"
-          }</p>
-          <p class="card-text">${campaign.description}</p>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-              <span>60%</span>
+      // تابع برای ایجاد کارت کمپین
+      // تابع برای ایجاد کارت کمپین
+      function createCampaignCard(campaign) {
+        const firstImage =
+          campaign.gallery && campaign.gallery.length > 0
+            ? `${BASE_URL}media/${campaign.gallery[0]}`
+            : "image/placeholder.jpg";
+
+        const steelNeededMoney =
+          campaign.steel_needed_money === null
+            ? 0
+            : parseFloat(campaign.steel_needed_money);
+
+        const estimatedMoney = parseFloat(campaign.estimated_money);
+
+        // محاسبه درصد پیشرفت
+        const progressPercentage =
+          estimatedMoney === 0
+            ? 0
+            : Math.round((steelNeededMoney / estimatedMoney) * 100);
+
+        return `
+        <div class="col-md-4">
+            <div class="card campaign-card">
+                <img src="${firstImage}" class="campaign-image" alt="${
+          campaign.title || "بدون عنوان"
+        }" />
+                <div class="card-body">
+                    <h5 class="card-title">${
+                      campaign.title || "بدون عنوان"
+                    }</h5>
+                    <p class="card-text text-muted">دسته‌بندی: ${
+                      campaign.category || "بدون توضیحات"
+                    }</p>
+                    <p class="card-text">${
+                      campaign.description || "بدون توضیحات"
+                    }</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
+                            <span>${progressPercentage}%</span>
+                        </div>
+                    </div>
+                    <div class="amount-info mt-3">
+                        <p><strong>${steelNeededMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-donate">کمک کردن</button>
+                        <a href="detailsChampain.html?id=${
+                          campaign.id
+                        }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="amount-info mt-3">
-            <p><strong>${
-              campaign.steel_needed_money
-            } از ${campaign.estimated_money} تومان</strong></p>
-          </div>
-          <div class="d-flex justify-content-between mt-3">
-            <button class="btn btn-donate">کمک کردن</button>
-            <a href="detailsChampain.html?id=${
-              campaign.id
-            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
-          </div>
         </div>
-      </div>
-    </div>
-  `;
-        }
-
-        // تابع برای دریافت کمپین‌ها بر اساس دسته‌بندی
-        function fetchCampaignsByCategory(categoryId) {
-          fetch(`${BASE_URL}campaigns/filter_by_category/`, {
-            method: "POST", // استفاده از متد POST
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json", // ارسال داده‌ها به صورت JSON
-            },
-            body: JSON.stringify({ category_id: categoryId }), // ارسال category_id در بدنه درخواست
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data); // بررسی ساختار پاسخ سرور
-              campaignsContainer.innerHTML = ""; // پاک کردن محتوای قبلی
-              if (data.results && Array.isArray(data.results)) {
-                if (data.results.length > 0) {
-                  data.results.forEach((campaign) => {
-                    const cardHTML = createCampaignCard(campaign);
-                    campaignsContainer.insertAdjacentHTML(
-                      "beforeend",
-                      cardHTML
-                    );
-                  });
-                } else {
-                  campaignsContainer.innerHTML = "<p>هیچ کمپینی یافت نشد.</p>";
-                }
-              } else {
-                console.error("Expected an array but got:", data);
-                campaignsContainer.innerHTML = "<p>خطا در دریافت داده‌ها.</p>";
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching campaigns:", error);
-              campaignsContainer.innerHTML = "<p>خطا در اتصال به سرور.</p>";
-            });
-        }
-
-        // اضافه کردن Event Listener به دکمه اعمال فیلتر
-        filterForm.addEventListener("submit", function (event) {
-          event.preventDefault(); // جلوگیری از ارسال فرم به صورت پیش‌فرض
-
-          // دریافت دسته‌بندی انتخاب شده
-          const categoryId = document.getElementById("category").value;
-
-          // ارسال درخواست به بک‌اند برای دریافت کمپین‌ها
-          fetchCampaignsByCategory(categoryId);
-        });
+    `;
+      }
+      // اعمال فیلتر دسته‌بندی
+      const filterForm = document.getElementById("filterForm");
+      filterForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const categoryId = document.getElementById("category").value;
+        window.location.href = `champains.html?category_id=${categoryId}`;
       });
     </script>
+
     <!-- اسکریپت فیلتر قیمت  -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {

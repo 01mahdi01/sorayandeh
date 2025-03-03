@@ -256,6 +256,109 @@
         box-shadow: none !important;
         border: 1px solid #dee2e6;
       }
+      .image-preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .image-preview .preview-item {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .image-preview .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .image-preview .preview-item .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: rgba(255, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
+      .image-preview .preview-item .delete-btn:hover {
+        background-color: rgba(255, 0, 0, 1);
+      }
+      /* استایل کلی محتوا */
+      .content {
+        padding: 20px;
+        position: relative;
+      }
+
+      /* استایل دکمه راهنما */
+      .guide-toggle {
+        position: absolute;
+        left: 20px; /* فاصله از سمت چپ */
+        top: 20px; /* فاصله از بالا */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        color: #007bff;
+        font-weight: bold;
+      }
+
+      .guide-toggle:hover {
+        text-decoration: none;
+      }
+
+      .guide-icon {
+        font-size: 1.2em;
+      }
+
+      /* استایل بخش توضیحات راهنما */
+      .guide-content {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+      }
+
+      .guide-content h3 {
+        margin-top: 0;
+        font-size: 1.1em;
+        color: #333;
+      }
+
+      .guide-content ul {
+        padding-left: 20px;
+        margin: 10px 0;
+      }
+
+      .guide-content ul li {
+        margin-bottom: 8px;
+        font-size: 0.9em;
+        color: #555;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* استایل فرم */
+      .form-title {
+        margin-top: 0;
+      }
     </style>
   </head>
   <body>
@@ -311,19 +414,25 @@
               </button>
               <ul class="dropdown-menu custom-dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="tamasBaMa.html"
-                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" href="about.html"
-                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  <a class="dropdown-item" href="home.html"
+                    ><i class="bi bi-house-door"></i> خانه</a
                   >
                 </li>
                 <li>
                   <a class="dropdown-item" href="champains.html"
                     ><i class="bi bi-people"></i> کمپین
                   </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
                 </li>
                 <li>
                   <a class="dropdown-item" href="conditions.html"
@@ -351,6 +460,11 @@
         </div>
         <div class="offcanvas-body">
           <div class="menu-links">
+            <a href="champains.html"> خانه <i class="bi bi-house-door"></i></a>
+            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
+            <a href="hemayat.html"
+              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
+            </a>
             <a href="tamasBaMa.html">
               ارتباط با ما<i class="bi bi-telephone"></i
             ></a>
@@ -358,10 +472,7 @@
             <a href="soalat.html"
               >سوالات متداول<i class="bi bi-question-circle"></i
             ></a>
-            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
-            <a href="hemayat.html"
-              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
-            </a>
+
             <a href="conditions.html">
               شرایط و ضوابط<i class="bi bi-file-earmark-text"></i
             ></a>
@@ -387,12 +498,12 @@
             <a href="#manage-campaign" class="menu-link">
               مدیریت کمپین‌ها<i class="bi bi-clipboard-check"></i>
             </a>
-            <a href="#received-donations" class="menu-link">
+            <!-- <a href="#received-donations" class="menu-link">
               کمک‌های دریافتی <i class="bi bi-gift"></i>
             </a>
             <a href="#reports" class="menu-link">
               گزارش‌ها و آمار<i class="bi bi-bar-chart-line"></i>
-            </a>
+            </a> -->
           </div>
 
           <div class="main-content">
@@ -525,7 +636,28 @@
 
             <!-- ایجاد کمپین -->
             <div id="create-campaign" class="content">
-              <h2 class="text-center">فرم ایجاد کمپین</h2>
+              <!-- دکمه راهنما در سمت چپ -->
+              <div class="guide-toggle" onclick="toggleGuide()">
+                راهنما<span class="guide-icon">&#9432;</span>
+              </div>
+
+              <!-- بخش توضیحات راهنما -->
+              <div id="guideContent" class="guide-content hidden">
+                <h3>راهنمای ایجاد کمپین</h3>
+                <ul>
+                  <li>
+                    اطلاعات فردی که کمپین را ایجاد می‌کند به دقت وارد کنید.
+                  </li>
+                  <li>
+                    متناسب با نیاز خود یکی از دسته‌بندی‌ها را انتخاب کنید.
+                  </li>
+                  <li>یک عنوان واضح و جذاب برای کمپین خود انتخاب کنید.</li>
+                  <li>توضیحات کامل و دقیقی درباره کمپین خود بنویسید.</li>
+                  <li>مبلغ مورد نیاز را به تومان وارد کنید.</li>
+                  <li>تصاویر مرتبط با کمپین را آپلود کنید.</li>
+                </ul>
+              </div>
+              <h2 class="text-center form-title">فرم ایجاد کمپین</h2>
               <form id="campaignForm">
                 <!-- مرحله 1: اطلاعات درخواست‌دهنده -->
                 <fieldset class="step">
@@ -635,16 +767,21 @@
                   </div>
                   <div class="mb-3">
                     <label class="form-label">تصاویر کمپین:</label>
-                    <label for="campaignImages" class="label-upload"
-                      >انتخاب تصاویر</label
-                    >
                     <input
                       type="file"
                       name="campaignImages"
                       id="campaignImages"
                       accept="image/*"
                       multiple
+                      style="display: none"
                     />
+                    <button
+                      type="button"
+                      id="uploadButton"
+                      class="btn btn-secondary"
+                    >
+                      انتخاب تصاویر
+                    </button>
                     <div id="previewContainer" class="image-preview"></div>
                   </div>
                   <div class="step-controls">
@@ -1009,8 +1146,60 @@
             return response.json();
           })
           .then((userData) => {
-            const campaignForm = document.getElementById("campaignForm");
+            console.log("اطلاعات کاربر دریافت شد:", userData);
 
+            // تنظیم اطلاعات کاربر در فرم
+            const schoolName = userData.json_data.name || ""; // دریافت schoolName
+            const schoolPhone = userData.json_data.phone || ""; // دریافت schoolPhone
+            const schoolAddress = userData.json_data.address || ""; // دریافت schoolAddress
+
+            // ادامه کد برای مدیریت فرم و ارسال داده‌ها
+            const uploadButton = document.getElementById("uploadButton");
+            const fileInput = document.getElementById("campaignImages");
+            const previewContainer =
+              document.getElementById("previewContainer");
+
+            // باز کردن پنجره انتخاب فایل با کلیک روی دکمه
+            uploadButton.addEventListener("click", () => fileInput.click());
+
+            // مدیریت انتخاب فایل‌ها
+            fileInput.addEventListener("change", function () {
+              previewContainer.innerHTML = ""; // پاک کردن پیش‌نمایش قبلی
+              const files = Array.from(this.files);
+
+              files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                  const previewItem = document.createElement("div");
+                  previewItem.className = "preview-item";
+
+                  const img = document.createElement("img");
+                  img.src = e.target.result;
+
+                  const deleteBtn = document.createElement("button");
+                  deleteBtn.className = "delete-btn";
+                  deleteBtn.innerHTML = "×";
+                  deleteBtn.addEventListener("click", () => {
+                    previewItem.remove(); // حذف عکس از پیش‌نمایش
+                    // حذف فایل از لیست فایل‌های انتخاب شده
+                    const newFiles = Array.from(fileInput.files).filter(
+                      (f) => f !== file
+                    );
+                    // ایجاد یک DataTransfer جدید برای به‌روزرسانی فایل‌های input
+                    const dataTransfer = new DataTransfer();
+                    newFiles.forEach((f) => dataTransfer.items.add(f));
+                    fileInput.files = dataTransfer.files;
+                  });
+
+                  previewItem.appendChild(img);
+                  previewItem.appendChild(deleteBtn);
+                  previewContainer.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+              });
+            });
+
+            const campaignForm = document.getElementById("campaignForm");
             campaignForm.addEventListener("submit", function (event) {
               event.preventDefault(); // جلوگیری از ارسال خودکار فرم
 
@@ -1051,15 +1240,14 @@
                 lastName: document.getElementById("lastName").value,
                 position: document.getElementById("position").value,
                 mobile: document.getElementById("mobile").value,
-                schoolName: userData.json_data.name || "", // اضافه کردن schoolName از userData
-                schoolPhone: userData.json_data.phone || "", // اضافه کردن schoolPhone از userData
-                schoolAddress: userData.json_data.address || "", // اضافه کردن schoolAddress از userData
+                schoolName: schoolName, // استفاده از schoolName دریافت شده از بک‌اند
+                schoolPhone: schoolPhone, // استفاده از schoolPhone دریافت شده از بک‌اند
+                schoolAddress: schoolAddress, // استفاده از schoolAddress دریافت شده از بک‌اند
               };
               formData.append("applicant_info", JSON.stringify(applicantInfo));
 
               // افزودن فایل‌های تصویر
-              const imageFiles =
-                document.getElementById("campaignImages").files;
+              const imageFiles = fileInput.files;
               if (imageFiles.length === 0) {
                 alert("لطفاً حداقل یک تصویر انتخاب کنید.");
                 return;
@@ -1263,7 +1451,12 @@
       });
     </script>
     <!-- اسکریپت عکس  -->
-
+    <script>
+      function toggleGuide() {
+        const guideContent = document.getElementById("guideContent");
+        guideContent.classList.toggle("hidden");
+      }
+    </script>
     <!-- مشاهده رمز -->
     <script>
       document.querySelectorAll(".toggle-password").forEach((item) => {

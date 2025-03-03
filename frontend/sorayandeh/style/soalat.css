@@ -83,4 +83,11 @@
   .accordion-body {
     font-size: 12px;
   }
+  .print-button {
+    top: 80px;
+    left: 00px;
+    font-size: 15px;
+    padding: 5px;
+    z-index: 10000;
+  }
 }

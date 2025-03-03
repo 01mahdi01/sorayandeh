@@ -9,10 +9,19 @@
       rel="stylesheet"
     />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/fonts.css" />
+    <link rel="stylesheet" href="style/style.css" />
     <style>
+      .campaign-details {
+        margin-top: 80px;
+      }
       /* استایل‌های عکس در بخش اطلاعات کلی */
       #campaign-image {
         width: 100%; /* عرض عکس */
@@ -131,6 +140,124 @@
     </style>
   </head>
   <body>
+    <!-- هدر -->
+    <header class="header shadow-sm">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4 container-login">
+            <button class="login-btn">
+              <a href="login.html">
+                <i class="bi bi-person"></i>
+                ورود | ثبت نام
+              </a>
+            </button>
+          </div>
+          <div class="col-4 menu-hamburger">
+            <!-- دکمه منوی همبرگری -->
+            <button
+              class="btn btn-primary hum-btn"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuCanvas"
+              aria-controls="menuCanvas"
+            >
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+          <div class="col-4 d-flex justify-content-center container-logo">
+            <a href="home.html" class="logo text-dark text-decoration-none">
+              <img
+                src="image/Screenshot-2024-09-28-140836.png"
+                alt="لوگو"
+                class="logo"
+              />
+            </a>
+          </div>
+          <div class="col-4 container-btn">
+            <a href="soalat.html">
+              <button class="questions-btn">سوالات متداول</button>
+            </a>
+            <a href="hemayat.html">
+              <button class="support-btn">حمایت از سرآینده</button>
+            </a>
+
+            <div class="dropdown">
+              <button
+                class="menu-btn dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu custom-dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="home.html"
+                    ><i class="bi bi-house-door"></i> خانه</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="champains.html"
+                    ><i class="bi bi-people"></i> کمپین
+                  </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="about.html"
+                    ><i class="bi bi-info-circle"></i> درباره ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="tamasBaMa.html"
+                    ><i class="bi bi-telephone"></i> ارتباط با ما</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="conditions.html"
+                    ><i class="bi bi-file-earmark-text"></i> شرایط و ضوابط</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- منوی همبرگری -->
+      <div
+        class="offcanvas offcanvas-end offcanvas-half"
+        tabindex="-1"
+        id="menuCanvas"
+        aria-labelledby="menuCanvasLabel"
+      >
+        <div class="offcanvas-header">
+          <i class="bi bi-person-circle" style="font-size: 40px"></i>
+          <h6 class="login-btn-hum">
+            <a href="login.html">ورود و ثبت نام</a>
+          </h6>
+        </div>
+        <div class="offcanvas-body">
+          <div class="menu-links">
+            <a href="champains.html"> خانه <i class="bi bi-house-door"></i></a>
+            <a href="champains.html"> کمپین <i class="bi bi-people"></i></a>
+            <a href="hemayat.html"
+              >حمایت از سرآینده<i class="bi bi-suit-heart"></i>
+            </a>
+            <a href="tamasBaMa.html">
+              ارتباط با ما<i class="bi bi-telephone"></i
+            ></a>
+            <a href="about.html"> درباره ما<i class="bi bi-info-circle"></i></a>
+            <a href="soalat.html"
+              >سوالات متداول<i class="bi bi-question-circle"></i
+            ></a>
+
+            <a href="conditions.html">
+              شرایط و ضوابط<i class="bi bi-file-earmark-text"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </header>
     <section class="campaign-details">
       <div class="container py-5">
         <div class="row">
@@ -154,14 +281,12 @@
                     >
                   </p>
                 </div>
+
                 <p id="campaign-category" class="text-muted">
-                  دسته‌بندی: هوشمند سازی مدارس
+                  دسته‌بندی: <span id="category-name">در حال بارگذاری...</span>
                 </p>
-                <p id="campaign-description" class="card-text">
-                  توضیحات کامل کمپین در این بخش قرار می‌گیرد. این توضیحات
-                  می‌تواند شامل اهداف، روش‌ها، و سایر اطلاعات مرتبط با کمپین
-                  باشد.
-                </p>
+
+                <p id="campaign-description" class="card-text"></p>
               </div>
             </div>
 
@@ -169,33 +294,7 @@
             <div class="card mb-4">
               <div class="card-body">
                 <h5 class="card-title">گالری تصاویر</h5>
-                <div id="campaign-gallery" class="campaign-gallery">
-                  <img
-                    src="image/بهداشت-و-انرژی-768x672.jpg"
-                    class="img-thumbnail"
-                    alt="تصویر کمپین"
-                  />
-                  <img
-                    src="image/بهداشت-و-انرژی-768x672.jpg"
-                    class="img-thumbnail"
-                    alt="تصویر کمپین"
-                  />
-                  <img
-                    src="image/بهداشت-و-انرژی-768x672.jpg"
-                    class="img-thumbnail"
-                    alt="تصویر کمپین"
-                  />
-                  <img
-                    src="image/بهداشت-و-انرژی-768x672.jpg"
-                    class="img-thumbnail"
-                    alt="تصویر کمپین"
-                  />
-                  <img
-                    src="image/بهداشت-و-انرژی-768x672.jpg"
-                    class="img-thumbnail"
-                    alt="تصویر کمپین"
-                  />
-                </div>
+                <div id="campaign-gallery" class="campaign-gallery"></div>
               </div>
             </div>
 
@@ -203,6 +302,12 @@
             <div class="donation-section">
               <h5>کمک به این کمپین</h5>
               <form id="donation-form">
+                <input
+                  type="hidden"
+                  id="campaign-id"
+                  name="campaign_id"
+                  value=""
+                />
                 <div class="mb-3">
                   <label for="donation-amount" class="form-label"
                     >مبلغ کمک</label
@@ -212,6 +317,7 @@
                       type="text"
                       class="form-control"
                       id="donation-amount"
+                      name="donation_amount"
                       placeholder="مبلغ را وارد کنید"
                       required
                     />
@@ -305,7 +411,72 @@
         </div>
       </div>
     </section>
+    <!-- فوتر -->
+    <footer class="footer py-4 mt-5 shadow-sm">
+      <div class="container">
+        <div class="row text-md-end">
+          <!-- ستون اول: درباره ما -->
+          <div class="col-md-4 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="about.html" class="">
+                  درباره ما <i class="bi bi-info-circle"></i>
+                </a>
+              </li>
+              <li>
+                <a href="tamasBaMa.html" class="">
+                  ارتباط با ما <i class="bi bi-envelope"></i>
+                </a>
+              </li>
+              <li>
+                <a href="conditions.html" class="">
+                  شرایط و ضوابط <i class="bi bi-file-earmark-text"></i>
+                </a>
+              </li>
+              <li>
+                <a href="soalat.html" class="">
+                  سوالات متداول <i class="bi bi-question-circle"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
 
+          <!-- ستون دوم: لینک‌های مهم -->
+          <div class="col-md-4 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="tamasBaMa.html"> با ما در ارتباط باشید</a>
+              </li>
+              <li>
+                <span>09231055206</span>
+              </li>
+            </ul>
+          </div>
+          <!-- ستون سوم: اطلاعات تماس -->
+          <div class="col-md-4 mb-3">
+            <img src="image/logo.png" alt="" />
+          </div>
+        </div>
+        <hr />
+        <div class="social-icons">
+          <a href="" data-title="واتساپ">
+            <img src="icons/whatsapp.svg" alt="" class="icon icon-w" />
+          </a>
+          <a href="" data-title="اینستاگرام">
+            <img src="icons/instagramh.svg" alt="" class="icon" />
+          </a>
+          <a href="" data-title="تلگرام">
+            <img src="icons/telegramh.svg" alt="" class="icon" />
+          </a>
+          <a href="" data-title="آپارات">
+            <img src="icons/aparath.svg" alt="" class="icon" />
+          </a>
+          <a href="" data-title="بله">
+            <img src="icons/baleh.svg" alt="" class="icon" />
+          </a>
+        </div>
+      </div>
+    </footer>
     <!-- اسکریپت اتصال به بک اند  -->
     <script>
       function displayCampaignDetails(campaign) {
@@ -352,7 +523,13 @@
 
         // نمایش آدرس مدرسه
         const schoolAddress = document.getElementById("school-address");
-        schoolAddress.textContent = campaign.school || "بدون آدرس";
+        schoolAddress.textContent =
+          campaign.applicant_info.schoolAddress || "بدون آدرس";
+
+        // نمایش دسته‌بندی کمپین
+        const categoryName = document.getElementById("category-name");
+
+        categoryName.textContent = campaign.category || "بدون دسته‌بندی";
 
         // نمایش درصد پیشرفت
         const progress = campaign.steel_needed_money
@@ -386,6 +563,7 @@
           campaignGallery.innerHTML = "<p>هیچ تصویری وجود ندارد.</p>";
         }
       }
+
       document.addEventListener("DOMContentLoaded", function () {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -420,41 +598,6 @@
           .catch((error) => {
             console.error("Error fetching campaign details:", error);
           });
-      });
-      // مدیریت دکمه‌های پیشنهادی
-      const suggestedAmountButtons = document.querySelectorAll(
-        ".suggested-amounts .btn"
-      );
-      const donationAmountInput = document.getElementById("donation-amount");
-
-      suggestedAmountButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-          const amount = this.getAttribute("data-amount");
-          donationAmountInput.value = parseInt(amount).toLocaleString();
-        });
-      });
-
-      // فرمت‌دهی مبلغ وارد‌شده توسط کاربر
-      donationAmountInput.addEventListener("input", function () {
-        let value = this.value.replace(/,/g, ""); // حذف کاماهای موجود
-        if (!isNaN(value)) {
-          this.value = parseInt(value).toLocaleString(); // افزودن کاما به صورت سه‌رقمی
-        }
-      });
-
-      // مدیریت فرم کمک کردن
-      const donationForm = document.getElementById("donation-form");
-      donationForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const amount = donationAmountInput.value.replace(/,/g, ""); // حذف کاماها برای محاسبه
-        if (amount && amount > 0) {
-          alert(
-            `مبلغ ${parseInt(amount).toLocaleString()} تومان با موفقیت ثبت شد.`
-          );
-          donationForm.reset();
-        } else {
-          alert("لطفاً مبلغ معتبری وارد کنید.");
-        }
       });
     </script>
     <!-- اسکریپت داده محلی  -->
@@ -494,6 +637,159 @@
         populateDonorsList(mockDonors);
       });
     </script>
+    <!-- اسکریپت کمک کردن  -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const accessToken = localStorage.getItem("accessToken");
+
+        // دریافت id کمپین از URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const campaignId = urlParams.get("id");
+
+        if (!campaignId) {
+          console.error("Campaign ID not found in URL");
+          return;
+        }
+
+        // قرار دادن campaignId در فیلد مخفی
+        const campaignIdInput = document.getElementById("campaign-id");
+        campaignIdInput.value = campaignId;
+
+        // ارسال درخواست به سرور برای دریافت اطلاعات کمپین
+        fetch(`${BASE_URL}campaigns/singe_campaign/`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ campaign_id: campaignId }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            displayCampaignDetails(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching campaign details:", error);
+          });
+
+        // مدیریت دکمه‌های پیشنهادی
+        const suggestedAmountButtons = document.querySelectorAll(
+          ".suggested-amounts .btn"
+        );
+        const donationAmountInput = document.getElementById("donation-amount");
+
+        suggestedAmountButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const amount = this.getAttribute("data-amount");
+            donationAmountInput.value = parseInt(amount).toLocaleString();
+          });
+        });
+
+        // فرمت‌دهی مبلغ وارد‌شده توسط کاربر
+        donationAmountInput.addEventListener("input", function () {
+          let value = this.value.replace(/,/g, "");
+          if (!isNaN(value)) {
+            this.value = parseInt(value).toLocaleString();
+          }
+        });
+
+        // مدیریت فرم کمک کردن
+        const donationForm = document.getElementById("donation-form");
+        donationForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const amount = donationAmountInput.value.replace(/,/g, "");
+          const campaignId = campaignIdInput.value;
+
+          if (amount && amount > 0) {
+            // ارسال درخواست به بک‌اند
+            fetch(`${BASE_URL}finance/get_bank_url/`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                campaign_id: campaignId,
+                amount: amount,
+              }),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Donation successful:", data);
+
+                // ذخیره‌سازی payment_url در localStorage
+                localStorage.setItem("payment_url", data.payment_url.url);
+
+                // ذخیره‌سازی مبلغ در localStorage
+                localStorage.setItem("amount", amount);
+
+                // هدایت به صفحه پیش‌فاکتور
+                window.location.href = "pre-invoice.html";
+              })
+              .catch((error) => {
+                console.error("Error during donation:", error);
+                alert("خطا در ارسال کمک. لطفاً دوباره تلاش کنید.");
+              });
+          } else {
+            alert("لطفاً مبلغ معتبری وارد کنید.");
+          }
+        });
+      });
+
+      function displayCampaignDetails(campaign) {
+        // نمایش اطلاعات کمپین
+        const campaignTitle = document.getElementById("campaign-title");
+        campaignTitle.textContent = campaign.title || "بدون عنوان";
+
+        // ذخیره‌سازی نام کمپین در localStorage
+        localStorage.setItem("campaign_name", campaign.title);
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        const donationAmountInput = document.getElementById("donation-amount");
+
+        // اعتبارسنجی ورودی و جلوگیری از نمایش NaN
+        donationAmountInput.addEventListener("input", function () {
+          let value = this.value.replace(/[^0-9]/g, ""); // حذف کاراکترهای غیرعددی
+          if (value === "") {
+            value = "0"; // اگر فیلد خالی بود، مقدار پیش‌فرض 0 قرار دهید
+          }
+          this.value = parseInt(value).toLocaleString(); // نمایش عدد با فرمت مناسب
+        });
+
+        // تنظیم مقدار پیش‌فرض هنگام از دست دادن فوکوس
+        donationAmountInput.addEventListener("blur", function () {
+          if (this.value === "") {
+            this.value = "0";
+          }
+        });
+
+        // دکمه‌های پیشنهادی
+        const suggestedAmountButtons = document.querySelectorAll(
+          ".suggested-amounts button"
+        );
+        suggestedAmountButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const amount = this.getAttribute("data-amount");
+            donationAmountInput.value = parseInt(amount).toLocaleString();
+          });
+        });
+      });
+    </script>
+
     <script src="app/baseConfig.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app/logintest.js"></script>
   </body>
 </html>

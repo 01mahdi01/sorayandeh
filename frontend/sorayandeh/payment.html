@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پرداخت</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">پرداخت</h3>
+            </div>
+            <div class="card-body">
+              <p>مبلغ پرداخت: ۱۰۰,۰۰۰ تومان</p>
+              <button id="payButton" class="btn btn-success">پرداخت</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("payButton")
+        .addEventListener("click", function () {
+          // شبیه‌سازی پرداخت موفق
+          const paymentStatus = "success"; // یا 'failed' برای پرداخت ناموفق
+
+          // ذخیره وضعیت پرداخت در Local Storage
+          localStorage.setItem("paymentStatus", paymentStatus);
+
+          // انتقال کاربر به صفحه نتیجه پرداخت
+          window.location.href = "payment-result.html";
+        });
+    </script>
+  </body>
+</html>
+/finance/finance_get_financial_logs/
