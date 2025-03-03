@@ -76,7 +76,7 @@ class CallbackPaymentUrl(APIView):
         #     bank_record = bank_models.Bank.objects.select_related("campaign_transaction",).get(tracking_code=tracking_code)
         # except bank_models.Bank.DoesNotExist:
         #     return Response({"error": "Tracking code not found"}, status=status.HTTP_404_NOT_FOUND)
-        frontend_base_url="http//62.60.197.167"
+        frontend_base_url="http://62.60.197.167"
         if bank_record.is_success:
             with transaction.atomic():
                 campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
