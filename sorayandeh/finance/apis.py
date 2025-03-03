@@ -60,7 +60,7 @@ class CallbackPaymentUrl(APIView):
         # tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
         authority = request.GET.get('Authority')
         print(authority)
-        bank_record = bank_models.Bank.objects.select_related("campaign_transaction", ).get(reference_number=authority)
+        bank_record = bank_models.Bank.objects.select_related("transaction_set", ).get(reference_number=authority)
         # if not tracking_code:
         #     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
         #
@@ -77,7 +77,7 @@ class CallbackPaymentUrl(APIView):
                 campaign.participants.add(user)
 
             return Response(
-                {"message": "پرداخت با موفقیت انجام شد.", "tracking_code": tracking_code}, status=status.HTTP_200_OK
+                {"message": "پرداخت با موفقیت انجام شد.", "tracking_code": bank_record.tracking_code}, status=status.HTTP_200_OK
             )
         else:
             campaign =Campaign.objects.select_for_update().get(id=bank_record.campaign_transaction.campaign)
