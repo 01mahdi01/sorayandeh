@@ -226,7 +226,7 @@ CORS_ALLOW_METHODS = [
 ]
 
 ELASTICSEARCH_DSL = {
-    "default": {"hosts": "http://localhost:9200"},  # Change if running remotely
+    "default": {"hosts": "elasticsearch:9200"},  # Change if running remotely
 }
 ELASTICSEARCH_DSL_AUTOSYNC = True
 
