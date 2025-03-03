@@ -45,7 +45,6 @@ def contribute(user_id, campaign_id,participation_type):
     contributed = Participants.objects.create(user=user,campaign=campaign,participation_type=participation_type)
     campaign.participants.add(user)
     campaign.save()
-    print(campaign.participants.all())
     return contributed
 
 

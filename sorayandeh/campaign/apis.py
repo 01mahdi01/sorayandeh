@@ -181,7 +181,6 @@ class GetSingleCampaign(APIView):
 
     def post(self, request):
         serializer = self.InputGetSingleCampaignSerializer(data=request.data)
-        print(request.data)
         serializer.is_valid(raise_exception=True)
         campaign_id = serializer.validated_data["campaign_id"]
         campaign = Campaign.objects.select_related("category", "school").get(pk=campaign_id)
