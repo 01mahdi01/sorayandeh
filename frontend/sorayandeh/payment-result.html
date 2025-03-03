@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نتیجه پرداخت</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .card-header {
+        background-color: #007bff;
+        color: white;
+        border-radius: 10px 10px 0 0;
+      }
+      .icon-success {
+        color: #28a745;
+        font-size: 3rem;
+      }
+      .icon-failed {
+        color: #dc3545;
+        font-size: 3rem;
+      }
+      .detail-card {
+        background-color: white;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+        text-align: right;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .detail-card i {
+        color: #007bff;
+        margin-left: 10px;
+      }
+      .detail-card strong {
+        color: #343a40;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header text-center">
+              <h3 class="card-title">نتیجه پرداخت</h3>
+            </div>
+            <div class="card-body text-center">
+              <!-- آیکون وضعیت پرداخت -->
+              <div id="paymentIcon">
+                <i class="fas fa-check-circle icon-success d-none"></i>
+                <i class="fas fa-times-circle icon-failed d-none"></i>
+              </div>
+              <!-- پیام وضعیت پرداخت -->
+              <h4 id="paymentResultMessage" class="mt-3"></h4>
+              <!-- جزئیات پرداخت -->
+              <div class="details mt-4">
+                <div class="detail-card">
+                  <i class="fas fa-user"></i>
+                  <strong>نام کمک‌کننده:</strong>
+                  <span id="helperName">محمد رضایی</span>
+                </div>
+                <div class="detail-card">
+                  <i class="fas fa-hand-holding-heart"></i>
+                  <strong>نام کمپین:</strong>
+                  <span id="campaignName">کمک به کودکان نیازمند</span>
+                </div>
+                <div class="detail-card">
+                  <i class="fas fa-calendar-alt"></i>
+                  <strong>تاریخ پرداخت:</strong>
+                  <span id="paymentDate">۱۴۰۲/۰۷/۲۵</span>
+                </div>
+                <div class="detail-card">
+                  <i class="fas fa-receipt"></i>
+                  <strong>شناسه پرداخت:</strong>
+                  <span id="paymentId">۱۲۳۴۵۶۷۸۹</span>
+                </div>
+              </div>
+              <!-- دکمه بازگشت -->
+              <div class="mt-4">
+                <a href="index.html" class="btn btn-primary"
+                  >بازگشت به صفحه اصلی</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // بازیابی وضعیت پرداخت از Local Storage
+      const paymentStatus = localStorage.getItem("paymentStatus");
+
+      // عناصر صفحه
+      const paymentIcon = document.getElementById("paymentIcon");
+      const paymentResultMessage = document.getElementById(
+        "paymentResultMessage"
+      );
+      const helperName = document.getElementById("helperName");
+      const campaignName = document.getElementById("campaignName");
+      const paymentDate = document.getElementById("paymentDate");
+      const paymentId = document.getElementById("paymentId");
+
+      // نمایش پیام و آیکون مناسب
+      if (paymentStatus === "success") {
+        paymentIcon.querySelector(".icon-success").classList.remove("d-none");
+        paymentResultMessage.textContent = "پرداخت شما با موفقیت انجام شد.";
+        paymentResultMessage.classList.add("text-success");
+      } else {
+        paymentIcon.querySelector(".icon-failed").classList.remove("d-none");
+        paymentResultMessage.textContent =
+          "پرداخت شما ناموفق بود. لطفاً مجدداً تلاش کنید.";
+        paymentResultMessage.classList.add("text-danger");
+      }
+
+      // پاک کردن وضعیت پرداخت از Local Storage
+      localStorage.removeItem("paymentStatus");
+    </script>
+  </body>
+</html>

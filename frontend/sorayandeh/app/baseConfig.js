@@ -1,1 +1,1 @@
-const BASE_URL = "https://sorayandeh-mahdi01.kubarcloud.net/";
+const BASE_URL = "http://62.60.197.167:8000/";
