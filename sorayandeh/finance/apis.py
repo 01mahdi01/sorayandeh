@@ -57,16 +57,17 @@ class CallbackPaymentUrl(APIView):
 
     def get(self, request):
         print(100*'f')
-        tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
-
-
-        if not tracking_code:
-            return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            bank_record = bank_models.Bank.objects.select_related("campaign_transaction",).get(tracking_code=tracking_code)
-        except bank_models.Bank.DoesNotExist:
-            return Response({"error": "Tracking code not found"}, status=status.HTTP_404_NOT_FOUND)
+        # tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
+        authority = request.GET.get('Authority')
+        print(authority)
+        bank_record = bank_models.Bank.objects.select_related("campaign_transaction", ).get(reference_number=authority)
+        # if not tracking_code:
+        #     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
+        #
+        # try:
+        #     bank_record = bank_models.Bank.objects.select_related("campaign_transaction",).get(tracking_code=tracking_code)
+        # except bank_models.Bank.DoesNotExist:
+        #     return Response({"error": "Tracking code not found"}, status=status.HTTP_404_NOT_FOUND)
 
         if bank_record.is_success:
             with transaction.atomic():
