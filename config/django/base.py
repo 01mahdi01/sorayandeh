@@ -247,6 +247,7 @@ AZ_IRANIAN_BANK_GATEWAYS = {
       # اختیاری
     "IS_SAFE_GET_GATEWAY_PAYMENT": False,  # اختیاری، بهتر است True بزارید.
     "CUSTOM_APP": None,  # اختیاری
+    'CALLBACK_NAMESPACE': 'finance:callback_gateway',
 }
 # Redirect all HTTP requests to HTTPS
 # SECURE_SSL_REDIRECT = True
