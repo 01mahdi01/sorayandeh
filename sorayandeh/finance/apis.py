@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -85,12 +85,12 @@ class CallbackPaymentUrl(APIView):
                 campaign.participants.add(user)
 
             success_url = f"{frontend_base_url}/payment-success?tracking_code={authority}"
-            return redirect(success_url)
+            return HttpResponseRedirect(success_url)
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
             failure_url = f"{frontend_base_url}"
-            return redirect(failure_url)
+            return HttpResponseRedirect(failure_url)
 
 
 
