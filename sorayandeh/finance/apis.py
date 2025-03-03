@@ -107,5 +107,5 @@ class GetFinancialLogs(APIView):
     def post(self, request):
         serializer = self.InputFinancialLogsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        log=FinancialLogs.objects.select_related("campaign","user").get(transaction=serializer.validated_data["tracking_code"])
+        log=FinancialLogs.objects.select_related("campaign","user",'transaction').get(transaction__reference_number=serializer.validated_data["tracking_code"])
         return Response(self.OutputFinancialLogsSerializer(log).data)
