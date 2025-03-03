@@ -83,7 +83,7 @@ class CallbackPaymentUrl(APIView):
                 {"message": "پرداخت با موفقیت انجام شد.", "tracking_code": bank_record.tracking_code}, status=status.HTTP_200_OK
             )
         else:
-            campaign =Campaign.objects.select_for_update().get(id=bank_record.campaign_transaction.campaign)
+            campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.amount += bank_record.amount
             return Response(
                 {"message": "پرداخت با شکست مواجه شده است. اگر پول کم شده است، ظرف مدت ۴۸ ساعت باز خواهد گشت."},
