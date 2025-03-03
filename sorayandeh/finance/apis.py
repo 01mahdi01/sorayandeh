@@ -7,6 +7,7 @@ from .services import generate_payment_url
 from ..campaign.models import Campaign,Participants
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
+from .models import FinancialLogs
 
 
 from azbankgateways import (
@@ -61,6 +62,8 @@ class CallbackPaymentUrl(APIView):
         authority = request.GET.get('Authority')
         print(authority)
         bank_record = bank_models.Bank.objects.get(reference_number=authority)
+        log = FinancialLogs.objects.get(pk=bank_record.pk)
+
         # if not tracking_code:
         #     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
         #
@@ -71,8 +74,8 @@ class CallbackPaymentUrl(APIView):
 
         if bank_record.is_success:
             with transaction.atomic():
-                campaign =Campaign.objects.select_for_update().get(id=bank_record.campaign_transaction.campaign)
-                user=BaseUser.objects.get(id= bank_record.campaign_transaction.user)
+                campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
+                user=BaseUser.objects.get(id= log.user.id)
                 participant=Participants.objects.create(user=user, campaign=campaign,participation_type="money")
                 campaign.participants.add(user)
 
