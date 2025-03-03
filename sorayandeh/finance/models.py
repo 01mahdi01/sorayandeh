@@ -7,4 +7,4 @@ from azbankgateways.models import Bank
 class FinancialLogs(models.Model):
     user = models.ForeignKey(BaseUser, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
-    transaction = models.ForeignKey(Bank, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(Bank, on_delete=models.CASCADE,related_name='transactions')
