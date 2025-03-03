@@ -64,7 +64,7 @@ class CallbackPaymentUrl(APIView):
         try:
             authority = request.GET.get('Authority')
             bank_record = bank_models.Bank.objects.get(reference_number=authority)
-            log = FinancialLogs.objects.get(pk=bank_record.pk)
+            log = FinancialLogs.objects.select_related("campaign","user").get(pk=bank_record.pk)
         except bank_models.Bank.DoesNotExist:
             return Response({"error": "Authority does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -89,8 +89,23 @@ class CallbackPaymentUrl(APIView):
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
-            failure_url = f"{frontend_base_url}"
+            failure_url = f"{frontend_base_url}?tracking_code={authority}"
             return HttpResponseRedirect(failure_url)
 
 
+class GetFinancialLogs(APIView):
+    class InputFinancialLogsSerializer(serializers.Serializer):
+        tracking_code=serializers.CharField()
+    class OutputFinancialLogsSerializer(serializers.Serializer):
+        user = serializers.CharField(source="user.name", read_only=True)
+        campaign = serializers.CharField(source="campaign.title", read_only=True)
+        transaction = serializers.CharField(source="campaign.tracking_code", read_only=True)
+        class Meta:
+            model = FinancialLogs
+            fields = ("user","campaign","transaction")
 
+    def post(self, request):
+        serializer = self.InputFinancialLogsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        log=FinancialLogs.objects.select_related("campaign","user").get(pk=serializer.validated_data["tracking_code"])
+        return Response(self.OutputFinancialLogsSerializer(log).data)
