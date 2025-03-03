@@ -84,7 +84,7 @@ class CallbackPaymentUrl(APIView):
             )
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
-            campaign.amount += bank_record.amount
+            campaign.steel_needed_money += bank_record.amount
             return Response(
                 {"message": "پرداخت با شکست مواجه شده است. اگر پول کم شده است، ظرف مدت ۴۸ ساعت باز خواهد گشت."},
                 status=status.HTTP_400_BAD_REQUEST,
