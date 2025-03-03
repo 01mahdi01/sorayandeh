@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import redirect
 from django.urls import reverse
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -57,12 +58,16 @@ class RequestPaymentUrl(APIView):
 class CallbackPaymentUrl(APIView):
 
     def get(self, request):
-        print(100*'f')
+        if not request.GET.get('Authority'):
+            return Response({"error": "Authority is required."}, status=status.HTTP_400_BAD_REQUEST)
         # tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
-        authority = request.GET.get('Authority')
-        print(authority)
-        bank_record = bank_models.Bank.objects.get(reference_number=authority)
-        log = FinancialLogs.objects.get(pk=bank_record.pk)
+        try:
+            authority = request.GET.get('Authority')
+            bank_record = bank_models.Bank.objects.get(reference_number=authority)
+            log = FinancialLogs.objects.get(pk=bank_record.pk)
+        except bank_models.Bank.DoesNotExist:
+            return Response({"error": "Authority does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
 
         # if not tracking_code:
         #     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
@@ -71,7 +76,7 @@ class CallbackPaymentUrl(APIView):
         #     bank_record = bank_models.Bank.objects.select_related("campaign_transaction",).get(tracking_code=tracking_code)
         # except bank_models.Bank.DoesNotExist:
         #     return Response({"error": "Tracking code not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        frontend_base_url="http//62.60.197.167"
         if bank_record.is_success:
             with transaction.atomic():
                 campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
@@ -79,15 +84,13 @@ class CallbackPaymentUrl(APIView):
                 participant=Participants.objects.create(user=user, campaign=campaign,participation_type="money")
                 campaign.participants.add(user)
 
-            return Response(
-                {"message": "پرداخت با موفقیت انجام شد.", "tracking_code": bank_record.tracking_code}, status=status.HTTP_200_OK
-            )
+            success_url = f"{frontend_base_url}/payment-success?tracking_code={authority}"
+            return redirect(success_url)
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
-            return Response(
-                {"message": "پرداخت با شکست مواجه شده است. اگر پول کم شده است، ظرف مدت ۴۸ ساعت باز خواهد گشت."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            failure_url = f"{frontend_base_url}"
+            return redirect(failure_url)
+
 
 
