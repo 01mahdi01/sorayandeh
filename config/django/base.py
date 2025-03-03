@@ -239,16 +239,12 @@ AZ_IRANIAN_BANK_GATEWAYS = {
         },
     },
     "IS_SAMPLE_FORM_ENABLE": True,  # اختیاری و پیش فرض غیر فعال است
-    "DEFAULT": "BMI",
+    "DEFAULT": "ZARINPAL",
     "CURRENCY": "IRR",  # اختیاری
     "TRACKING_CODE_QUERY_PARAM": "tc",  # اختیاری
     "TRACKING_CODE_LENGTH": 16,  # اختیاری
     "SETTING_VALUE_READER_CLASS": "azbankgateways.readers.DefaultReader",  # اختیاری
-    "BANK_PRIORITIES": [
-        "BMI",
-        "SEP",
-        # and so on ...
-    ],  # اختیاری
+      # اختیاری
     "IS_SAFE_GET_GATEWAY_PAYMENT": False,  # اختیاری، بهتر است True بزارید.
     "CUSTOM_APP": None,  # اختیاری
 }

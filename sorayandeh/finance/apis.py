@@ -42,7 +42,7 @@ class RequestPaymentUrl(APIView):
         callback_url = request.build_absolute_uri(reverse("finance:callback_gateway"))
         user = request.user
 
-        response_url = generate_payment_url(amount=amount, callback_url=callback_url, user=user, campaign=campaign)
+        response_url = generate_payment_url(amount=amount, callback_url=callback_url, user=user, campaign=campaign,request=request)
 
         # d = {}
 
@@ -56,6 +56,7 @@ class RequestPaymentUrl(APIView):
 class CallbackPaymentUrl(APIView):
 
     def get(self, request):
+        print(100*'f')
         tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
 
 
@@ -84,3 +85,5 @@ class CallbackPaymentUrl(APIView):
                 {"message": "پرداخت با شکست مواجه شده است. اگر پول کم شده است، ظرف مدت ۴۸ ساعت باز خواهد گشت."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
