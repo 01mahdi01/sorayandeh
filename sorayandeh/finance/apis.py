@@ -85,6 +85,7 @@ class CallbackPaymentUrl(APIView):
         stat = request.GET.get('Status')
         if stat == "OK":
             with transaction.atomic():
+
                 campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
                 user=BaseUser.objects.get(id= log.user.id)
                 log.status = "success"
@@ -94,6 +95,7 @@ class CallbackPaymentUrl(APIView):
             print(100*"Y")
             return HttpResponseRedirect(success_url)
         else:
+            bank_record = bank_models.Bank.objects.get(reference_number=authority)
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
             print(bank_record.amount*1000)
