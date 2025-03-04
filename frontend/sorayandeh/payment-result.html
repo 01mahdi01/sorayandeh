@@ -93,7 +93,7 @@
               </div>
               <!-- دکمه بازگشت -->
               <div class="mt-4">
-                <a href="index.html" class="btn btn-primary"
+                <a href="home.html" class="btn btn-primary"
                   >بازگشت به صفحه اصلی</a
                 >
               </div>
@@ -116,9 +116,10 @@
           window.location.href = "home.html"; // بازگشت به صفحه اصلی
           return;
         }
-
+        console.log(`${BASE_URL}finance/get_financial_logs/`);
+        console.log(JSON.stringify({ tracking_code: trackingCode }));
         // ارسال درخواست به بک‌اند
-        fetch(`${BASE_URL}/finance/get_financial_logs/`, {
+        fetch(`${BASE_URL}finance/get_financial_logs/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
