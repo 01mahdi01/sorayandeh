@@ -92,7 +92,7 @@ class CallbackPaymentUrl(APIView):
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
-            failure_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}""
+            failure_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
             return HttpResponseRedirect(failure_url)
 
 
