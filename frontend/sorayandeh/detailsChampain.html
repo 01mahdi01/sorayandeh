@@ -266,19 +266,19 @@
             <div class="card mb-4">
               <img
                 id="campaign-image"
-                src="/image/bg001.jpg"
+                src=""
                 class="card-img-top"
                 alt="عنوان کمپین"
               />
               <div class="card-body">
-                <h1 id="campaign-title" class="card-title">عنوان کمپین</h1>
+                <h1 id="campaign-title" class="card-title">
+                  در حال بارگذاری...
+                </h1>
                 <!-- بخش جدید: آدرس مدرسه -->
                 <div class="mb-3">
                   <p>
                     <strong>آدرس مدرسه:</strong>
-                    <span id="school-address"
-                      >تهران، خیابان آزادی، کوچه شهید فلانی، پلاک ۱۲</span
-                    >
+                    <span id="school-address">در حال بارگذاری...</span>
                   </p>
                 </div>
 
@@ -286,7 +286,9 @@
                   دسته‌بندی: <span id="category-name">در حال بارگذاری...</span>
                 </p>
 
-                <p id="campaign-description" class="card-text"></p>
+                <p id="campaign-description" class="card-text">
+                  در حال بارگذاری...
+                </p>
               </div>
             </div>
 
@@ -294,7 +296,9 @@
             <div class="card mb-4">
               <div class="card-body">
                 <h5 class="card-title">گالری تصاویر</h5>
-                <div id="campaign-gallery" class="campaign-gallery"></div>
+                <div id="campaign-gallery" class="campaign-gallery">
+                  در حال بارگذاری...
+                </div>
               </div>
             </div>
 
@@ -377,20 +381,20 @@
                       r="50"
                     ></circle>
                   </svg>
-                  <div class="circle-progress-text">60%</div>
+                  <div class="circle-progress-text">0%</div>
                 </div>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
                     <strong>تاریخ شروع:</strong>
-                    <span id="campaign-start-date">1402/01/01</span>
+                    <span id="campaign-start-date">در حال بارگذاری...</span>
                   </li>
                   <li class="list-group-item">
                     <strong>هدف مالی:</strong>
-                    <span id="campaign-target-amount">10,000,000 تومان</span>
+                    <span id="campaign-target-amount">در حال بارگذاری...</span>
                   </li>
                   <li class="list-group-item">
                     <strong>جمع‌آوری شده:</strong>
-                    <span id="campaign-raised-amount">5,000,000 تومان</span>
+                    <span id="campaign-raised-amount">در حال بارگذاری...</span>
                   </li>
                 </ul>
               </div>
@@ -477,167 +481,8 @@
         </div>
       </div>
     </footer>
-    <!-- اسکریپت اتصال به بک اند  -->
-    <script>
-      function displayCampaignDetails(campaign) {
-        // نمایش اولین عکس گالری در قسمت عکس اطلاعات کلی
-        const campaignImage = document.getElementById("campaign-image");
-        if (campaign.gallery && campaign.gallery.length > 0) {
-          campaignImage.src = `${BASE_URL}media/${campaign.gallery[0]}`;
-        } else {
-          campaignImage.src = "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
-        }
 
-        // نمایش عنوان کمپین
-        const campaignTitle = document.getElementById("campaign-title");
-        campaignTitle.textContent = campaign.title || "بدون عنوان";
-
-        // نمایش توضیحات کمپین
-        const campaignDescription = document.getElementById(
-          "campaign-description"
-        );
-        campaignDescription.textContent =
-          campaign.description || "بدون توضیحات";
-
-        // نمایش هدف مالی کمپین
-        const campaignTargetAmount = document.getElementById(
-          "campaign-target-amount"
-        );
-        campaignTargetAmount.textContent = `${campaign.estimated_money.toLocaleString()} تومان`;
-
-        // نمایش مبلغ جمع‌آوری شده
-        const campaignRaisedAmount = document.getElementById(
-          "campaign-raised-amount"
-        );
-        campaignRaisedAmount.textContent = campaign.steel_needed_money
-          ? `${campaign.steel_needed_money.toLocaleString()} تومان`
-          : "0 تومان";
-
-        // نمایش تاریخ شروع کمپین
-        const campaignStartDate = document.getElementById(
-          "campaign-start-date"
-        );
-        const createdDate = new Date(campaign.created_date);
-        const formattedDate = createdDate.toLocaleDateString("fa-IR"); // تاریخ به فرمت فارسی
-        campaignStartDate.textContent = formattedDate || "بدون تاریخ";
-
-        // نمایش آدرس مدرسه
-        const schoolAddress = document.getElementById("school-address");
-        schoolAddress.textContent =
-          campaign.applicant_info.schoolAddress || "بدون آدرس";
-
-        // نمایش دسته‌بندی کمپین
-        const categoryName = document.getElementById("category-name");
-
-        categoryName.textContent = campaign.category || "بدون دسته‌بندی";
-
-        // نمایش درصد پیشرفت
-        const progress = campaign.steel_needed_money
-          ? Math.round(
-              (campaign.steel_needed_money / campaign.estimated_money) * 100
-            )
-          : 0;
-        const circleProgressBar = document.querySelector(
-          ".circle-progress-bar"
-        );
-        const circleProgressText = document.querySelector(
-          ".circle-progress-text"
-        );
-        const circumference = 2 * Math.PI * 50; // محیط دایره (2 * π * r)
-        const offset = circumference - (progress / 100) * circumference;
-        circleProgressBar.style.strokeDasharray = circumference;
-        circleProgressBar.style.strokeDashoffset = offset;
-        circleProgressText.textContent = `${progress}%`;
-
-        // نمایش گالری تصاویر
-        const campaignGallery = document.getElementById("campaign-gallery");
-        if (campaign.gallery && campaign.gallery.length > 0) {
-          campaignGallery.innerHTML = campaign.gallery
-            .map(
-              (image) => `
-      <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
-    `
-            )
-            .join("");
-        } else {
-          campaignGallery.innerHTML = "<p>هیچ تصویری وجود ندارد.</p>";
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const accessToken = localStorage.getItem("accessToken");
-
-        // دریافت id کمپین از URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const campaignId = urlParams.get("id");
-
-        if (!campaignId) {
-          console.error("Campaign ID not found in URL");
-          return;
-        }
-
-        // ارسال درخواست به سرور برای دریافت اطلاعات کمپین
-        fetch(`${BASE_URL}campaigns/singe_campaign/`, {
-          method: "POST", // استفاده از متد POST
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json", // ارسال داده‌ها به صورت JSON
-          },
-          body: JSON.stringify({ campaign_id: campaignId }), // ارسال id کمپین در بدنه درخواست
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data); // بررسی ساختار پاسخ سرور
-            displayCampaignDetails(data); // نمایش اطلاعات کمپین
-          })
-          .catch((error) => {
-            console.error("Error fetching campaign details:", error);
-          });
-      });
-    </script>
-    <!-- اسکریپت داده محلی  -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // داده‌های محلی برای کمک‌کنندگان
-        const mockDonors = [
-          { full_name: "علی احمدی", amount: 1000000 },
-          { full_name: "مریم محمدی", amount: 500000 },
-          { full_name: "ناشناس", amount: 200000 },
-          { full_name: "رضا حسینی", amount: 300000 },
-          { full_name: "فاطمه کریمی", amount: 150000 },
-        ];
-
-        // تابع برای نمایش لیست کمک‌کنندگان
-        function populateDonorsList(donors) {
-          const donorsListContainer = document.getElementById("donors-list");
-
-          if (donors.length > 0) {
-            donorsListContainer.innerHTML = donors
-              .map(
-                (donor) => `
-            <div class="donor-item">
-              <span class="donor-name">${donor.full_name || "ناشناس"}</span>
-              <span class="donor-amount">${donor.amount.toLocaleString()} تومان</span>
-            </div>
-          `
-              )
-              .join("");
-          } else {
-            donorsListContainer.innerHTML =
-              "<p class='text-muted'>هنوز هیچ کمک‌کننده‌ای ثبت نشده است.</p>";
-          }
-        }
-
-        // نمایش داده‌های محلی
-        populateDonorsList(mockDonors);
-      });
-    </script>
-    <!-- اسکریپت کمک کردن  -->
+    <!-- ادغام  -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const accessToken = localStorage.getItem("accessToken");
@@ -746,18 +591,6 @@
             alert("لطفاً مبلغ معتبری وارد کنید.");
           }
         });
-      });
-
-      function displayCampaignDetails(campaign) {
-        // نمایش اطلاعات کمپین
-        const campaignTitle = document.getElementById("campaign-title");
-        campaignTitle.textContent = campaign.title || "بدون عنوان";
-
-        // ذخیره‌سازی نام کمپین در localStorage
-        localStorage.setItem("campaign_name", campaign.title);
-      }
-      document.addEventListener("DOMContentLoaded", function () {
-        const donationAmountInput = document.getElementById("donation-amount");
 
         // اعتبارسنجی ورودی و جلوگیری از نمایش NaN
         donationAmountInput.addEventListener("input", function () {
@@ -774,20 +607,140 @@
             this.value = "0";
           }
         });
+      });
 
-        // دکمه‌های پیشنهادی
-        const suggestedAmountButtons = document.querySelectorAll(
-          ".suggested-amounts button"
+      function displayCampaignDetails(campaign) {
+        // نمایش اولین عکس گالری در قسمت عکس اطلاعات کلی
+        const campaignImage = document.getElementById("campaign-image");
+        if (campaign.gallery && campaign.gallery.length > 0) {
+          campaignImage.src = `${BASE_URL}media/${campaign.gallery[0]}`;
+        } else {
+          campaignImage.src = "image/placeholder.jpg"; // اگر عکسی وجود نداشت، از یک تصویر پیش‌فرض استفاده کنید
+          campaignImage.alt = "تصویر پیش‌فرض";
+        }
+
+        // نمایش عنوان کمپین
+        const campaignTitle = document.getElementById("campaign-title");
+        campaignTitle.textContent = campaign.title || "بدون عنوان";
+
+        // نمایش توضیحات کمپین
+        const campaignDescription = document.getElementById(
+          "campaign-description"
         );
-        suggestedAmountButtons.forEach((button) => {
-          button.addEventListener("click", function () {
-            const amount = this.getAttribute("data-amount");
-            donationAmountInput.value = parseInt(amount).toLocaleString();
-          });
-        });
+        campaignDescription.textContent =
+          campaign.description || "بدون توضیحات";
+
+        // نمایش هدف مالی کمپین
+        const campaignTargetAmount = document.getElementById(
+          "campaign-target-amount"
+        );
+        campaignTargetAmount.textContent = campaign.estimated_money
+          ? `${campaign.estimated_money.toLocaleString()} تومان`
+          : "بدون هدف مالی";
+
+        // نمایش مبلغ جمع‌آوری شده
+        const campaignRaisedAmount = document.getElementById(
+          "campaign-raised-amount"
+        );
+        campaignRaisedAmount.textContent = campaign.steel_needed_money
+          ? `${campaign.steel_needed_money.toLocaleString()} تومان`
+          : "0 تومان";
+
+        // نمایش تاریخ شروع کمپین
+        const campaignStartDate = document.getElementById(
+          "campaign-start-date"
+        );
+        const createdDate = campaign.created_date
+          ? new Date(campaign.created_date)
+          : null;
+        const formattedDate = createdDate
+          ? createdDate.toLocaleDateString("fa-IR")
+          : "بدون تاریخ";
+        campaignStartDate.textContent = formattedDate;
+
+        // نمایش آدرس مدرسه
+        const schoolAddress = document.getElementById("school-address");
+        schoolAddress.textContent =
+          campaign.applicant_info?.schoolAddress || "بدون آدرس";
+
+        // نمایش دسته‌بندی کمپین
+        const categoryName = document.getElementById("category-name");
+        categoryName.textContent = campaign.category || "بدون دسته‌بندی";
+
+        // نمایش درصد پیشرفت
+        const progress =
+          campaign.steel_needed_money && campaign.estimated_money
+            ? Math.round(
+                (campaign.steel_needed_money / campaign.estimated_money) * 100
+              )
+            : 0;
+        const circleProgressBar = document.querySelector(
+          ".circle-progress-bar"
+        );
+        const circleProgressText = document.querySelector(
+          ".circle-progress-text"
+        );
+        const circumference = 2 * Math.PI * 50; // محیط دایره (2 * π * r)
+        const offset = circumference - (progress / 100) * circumference;
+        circleProgressBar.style.strokeDasharray = circumference;
+        circleProgressBar.style.strokeDashoffset = offset;
+        circleProgressText.textContent = `${progress}%`;
+
+        // نمایش گالری تصاویر
+        const campaignGallery = document.getElementById("campaign-gallery");
+        if (campaign.gallery && campaign.gallery.length > 0) {
+          campaignGallery.innerHTML = campaign.gallery
+            .map(
+              (image) => `
+                <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
+              `
+            )
+            .join("");
+        } else {
+          campaignGallery.innerHTML = "<p>هیچ تصویری وجود ندارد.</p>";
+        }
+
+        // ذخیره‌سازی نام کمپین در localStorage
+        localStorage.setItem("campaign_name", campaign.title);
+      }
+    </script>
+    <!-- اسکریپت داده محلی  -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // داده‌های محلی برای کمک‌کنندگان
+        const mockDonors = [
+          { full_name: "علی احمدی", amount: 1000000 },
+          { full_name: "مریم محمدی", amount: 500000 },
+          { full_name: "ناشناس", amount: 200000 },
+          { full_name: "رضا حسینی", amount: 300000 },
+          { full_name: "فاطمه کریمی", amount: 150000 },
+        ];
+
+        // تابع برای نمایش لیست کمک‌کنندگان
+        function populateDonorsList(donors) {
+          const donorsListContainer = document.getElementById("donors-list");
+
+          if (donors.length > 0) {
+            donorsListContainer.innerHTML = donors
+              .map(
+                (donor) => `
+            <div class="donor-item">
+              <span class="donor-name">${donor.full_name || "ناشناس"}</span>
+              <span class="donor-amount">${donor.amount.toLocaleString()} تومان</span>
+            </div>
+          `
+              )
+              .join("");
+          } else {
+            donorsListContainer.innerHTML =
+              "<p class='text-muted'>هنوز هیچ کمک‌کننده‌ای ثبت نشده است.</p>";
+          }
+        }
+
+        // نمایش داده‌های محلی
+        populateDonorsList(mockDonors);
       });
     </script>
-
     <script src="app/baseConfig.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="app/logintest.js"></script>
