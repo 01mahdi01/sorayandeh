@@ -9,6 +9,8 @@ from ..campaign.models import Campaign,Participants
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from .models import FinancialLogs
+from django.conf import settings as django_settings
+import requests
 
 
 from azbankgateways import (
@@ -60,6 +62,7 @@ class CallbackPaymentUrl(APIView):
     def get(self, request):
         if not request.GET.get('Authority'):
             return Response({"error": "Authority is required."}, status=status.HTTP_400_BAD_REQUEST)
+
         # tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
         try:
             authority = request.GET.get('Authority')
@@ -77,19 +80,19 @@ class CallbackPaymentUrl(APIView):
         # except bank_models.Bank.DoesNotExist:
         #     return Response({"error": "Tracking code not found"}, status=status.HTTP_404_NOT_FOUND)
         frontend_base_url="http://62.60.197.167/payment-result.html"
-        if bank_record.is_success:
+        stat = request.GET.get('Status')
+        if stat == "OK":
             with transaction.atomic():
                 campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
                 user=BaseUser.objects.get(id= log.user.id)
                 participant=Participants.objects.create(user=user, campaign=campaign,participation_type="money")
                 campaign.participants.add(user)
-
-            success_url = f"{frontend_base_url}/?tracking_code={authority}"
+            success_url = f"{frontend_base_url}/?tracking_code={authority}?{stat}"
             return HttpResponseRedirect(success_url)
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
-            failure_url = f"{frontend_base_url}?tracking_code={authority}"
+            failure_url = f"{frontend_base_url}?tracking_code={authority}?{stat}"
             return HttpResponseRedirect(failure_url)
 
 
@@ -99,7 +102,7 @@ class GetFinancialLogs(APIView):
     class OutputFinancialLogsSerializer(serializers.Serializer):
         user = serializers.CharField(source="user.name", read_only=True)
         campaign = serializers.CharField(source="campaign.title", read_only=True)
-        transaction = serializers.CharField(source="campaign.tracking_code", read_only=True)
+        transaction = serializers.CharField(source="transaction.tracking_code", read_only=True)
         class Meta:
             model = FinancialLogs
             fields = ("user","campaign","transaction")
@@ -109,3 +112,43 @@ class GetFinancialLogs(APIView):
         serializer.is_valid(raise_exception=True)
         log=FinancialLogs.objects.select_related("campaign","user",'transaction').get(transaction__reference_number=serializer.validated_data["tracking_code"])
         return Response(self.OutputFinancialLogsSerializer(log).data)
+
+# class ValidatePayment(APIView):
+#     class OutputPaymentSerializer(serializers.Serializer):
+#         authority = serializers.CharField(max_length=50)
+#         amount = serializers.IntegerField()
+#
+#     ZARINPAL_VERIFY_URL = "https://payment.zarinpal.com/pg/v4/payment/verify.json"
+#
+#     def post(self, request):
+#         serializer = self.OutputPaymentSerializer(data=request.data)
+#         if serializer.is_valid():
+#             merchant_id = django_settings.MERCHANT_CODE  # Store this in settings.py
+#             authority = serializer.validated_data["authority"]
+#             amount = serializer.validated_data["amount"]
+#
+#             data = {
+#                 "merchant_id": merchant_id,
+#                 "amount": amount,
+#                 "authority": authority,
+#             }
+#             headers = {"Content-Type": "application/json"}
+#
+#             try:
+#                 response = requests.post(self.ZARINPAL_VERIFY_URL, json=data, headers=headers)
+#                 response_data = response.json()
+#
+#                 if response_data.get("data") and response_data["data"].get("code") == 100:
+#                     return Response(
+#                         {"message": "Payment successful", "details": response_data},
+#                         status=status.HTTP_200_OK,
+#                     )
+#                 else:
+#                     return Response(
+#                         {"message": "Payment verification failed", "details": response_data},
+#                         status=status.HTTP_400_BAD_REQUEST,
+#                     )
+#             except requests.exceptions.RequestException as e:
+#                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

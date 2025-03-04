@@ -163,8 +163,42 @@ class SearchCampaignBySchool(APIView):
         return Response(serializer.data)
 
 
-class SearchByAddress(APIView):
-    pass
+# class SearchByAddress(APIView):
+#     class InputSearchByAddressSerializer(serializers.Serializer):
+#         address = serializers.CharField()
+#         query = Q("wildcard", school_name=school_name)
+#
+#         # Get the page number from query parameters, defaulting to 1 if not provided
+#         page = int(request.query_params.get("page", 1))
+#         page_size = 10
+#         from_value = (page - 1) * page_size  # Elasticsearch's 'from' is 0-based
+#
+#         # Elasticsearch query with pagination and sorting by 'id'
+#         results = YourModelDocument.search().query(query).sort("id").extra(size=page_size, from_=from_value).execute()
+#
+#         # Extract campaign IDs from Elasticsearch results
+#         campaigns_ids = [result.meta.id for result in results]
+#
+#         # Query the campaigns using the extracted IDs and optimize with select_related to avoid N+1 issue
+#         campaigns = Campaign.objects.select_related("school").filter(id__in=campaigns_ids).order_by("id")
+#
+#         # Serialize the data and return the response
+#         serializer = self.OutputSearchBySchoolSerializer(campaigns, many=True)
+#         return Response(serializer.data)
+#
+#     class OutputSearchByAddressSerializer(serializers.Serializer):
+#         category = serializers.CharField(source="category.title", read_only=True)
+#         school = serializers.CharField(source="school.school.name", read_only=True)
+#
+#         class Meta:
+#             model = Campaign
+#             fields = "__all__"
+#     def post(self, request):
+#         serializer = self.InputSearchByAddressSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         address = serializer.validated_data["address"]
+#
+
 
 
 class GetSingleCampaign(APIView):
