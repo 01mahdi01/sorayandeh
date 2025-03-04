@@ -85,6 +85,7 @@ class CallbackPaymentUrl(APIView):
             with transaction.atomic():
                 campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
                 user=BaseUser.objects.get(id= log.user.id)
+                log.status = "success"
                 participant=Participants.objects.create(user=user, campaign=campaign,participation_type="money")
                 campaign.participants.add(user)
             success_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
@@ -93,6 +94,7 @@ class CallbackPaymentUrl(APIView):
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
             failure_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
+            log.status = "failure"
             return HttpResponseRedirect(failure_url)
 
 
