@@ -5,7 +5,7 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .services import generate_payment_url
-from ..campaign.models import Campaign,Participants
+from ..campaign.models import Campaign, Participants
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from .models import FinancialLogs
@@ -46,7 +46,9 @@ class RequestPaymentUrl(APIView):
         callback_url = request.build_absolute_uri(reverse("finance:callback_gateway"))
         user = request.user
 
-        response_url = generate_payment_url(amount=amount, callback_url=callback_url, user=user, campaign=campaign,request=request)
+        response_url = generate_payment_url(
+            amount=amount, callback_url=callback_url, user=user, campaign=campaign, request=request
+        )
 
         # d = {}
 
@@ -60,19 +62,18 @@ class RequestPaymentUrl(APIView):
 class CallbackPaymentUrl(APIView):
 
     def get(self, request):
-        if not request.GET.get('Authority'):
-            print(100*"f")
+        if not request.GET.get("Authority"):
+
             return Response({"error": "Authority is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         # tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
         try:
-            authority = request.GET.get('Authority')
+            authority = request.GET.get("Authority")
             bank_record = bank_models.Bank.objects.get(reference_number=authority)
-            log = FinancialLogs.objects.select_related("campaign","user").get(pk=bank_record.pk)
+            log = FinancialLogs.objects.select_related("campaign", "user").get(transaction=bank_record.pk)
         except bank_models.Bank.DoesNotExist:
-            print(bank_record.amount * 1000,"alksdhfasldkfjhaskdfjh")
-            return Response({"error": "Authority does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
+            return Response({"error": "Authority does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
         # if not tracking_code:
         #     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
@@ -81,45 +82,48 @@ class CallbackPaymentUrl(APIView):
         #     bank_record = bank_models.Bank.objects.select_related("campaign_transaction",).get(tracking_code=tracking_code)
         # except bank_models.Bank.DoesNotExist:
         #     return Response({"error": "Tracking code not found"}, status=status.HTTP_404_NOT_FOUND)
-        frontend_base_url="http://62.60.197.167/payment-result.html"
-        stat = request.GET.get('Status')
+        frontend_base_url = "http://62.60.197.167/payment-result.html"
+        stat = request.GET.get("Status")
         if stat == "OK":
             with transaction.atomic():
 
-                campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
-                user=BaseUser.objects.get(id= log.user.id)
+                campaign = Campaign.objects.select_for_update().get(id=log.campaign.id)
+                user = BaseUser.objects.get(id=log.user.id)
                 log.status = "success"
-                participant=Participants.objects.create(user=user, campaign=campaign,participation_type="money")
+                participant = Participants.objects.create(user=user, campaign=campaign, participation_type="money")
                 campaign.participants.add(user)
-            success_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
-            print(100*"Y")
+            success_url = f"{frontend_base_url}?tracking_code={authority}&status={stat}"
             return HttpResponseRedirect(success_url)
         else:
             bank_record = bank_models.Bank.objects.get(reference_number=authority)
-            campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
+            campaign = Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
-            print(bank_record.amount*1000)
-            failure_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
-            log.status = "failure"
+            campaign.save()
+            failure_url = f"{frontend_base_url}?tracking_code={authority}&status={stat}"
             return HttpResponseRedirect(failure_url)
 
 
 class GetFinancialLogs(APIView):
     class InputFinancialLogsSerializer(serializers.Serializer):
-        tracking_code=serializers.CharField()
+        tracking_code = serializers.CharField()
+
     class OutputFinancialLogsSerializer(serializers.Serializer):
         user = serializers.CharField(source="user.name", read_only=True)
         campaign = serializers.CharField(source="campaign.title", read_only=True)
         transaction = serializers.CharField(source="transaction.tracking_code", read_only=True)
+
         class Meta:
             model = FinancialLogs
-            fields = ("user","campaign","transaction")
+            fields = ("user", "campaign", "transaction")
 
     def post(self, request):
         serializer = self.InputFinancialLogsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        log=FinancialLogs.objects.select_related("campaign","user",'transaction').get(transaction__reference_number=serializer.validated_data["tracking_code"])
+        log = FinancialLogs.objects.select_related("campaign", "user", "transaction").get(
+            transaction__reference_number=serializer.validated_data["tracking_code"]
+        )
         return Response(self.OutputFinancialLogsSerializer(log).data)
+
 
 # class ValidatePayment(APIView):
 #     class OutputPaymentSerializer(serializers.Serializer):
