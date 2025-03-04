@@ -149,7 +149,7 @@
           <div class="col-md-3">
             <div class="filter-section">
               <h4>فیلترها</h4>
-              <form>
+              <form id="filterForm">
                 <!-- بخش جدید: فیلتر شهر -->
                 <!-- <div class="mb-3">
                   <label for="city" class="form-label">شهر</label>
@@ -379,6 +379,7 @@
         })
           .then((response) => response.json())
           .then((data) => {
+            console.log("Filtered campaigns:", data); // برای دیباگ
             displayCampaigns(data.results);
           })
           .catch((error) => {
@@ -399,6 +400,7 @@
         })
           .then((response) => response.json())
           .then((data) => {
+            console.log("All campaigns:", data); // برای دیباگ
             displayCampaigns(data.results);
           })
           .catch((error) => {
@@ -424,6 +426,134 @@
       }
 
       // تابع برای ایجاد کارت کمپین
+      function createCampaignCard(campaign) {
+        const firstImage =
+          campaign.gallery && campaign.gallery.length > 0
+            ? `${BASE_URL}media/${campaign.gallery[0]}`
+            : "image/placeholder.jpg";
+
+        const steelNeededMoney =
+          campaign.steel_needed_money === null
+            ? 0
+            : parseFloat(campaign.steel_needed_money);
+
+        const estimatedMoney = parseFloat(campaign.estimated_money);
+
+        // محاسبه درصد پیشرفت
+        const progressPercentage =
+          estimatedMoney === 0
+            ? 0
+            : Math.round((steelNeededMoney / estimatedMoney) * 100);
+
+        return `
+    <div class="col-md-4">
+      <div class="card campaign-card">
+        <img src="${firstImage}" class="campaign-image" alt="${
+          campaign.title || "بدون عنوان"
+        }" />
+        <div class="card-body">
+          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
+          <p class="card-text text-muted">دسته‌بندی: ${
+            campaign.category || "بدون توضیحات"
+          }</p>
+          <p class="card-text">${campaign.description || "بدون توضیحات"}</p>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
+              <span>${progressPercentage}%</span>
+            </div>
+          </div>
+          <div class="amount-info mt-3">
+            <p><strong>${steelNeededMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-donate">کمک کردن</button>
+            <a href="detailsChampain.html?id=${
+              campaign.id
+            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+      }
+
+      // اعمال فیلتر دسته‌بندی
+      const filterForm = document.getElementById("filterForm");
+      filterForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const categoryId = document.getElementById("category").value;
+
+        // اگر دسته‌بندی انتخاب شده باشد، کمپین‌های مربوطه را دریافت کنید
+        if (categoryId) {
+          fetchCampaignsByCategory(categoryId);
+        } else {
+          // اگر دسته‌بندی "همه" انتخاب شده باشد، همه کمپین‌ها را دریافت کنید
+          fetchAllCampaigns();
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchButton = document.getElementById("searchButton");
+        const searchInput = document.getElementById("searchInput");
+
+        // رویداد کلیک روی دکمه جستجو
+        searchButton.addEventListener("click", function () {
+          const searchTerm = searchInput.value.trim();
+          if (searchTerm) {
+            fetchCampaignsBySearch(searchTerm);
+          }
+        });
+
+        // رویداد فشار کلید Enter در فیلد جستجو
+        searchInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+              fetchCampaignsBySearch(searchTerm);
+            }
+          }
+        });
+      });
+
+      // تابع برای ارسال درخواست جستجو
+      function fetchCampaignsBySearch(searchTerm) {
+        const accessToken = localStorage.getItem("accessToken");
+
+        fetch(`${BASE_URL}campaigns/search_by_school/`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: searchTerm }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            displayCampaigns(data.results);
+          })
+          .catch((error) => {
+            console.error("Error fetching campaigns by search:", error);
+          });
+      }
+
+      // تابع برای نمایش کمپین‌ها
+      function displayCampaigns(campaigns) {
+        const campaignsContainer = document.getElementById(
+          "campaigns-container"
+        );
+        campaignsContainer.innerHTML = "";
+
+        if (campaigns && campaigns.length > 0) {
+          campaigns.forEach((campaign) => {
+            const cardHTML = createCampaignCard(campaign);
+            campaignsContainer.insertAdjacentHTML("beforeend", cardHTML);
+          });
+        } else {
+          campaignsContainer.innerHTML = "<p>هیچ کمپینی یافت نشد.</p>";
+        }
+      }
+
       // تابع برای ایجاد کارت کمپین
       function createCampaignCard(campaign) {
         const firstImage =
@@ -445,49 +575,37 @@
             : Math.round((steelNeededMoney / estimatedMoney) * 100);
 
         return `
-        <div class="col-md-4">
-            <div class="card campaign-card">
-                <img src="${firstImage}" class="campaign-image" alt="${
+    <div class="col-md-4">
+      <div class="card campaign-card">
+        <img src="${firstImage}" class="campaign-image" alt="${
           campaign.title || "بدون عنوان"
         }" />
-                <div class="card-body">
-                    <h5 class="card-title">${
-                      campaign.title || "بدون عنوان"
-                    }</h5>
-                    <p class="card-text text-muted">دسته‌بندی: ${
-                      campaign.category || "بدون توضیحات"
-                    }</p>
-                    <p class="card-text">${
-                      campaign.description || "بدون توضیحات"
-                    }</p>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
-                            <span>${progressPercentage}%</span>
-                        </div>
-                    </div>
-                    <div class="amount-info mt-3">
-                        <p><strong>${steelNeededMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
-                    </div>
-                    <div class="d-flex justify-content-between mt-3">
-                        <button class="btn btn-donate">کمک کردن</button>
-                        <a href="detailsChampain.html?id=${
-                          campaign.id
-                        }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
-                    </div>
-                </div>
+        <div class="card-body">
+          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
+          <p class="card-text text-muted">دسته‌بندی: ${
+            campaign.category || "بدون توضیحات"
+          }</p>
+          <p class="card-text">${campaign.description || "بدون توضیحات"}</p>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
+              <span>${progressPercentage}%</span>
             </div>
+          </div>
+          <div class="amount-info mt-3">
+            <p><strong>${steelNeededMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-donate">کمک کردن</button>
+            <a href="detailsChampain.html?id=${
+              campaign.id
+            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
+          </div>
         </div>
-    `;
+      </div>
+    </div>
+  `;
       }
-      // اعمال فیلتر دسته‌بندی
-      const filterForm = document.getElementById("filterForm");
-      filterForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const categoryId = document.getElementById("category").value;
-        window.location.href = `champains.html?category_id=${categoryId}`;
-      });
     </script>
-
     <!-- اسکریپت فیلتر قیمت  -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {

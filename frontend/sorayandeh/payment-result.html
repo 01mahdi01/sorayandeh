@@ -81,11 +81,6 @@
                   <span id="campaignName">در حال دریافت اطلاعات...</span>
                 </div>
                 <div class="detail-card">
-                  <i class="fas fa-calendar-alt"></i>
-                  <strong>تاریخ پرداخت:</strong>
-                  <span id="paymentDate">در حال دریافت اطلاعات...</span>
-                </div>
-                <div class="detail-card">
                   <i class="fas fa-receipt"></i>
                   <strong>شناسه پرداخت:</strong>
                   <span id="paymentId">در حال دریافت اطلاعات...</span>
@@ -107,17 +102,17 @@
       document.addEventListener("DOMContentLoaded", function () {
         const accessToken = localStorage.getItem("accessToken");
 
-        // دریافت tracking_code از URL
+        // دریافت tracking_code و status از URL
         const urlParams = new URLSearchParams(window.location.search);
         const trackingCode = urlParams.get("tracking_code");
-        console.log(trackingCode);
+        const paymentStatus = urlParams.get("status");
+
         if (!trackingCode) {
           alert("کد رهگیری یافت نشد. لطفاً دوباره تلاش کنید.");
           window.location.href = "home.html"; // بازگشت به صفحه اصلی
           return;
         }
-        console.log(`${BASE_URL}finance/get_financial_logs/`);
-        console.log(JSON.stringify({ tracking_code: trackingCode }));
+
         // ارسال درخواست به بک‌اند
         fetch(`${BASE_URL}finance/get_financial_logs/`, {
           method: "POST",
@@ -134,39 +129,38 @@
             return response.json();
           })
           .then((data) => {
-            console.log(data);
             // نمایش اطلاعات پرداخت
             const helperName = document.getElementById("helperName");
             const campaignName = document.getElementById("campaignName");
-            const paymentDate = document.getElementById("paymentDate");
             const paymentId = document.getElementById("paymentId");
 
             helperName.textContent = data.user || "نام نامشخص";
             campaignName.textContent = data.campaign || "کمپین نامشخص";
-            paymentDate.textContent = data.payment_date || "تاریخ نامشخص";
-            paymentId.textContent = data.payment_id || "شناسه نامشخص";
+            paymentId.textContent = data.transaction || "شناسه نامشخص";
 
-            // نمایش وضعیت پرداخت
-            const paymentStatus = data.payment_status; // فرض می‌کنیم وضعیت پرداخت در پاسخ وجود دارد
+            // نمایش وضعیت پرداخت بر اساس status از URL
             const paymentIcon = document.getElementById("paymentIcon");
             const paymentResultMessage = document.getElementById(
               "paymentResultMessage"
             );
 
-            if (paymentStatus === "success") {
+            if (paymentStatus === "OK") {
               paymentIcon
                 .querySelector(".icon-success")
                 .classList.remove("d-none");
               paymentResultMessage.textContent =
                 "پرداخت شما با موفقیت انجام شد.";
               paymentResultMessage.classList.add("text-success");
-            } else {
+            } else if (paymentStatus === "NOK") {
               paymentIcon
                 .querySelector(".icon-failed")
                 .classList.remove("d-none");
               paymentResultMessage.textContent =
                 "پرداخت شما ناموفق بود. لطفاً مجدداً تلاش کنید.";
               paymentResultMessage.classList.add("text-danger");
+            } else {
+              paymentResultMessage.textContent = "وضعیت پرداخت نامشخص است.";
+              paymentResultMessage.classList.add("text-warning");
             }
           })
           .catch((error) => {
