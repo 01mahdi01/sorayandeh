@@ -235,7 +235,7 @@ AZ_IRANIAN_BANK_GATEWAYS = {
     "GATEWAYS": {
         "ZARINPAL": {
             "MERCHANT_CODE": "412ee5c5-2da0-4932-bd61-9a6e93727294",
-            "SANDBOX": 1,  # 0 disable, 1 active
+            "SANDBOX": 0,  # 0 disable, 1 active
         },
     },
     "IS_SAMPLE_FORM_ENABLE": True,  # اختیاری و پیش فرض غیر فعال است
