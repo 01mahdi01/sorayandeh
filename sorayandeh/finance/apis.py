@@ -61,6 +61,7 @@ class CallbackPaymentUrl(APIView):
 
     def get(self, request):
         if not request.GET.get('Authority'):
+            print(100*"f")
             return Response({"error": "Authority is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         # tracking_code = request.GET.get(settings.TRACKING_CODE_QUERY_PARAM)
@@ -69,6 +70,7 @@ class CallbackPaymentUrl(APIView):
             bank_record = bank_models.Bank.objects.get(reference_number=authority)
             log = FinancialLogs.objects.select_related("campaign","user").get(pk=bank_record.pk)
         except bank_models.Bank.DoesNotExist:
+            print(bank_record.amount * 1000,"alksdhfasldkfjhaskdfjh")
             return Response({"error": "Authority does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -89,10 +91,12 @@ class CallbackPaymentUrl(APIView):
                 participant=Participants.objects.create(user=user, campaign=campaign,participation_type="money")
                 campaign.participants.add(user)
             success_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
+            print(100*"Y")
             return HttpResponseRedirect(success_url)
         else:
             campaign =Campaign.objects.select_for_update().get(id=log.campaign.id)
             campaign.steel_needed_money += int(bank_record.amount)
+            print(bank_record.amount*1000)
             failure_url =  f"{frontend_base_url}?tracking_code={authority}&status={stat}"
             log.status = "failure"
             return HttpResponseRedirect(failure_url)
