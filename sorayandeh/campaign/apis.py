@@ -86,7 +86,7 @@ class CampaignList(APIView):
 
     def get(self, request):
         # Optimize query by using select_related for category
-        campaigns = Campaign.objects.select_related("category").all()
+        campaigns = Campaign.objects.select_related("category").all().order_by(id)
 
         # Initialize pagination
         paginator = CustomPagination()
@@ -96,7 +96,7 @@ class CampaignList(APIView):
         serializer = self.OutputCampaignListSerializer(result_page, many=True)
 
         # Return paginated response
-        return paginator.get_paginated_response(serializer.data)
+        return paginator.get_paginated_response(serializer.data).order_by("id")
 
 
 class FilterByCategory(APIView):
