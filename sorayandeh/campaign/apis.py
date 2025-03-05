@@ -96,7 +96,7 @@ class CampaignList(APIView):
         serializer = self.OutputCampaignListSerializer(result_page, many=True)
 
         # Return paginated response
-        return paginator.get_paginated_response(serializer.data).order_by("id")
+        return paginator.get_paginated_response(serializer.data)
 
 
 class FilterByCategory(APIView):
