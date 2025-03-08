@@ -157,10 +157,11 @@ class SearchCampaignBySchool(APIView):
 
         # Query the campaigns using the extracted IDs and optimize with select_related to avoid N+1 issue
         campaigns = Campaign.objects.select_related("school").filter(id__in=campaigns_ids).order_by("id")
-
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(campaigns, request)
         # Serialize the data and return the response
-        serializer = self.OutputSearchBySchoolSerializer(campaigns, many=True)
-        return Response(serializer.data)
+        serializer = self.OutputSearchBySchoolSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 # class SearchByAddress(APIView):
