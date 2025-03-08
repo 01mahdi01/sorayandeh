@@ -261,3 +261,67 @@ select:focus {
     max-width: 33.333%;
   }
 }
+.progress-bar span {
+  color: black; /* تغییر رنگ متن به مشکی */
+  font-weight: bold; /* اگر می‌خواهید متن پررنگ‌تر باشد */
+}
+/* استایل کلی برای صفحه‌بندی */
+.pagination {
+  display: flex !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 20px 0 !important;
+}
+
+/* استایل دکمه‌های صفحه‌بندی */
+.page-item {
+  list-style: none !important;
+  margin: 0 5px !important;
+}
+
+.page-link {
+  display: block !important;
+  padding: 8px 16px !important;
+  border: 1px solid #ddd;
+  border-radius: 4px !important;
+  color: #007bff;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-link:hover {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* استایل دکمه "قبلی" */
+.prev-btn {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: 20px !important; /* بردر ردیوس سمت چپ */
+  border-bottom-left-radius: 20px !important; /* بردر ردیوس سمت چپ */
+}
+
+/* استایل دکمه "بعدی" */
+.next-btn {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 20px !important; /* بردر ردیوس سمت راست */
+  border-bottom-right-radius: 20px !important; /* بردر ردیوس سمت راست */
+}
+
+/* استایل برای دکمه‌های غیرفعال */
+.page-item.disabled .page-link {
+  color: #6c757d !important;
+  pointer-events: none !important;
+  background-color: #f8f9fa !important;
+  border-color: #ddd !important;
+}
+
+/* استایل برای دکمه فعال */
+.page-item.active .page-link {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
