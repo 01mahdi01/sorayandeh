@@ -126,7 +126,7 @@ class FilterByCategory(APIView):
 
 class SearchCampaignBySchool(APIView):
     class InputSearchBySchoolSerializer(serializers.Serializer):
-        name = serializers.CharField(max_length=100)  # School name
+        name = serializers.CharField(max_length=100)
 
     class OutputSearchBySchoolSerializer(serializers.ModelSerializer):
         category = serializers.CharField(source="category.title", read_only=True)
@@ -137,30 +137,38 @@ class SearchCampaignBySchool(APIView):
             fields = "__all__"
 
     def post(self, request):
-        # Validate input
         serializer = self.InputSearchBySchoolSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         school_name = serializer.validated_data["name"]
         query = Q("wildcard", school_name=school_name)
 
-        # Get the page number from query parameters, defaulting to 1 if not provided
         page = int(request.query_params.get("page", 1))
         page_size = 10
-        from_value = (page - 1) * page_size  # Elasticsearch's 'from' is 0-based
+        from_value = (page - 1) * page_size
 
-        # Elasticsearch query with pagination and sorting by 'id'
+        # Get total count first
+        total_count = YourModelDocument.search().query(query).count()
+        total_pages = (total_count + page_size - 1) // page_size
+
+        # Elasticsearch query with pagination
         results = YourModelDocument.search().query(query).sort("id").extra(size=page_size, from_=from_value).execute()
-
-        # Extract campaign IDs from Elasticsearch results
         campaigns_ids = [result.meta.id for result in results]
 
-        # Query the campaigns using the extracted IDs and optimize with select_related to avoid N+1 issue
+        # Fetch campaigns from DB
         campaigns = Campaign.objects.select_related("school").filter(id__in=campaigns_ids).order_by("id")
 
-        # Serialize the data and return the response
-        serializer = self.OutputSearchBySchoolSerializer(campaigns, many=True)
-        return Response(serializer.data)
+        return Response({
+            "results": self.OutputSearchBySchoolSerializer(campaigns, many=True).data,
+            "pagination": {
+                "current_page": page,
+                "page_size": page_size,
+                "total_count": total_count,
+                "total_pages": total_pages,
+                "has_next": page < total_pages,
+                "has_previous": page > 1,
+            }
+        })
 
 
 # class SearchByAddress(APIView):
