@@ -553,40 +553,12 @@
           const campaignId = campaignIdInput.value;
 
           if (amount && amount > 0) {
-            // ارسال درخواست به بک‌اند
-            fetch(`${BASE_URL}finance/get_bank_url/`, {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                campaign_id: campaignId,
-                amount: amount,
-              }),
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.json();
-              })
-              .then((data) => {
-                console.log("Donation successful:", data);
+            // ذخیره‌سازی مبلغ و campaign_id در localStorage
+            localStorage.setItem("amount", amount);
+            localStorage.setItem("campaign_id", campaignId);
 
-                // ذخیره‌سازی payment_url در localStorage
-                localStorage.setItem("payment_url", data.payment_url.url);
-
-                // ذخیره‌سازی مبلغ در localStorage
-                localStorage.setItem("amount", amount);
-
-                // هدایت به صفحه پیش‌فاکتور
-                window.location.href = "pre-invoice.html";
-              })
-              .catch((error) => {
-                console.error("Error during donation:", error);
-                alert("خطا در ارسال کمک. لطفاً دوباره تلاش کنید.");
-              });
+            // هدایت به صفحه پیش‌فاکتور
+            window.location.href = "pre-invoice.html";
           } else {
             alert("لطفاً مبلغ معتبری وارد کنید.");
           }
@@ -638,12 +610,20 @@
           ? `${campaign.estimated_money.toLocaleString()} تومان`
           : "بدون هدف مالی";
 
-        // نمایش مبلغ جمع‌آوری شده
+        // محاسبه مبلغ جمع‌آوری‌شده
+        const steelNeededMoney =
+          campaign.steel_needed_money === null
+            ? 0
+            : parseFloat(campaign.steel_needed_money);
+        const estimatedMoney = parseFloat(campaign.estimated_money);
+        const collectedMoney = estimatedMoney - steelNeededMoney;
+
+        // نمایش مبلغ جمع‌آوری‌شده
         const campaignRaisedAmount = document.getElementById(
           "campaign-raised-amount"
         );
-        campaignRaisedAmount.textContent = campaign.steel_needed_money
-          ? `${campaign.steel_needed_money.toLocaleString()} تومان`
+        campaignRaisedAmount.textContent = collectedMoney
+          ? `${collectedMoney.toLocaleString()} تومان`
           : "0 تومان";
 
         // نمایش تاریخ شروع کمپین
@@ -667,13 +647,13 @@
         const categoryName = document.getElementById("category-name");
         categoryName.textContent = campaign.category || "بدون دسته‌بندی";
 
+        // محاسبه درصد پیشرفت
+        const progressPercentage =
+          estimatedMoney === 0
+            ? 0
+            : Math.round((collectedMoney / estimatedMoney) * 100);
+
         // نمایش درصد پیشرفت
-        const progress =
-          campaign.steel_needed_money && campaign.estimated_money
-            ? Math.round(
-                (campaign.steel_needed_money / campaign.estimated_money) * 100
-              )
-            : 0;
         const circleProgressBar = document.querySelector(
           ".circle-progress-bar"
         );
@@ -681,10 +661,11 @@
           ".circle-progress-text"
         );
         const circumference = 2 * Math.PI * 50; // محیط دایره (2 * π * r)
-        const offset = circumference - (progress / 100) * circumference;
+        const offset =
+          circumference - (progressPercentage / 100) * circumference;
         circleProgressBar.style.strokeDasharray = circumference;
         circleProgressBar.style.strokeDashoffset = offset;
-        circleProgressText.textContent = `${progress}%`;
+        circleProgressText.textContent = `${progressPercentage}%`;
 
         // نمایش گالری تصاویر
         const campaignGallery = document.getElementById("campaign-gallery");
@@ -692,8 +673,8 @@
           campaignGallery.innerHTML = campaign.gallery
             .map(
               (image) => `
-                <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
-              `
+          <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
+        `
             )
             .join("");
         } else {
