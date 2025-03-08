@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="style/style.css" />
     <link rel="stylesheet" href="style/champains.css" />
   </head>
-
   <body class="bg-light">
     <!-- هدر -->
     <header class="header shadow-sm">
@@ -149,12 +148,54 @@
             <div class="filter-section">
               <h4>فیلترها</h4>
               <form id="filterForm">
+                <!-- بخش جدید: فیلتر شهر -->
+                <!-- <div class="mb-3">
+                  <label for="city" class="form-label">شهر</label>
+                  <select class="form-select" id="city">
+                    <option selected>همه</option>
+                    <option>تهران</option>
+                    <option>مشهد</option>
+                    <option>اصفهان</option>
+                    <option>شیراز</option>
+                    <option>تبریز</option>
+                  </select>
+                </div> -->
                 <div class="mb-3">
                   <label for="category" class="form-label"
                     >دسته‌بندی کمپین‌ها</label
                   >
                   <select class="form-select" id="category"></select>
                 </div>
+                <!-- <div class="mb-3">
+                  <label for="rangeSlider" class="form-label"
+                    >محدوده مبلغ</label
+                  >
+                  <div class="range-slider">
+                    <input
+                      type="range"
+                      class="form-range"
+                      id="minAmount"
+                      min="0"
+                      max="10000000"
+                      step="100000"
+                      value="0"
+                    />
+                    <input
+                      type="range"
+                      class="form-range"
+                      id="maxAmount"
+                      min="0"
+                      max="10000000"
+                      step="100000"
+                      value="10000000"
+                    />
+                    <div class="range-track"></div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-2">
+                    <span id="minAmountValue">0 تومان</span>
+                    <span id="maxAmountValue">10,000,000 تومان</span>
+                  </div>
+                </div> -->
                 <button type="submit" class="btn btn-primary">
                   اعمال فیلتر
                 </button>
@@ -185,26 +226,9 @@
               </div>
             </div>
 
-            <!-- لودینگ -->
-            <div id="loading" class="text-center my-5" style="display: none">
-              <i class="fas fa-spinner fa-spin fa-3x"></i>
-              <p class="mt-3">در حال دریافت کمپین‌ها، لطفاً منتظر بمانید...</p>
-            </div>
-
             <!-- کارت‌ها -->
             <div class="row g-4" id="campaigns-container">
               <!-- کارت‌ها اینجا به صورت داینامیک ساخته می‌شوند -->
-            </div>
-
-            <!-- بخش صفحه‌بندی -->
-            <div class="row mt-4">
-              <div class="col-md-12 d-flex justify-content-center">
-                <nav aria-label="Page navigation">
-                  <ul class="pagination" id="pagination">
-                    <!-- دکمه‌های صفحه‌بندی اینجا به صورت داینامیک ساخته می‌شوند -->
-                  </ul>
-                </nav>
-              </div>
             </div>
           </div>
         </div>
@@ -279,19 +303,11 @@
     </footer>
 
     <script>
-      // متغیرهای全局
-      let currentPage = 1;
-      let nextPageUrl = null;
-      let previousPageUrl = null;
-      const displaySize = 9; // تعداد کمپین‌های نمایشی در هر صفحه
-      let remainingCampaigns = []; // کمپین‌های باقی‌مانده از درخواست قبلی
-
-      // رویداد DOMContentLoaded برای بارگذاری اولیه
       document.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
         const categoryId = urlParams.get("category_id");
 
-        // دریافت دسته‌بندی‌ها از API
+        // دریافت دسته‌بندی‌ها از بک‌اند
         fetchCategories().then(() => {
           // اگر categoryId وجود داشت، گزینه مربوطه را انتخاب کنید
           if (categoryId) {
@@ -300,27 +316,15 @@
           }
         });
 
-        // دریافت کمپین‌ها بر اساس دسته‌بندی یا حالت عادی
+        // دریافت کمپین‌ها بر اساس دسته‌بندی
         if (categoryId) {
-          fetchCampaignsByCategory(categoryId, currentPage);
+          fetchCampaignsByCategory(categoryId);
         } else {
-          fetchCampaigns(currentPage);
+          fetchAllCampaigns();
         }
       });
 
-      // تابع برای نمایش لودینگ
-      function showLoading() {
-        const loadingElement = document.getElementById("loading");
-        loadingElement.style.display = "block";
-      }
-
-      // تابع برای مخفی کردن لودینگ
-      function hideLoading() {
-        const loadingElement = document.getElementById("loading");
-        loadingElement.style.display = "none";
-      }
-
-      // تابع برای دریافت دسته‌بندی‌ها از API
+      // تابع برای دریافت دسته‌بندی‌ها از بک‌اند
       function fetchCategories() {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -360,11 +364,10 @@
       }
 
       // تابع برای دریافت کمپین‌ها بر اساس دسته‌بندی
-      function fetchCampaignsByCategory(categoryId, page) {
-        showLoading(); // نمایش لودینگ
+      function fetchCampaignsByCategory(categoryId) {
         const accessToken = localStorage.getItem("accessToken");
 
-        fetch(`${BASE_URL}campaigns/filter_by_category/?page=${page}`, {
+        fetch(`${BASE_URL}campaigns/filter_by_category/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -374,31 +377,19 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Filtered campaigns:", data);
-            nextPageUrl = data.next;
-            previousPageUrl = data.previous;
-
-            const allCampaigns = remainingCampaigns.concat(data.results);
-            const campaignsToDisplay = allCampaigns.slice(0, displaySize);
-            remainingCampaigns = allCampaigns.slice(displaySize);
-
-            displayCampaigns(campaignsToDisplay);
-            updatePagination(data.count, page);
+            console.log("Filtered campaigns:", data); // برای دیباگ
+            displayCampaigns(data.results);
           })
           .catch((error) => {
             console.error("Error fetching campaigns:", error);
-          })
-          .finally(() => {
-            hideLoading(); // مخفی کردن لودینگ
           });
       }
 
-      // تابع برای دریافت کمپین‌ها بر اساس صفحه
-      function fetchCampaigns(page) {
-        showLoading(); // نمایش لودینگ
+      // تابع برای دریافت همه کمپین‌ها
+      function fetchAllCampaigns() {
         const accessToken = localStorage.getItem("accessToken");
 
-        fetch(`${BASE_URL}campaigns/campaign_list/?page=${page}`, {
+        fetch(`${BASE_URL}campaigns/campaign_list/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -407,62 +398,11 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Campaigns data:", data);
-            nextPageUrl = data.next;
-            previousPageUrl = data.previous;
-
-            const allCampaigns = remainingCampaigns.concat(data.results);
-            const campaignsToDisplay = allCampaigns.slice(0, displaySize);
-            remainingCampaigns = allCampaigns.slice(displaySize);
-
-            displayCampaigns(campaignsToDisplay);
-            updatePagination(data.count, page);
+            console.log("All campaigns:", data); // برای دیباگ
+            displayCampaigns(data.results);
           })
           .catch((error) => {
             console.error("Error fetching campaigns:", error);
-          })
-          .finally(() => {
-            hideLoading(); // مخفی کردن لودینگ
-          });
-      }
-
-      // تابع برای جستجوی کمپین‌ها بر اساس نام مدرسه
-      function fetchCampaignsBySchool(schoolName, page) {
-        showLoading(); // نمایش لودینگ
-        const accessToken = localStorage.getItem("accessToken");
-
-        fetch(`${BASE_URL}campaigns/search_by_school/?page=${page}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: schoolName }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Searched campaigns:", data);
-            const { pagination, results } = data;
-
-            nextPageUrl = pagination.has_next ? page + 1 : null;
-            previousPageUrl = pagination.has_previous ? page - 1 : null;
-
-            const allCampaigns = remainingCampaigns.concat(results);
-            const campaignsToDisplay = allCampaigns.slice(0, displaySize);
-            remainingCampaigns = allCampaigns.slice(displaySize);
-
-            displayCampaigns(campaignsToDisplay);
-            updatePagination(
-              pagination.total_count,
-              page,
-              pagination.total_pages
-            );
-          })
-          .catch((error) => {
-            console.error("Error searching campaigns:", error);
-          })
-          .finally(() => {
-            hideLoading(); // مخفی کردن لودینگ
           });
       }
 
@@ -490,9 +430,17 @@
             ? `${BASE_URL}media/${campaign.gallery[0]}`
             : "image/placeholder.jpg";
 
-        const steelNeededMoney = campaign.steel_needed_money || 0;
-        const estimatedMoney = campaign.estimated_money || 0;
+        const steelNeededMoney =
+          campaign.steel_needed_money === null
+            ? 0
+            : parseFloat(campaign.steel_needed_money);
+
+        const estimatedMoney = parseFloat(campaign.estimated_money);
+
+        // محاسبه مبلغ جمع‌آوری‌شده
         const collectedMoney = estimatedMoney - steelNeededMoney;
+
+        // محاسبه درصد پیشرفت
         const progressPercentage =
           estimatedMoney === 0
             ? 0
@@ -503,7 +451,7 @@
             <div class="card campaign-card">
               <img src="${firstImage}" class="campaign-image" alt="${
           campaign.title || "بدون عنوان"
-        }">
+        }" />
               <div class="card-body">
                 <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
                 <p class="card-text text-muted">دسته‌بندی: ${
@@ -532,96 +480,18 @@
         `;
       }
 
-      // تابع برای به‌روزرسانی صفحه‌بندی
-      function updatePagination(totalItems, currentPage) {
-        const paginationContainer = document.getElementById("pagination");
-        paginationContainer.innerHTML = "";
-
-        const totalPages = Math.ceil(totalItems / displaySize);
-
-        // دکمه قبلی
-        const previousButton = document.createElement("li");
-        previousButton.classList.add("page-item");
-        if (!previousPageUrl) {
-          previousButton.classList.add("disabled");
-        }
-        previousButton.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
-          currentPage - 1
-        })">قبلی</a>`;
-        paginationContainer.appendChild(previousButton);
-
-        // دکمه‌های شماره صفحه
-        for (let i = 1; i <= totalPages; i++) {
-          const pageButton = document.createElement("li");
-          pageButton.classList.add("page-item");
-          if (i === currentPage) {
-            pageButton.classList.add("active");
-          }
-          pageButton.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
-          paginationContainer.appendChild(pageButton);
-        }
-
-        // دکمه بعدی
-        const nextButton = document.createElement("li");
-        nextButton.classList.add("page-item");
-        if (!nextPageUrl) {
-          nextButton.classList.add("disabled");
-        }
-        nextButton.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
-          currentPage + 1
-        })">بعدی</a>`;
-        paginationContainer.appendChild(nextButton);
-      }
-
-      // تابع برای تغییر صفحه
-      function changePage(page) {
-        currentPage = page;
-        const categoryId = document.getElementById("category").value;
-        const searchInput = document.getElementById("searchInput").value;
-
-        if (searchInput) {
-          fetchCampaignsBySchool(searchInput, currentPage);
-        } else if (categoryId) {
-          fetchCampaignsByCategory(categoryId, currentPage);
-        } else {
-          fetchCampaigns(currentPage);
-        }
-      }
-
       // اعمال فیلتر دسته‌بندی
       const filterForm = document.getElementById("filterForm");
       filterForm.addEventListener("submit", function (event) {
         event.preventDefault();
         const categoryId = document.getElementById("category").value;
-        const searchInput = document.getElementById("searchInput");
-
-        // پاک کردن متن جست‌وجو
-        searchInput.value = "";
-
-        currentPage = 1; // ریست کردن صفحه به ۱ هنگام اعمال فیلتر
-        remainingCampaigns = []; // پاک کردن کمپین‌های باقی‌مانده
 
         // اگر دسته‌بندی انتخاب شده باشد، کمپین‌های مربوطه را دریافت کنید
         if (categoryId) {
-          fetchCampaignsByCategory(categoryId, currentPage);
+          fetchCampaignsByCategory(categoryId);
         } else {
           // اگر دسته‌بندی "همه" انتخاب شده باشد، همه کمپین‌ها را دریافت کنید
-          fetchCampaigns(currentPage);
-        }
-      });
-
-      // اعمال جستجو بر اساس نام مدرسه
-      const searchButton = document.getElementById("searchButton");
-      searchButton.addEventListener("click", function () {
-        const searchInput = document.getElementById("searchInput").value;
-        currentPage = 1; // ریست کردن صفحه به ۱ هنگام جستجو
-        remainingCampaigns = []; // پاک کردن کمپین‌های باقی‌مانده
-
-        if (searchInput) {
-          fetchCampaignsBySchool(searchInput, currentPage);
-        } else {
-          // اگر فیلد جستجو خالی باشد، همه کمپین‌ها را دریافت کنید
-          fetchCampaigns(currentPage);
+          fetchAllCampaigns();
         }
       });
     </script>

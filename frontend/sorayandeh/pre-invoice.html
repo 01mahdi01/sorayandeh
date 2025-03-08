@@ -154,12 +154,12 @@
             </div>
 
             <!-- گزینه ناشناس بودن -->
-            <div class="form-check me-auto mb-4">
+            <!-- <div class="form-check me-auto mb-4">
               <input type="checkbox" class="form-check-input" id="anonymous" />
               <label class="form-check-label" for="anonymous"
                 >می‌خواهید این کمک شما ناشناس باشد</label
               >
-            </div>
+            </div> -->
 
             <!-- متن قوانین -->
             <div class="mb-4">
@@ -193,22 +193,30 @@
       document.addEventListener("DOMContentLoaded", function () {
         const accessToken = localStorage.getItem("accessToken");
 
-        // دریافت payment_url از localStorage
-        const paymentUrl = localStorage.getItem("payment_url");
+        // دریافت اطلاعات از localStorage
+        const amount = localStorage.getItem("amount");
+        const campaignId = localStorage.getItem("campaign_id");
 
-        if (!paymentUrl) {
+        if (!amount || !campaignId) {
           alert("خطا در دریافت اطلاعات پرداخت. لطفاً دوباره تلاش کنید.");
           window.location.href = "home.html"; // بازگشت به صفحه اصلی
           return;
         }
 
-        // دریافت اطلاعات کاربر از بک‌اند
-        fetch(`${BASE_URL}users/get_user/`, {
-          method: "GET",
+        // ارسال مبلغ به‌صورت تومان (بدون تبدیل به ریال)
+        const amountInTomans = parseInt(amount); // مقدار به تومان
+
+        // ارسال درخواست به بک‌اند برای دریافت payment_url
+        fetch(`${BASE_URL}finance/get_bank_url/`, {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            campaign_id: campaignId,
+            amount: amountInTomans, // ارسال مبلغ به تومان
+          }),
         })
           .then((response) => {
             if (!response.ok) {
@@ -216,61 +224,104 @@
             }
             return response.json();
           })
-          .then((userData) => {
-            // نمایش نام کاربر
-            const nameInput = document.getElementById("name");
-            nameInput.value = userData.json_data.name || "نام نامشخص"; // فرض می‌کنیم full_name نام کاربر است
+          .then((data) => {
+            console.log("Payment URL received:", data);
 
-            // دریافت اطلاعات کمپین و مبلغ از localStorage
-            const campaignName = localStorage.getItem("campaign_name");
-            const amount = localStorage.getItem("amount");
+            // ذخیره‌سازی payment_url در localStorage
+            localStorage.setItem("payment_url", data.payment_url.url);
 
-            // نمایش نام کمپین
-            const purposeInput = document.getElementById("purpose");
-            purposeInput.value = campaignName || "کمپین نامشخص";
+            // نمایش اطلاعات کاربر و کمپین
+            fetch(`${BASE_URL}users/get_user/`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then((userData) => {
+                // نمایش نام کاربر
+                const nameInput = document.getElementById("name");
+                nameInput.value = userData.json_data.name || "نام نامشخص";
 
-            // نمایش مبلغ
-            const amountInput = document.getElementById("champain-amount");
-            amountInput.value = amount || "0";
+                // نمایش نام کمپین
+                const purposeInput = document.getElementById("purpose");
+                purposeInput.value =
+                  localStorage.getItem("campaign_name") || "کمپین نامشخص";
 
-            // تنظیم تاریخ فعلی به صورت شمسی با استفاده از jalaali-js
-            const dateInput = document.getElementById("date");
-            const today = new Date(); // تاریخ فعلی
-            const jalaliDate = jalaali.toJalaali(
-              today.getFullYear(),
-              today.getMonth() + 1,
-              today.getDate()
-            );
-            const formattedDate = `${jalaliDate.jy}/${String(
-              jalaliDate.jm
-            ).padStart(2, "0")}/${String(jalaliDate.jd).padStart(2, "0")}`;
-            dateInput.value = formattedDate;
+                // نمایش مبلغ
+                const amountInput = document.getElementById("champain-amount");
+                amountInput.value = amount;
 
-            // پنهان کردن پیام در حال آماده‌سازی و نمایش فاکتور
-            const loadingMessage = document.getElementById("loading-message");
-            const invoiceContent = document.getElementById("invoice-content");
-            loadingMessage.classList.add("hidden");
-            invoiceContent.classList.remove("hidden");
+                // نمایش تاریخ
+                const dateInput = document.getElementById("date");
+                const today = new Date();
+                const jalaliDate = jalaali.toJalaali(
+                  today.getFullYear(),
+                  today.getMonth() + 1,
+                  today.getDate()
+                );
+                const formattedDate = `${jalaliDate.jy}/${String(
+                  jalaliDate.jm
+                ).padStart(2, "0")}/${String(jalaliDate.jd).padStart(2, "0")}`;
+                dateInput.value = formattedDate;
 
-            // مدیریت دکمه اتصال به درگاه
-            const connectToGatewayButton =
-              document.getElementById("connect-to-gateway");
-            connectToGatewayButton.addEventListener("click", function (event) {
-              event.preventDefault(); // جلوگیری از رفتار پیش‌فرض لینک
-              window.location.href = paymentUrl; // هدایت کاربر به درگاه پرداخت
-            });
+                // پنهان کردن پیام در حال آماده‌سازی و نمایش فاکتور
+                const loadingMessage =
+                  document.getElementById("loading-message");
+                const invoiceContent =
+                  document.getElementById("invoice-content");
+                loadingMessage.classList.add("hidden");
+                invoiceContent.classList.remove("hidden");
 
-            // مدیریت دکمه انصراف
-            const cancelButton = document.getElementById("cancel-button");
-            cancelButton.addEventListener("click", function (event) {
-              event.preventDefault(); // جلوگیری از رفتار پیش‌فرض لینک
-              window.history.back(); // بازگشت به صفحه قبل
-            });
+                // مدیریت دکمه اتصال به درگاه
+                const connectToGatewayButton =
+                  document.getElementById("connect-to-gateway");
+                connectToGatewayButton.addEventListener(
+                  "click",
+                  function (event) {
+                    event.preventDefault();
+                    window.location.href = data.payment_url.url; // هدایت به درگاه پرداخت
+                  }
+                );
+
+                // مدیریت دکمه انصراف
+                const cancelButton = document.getElementById("cancel-button");
+                cancelButton.addEventListener("click", function (event) {
+                  event.preventDefault();
+
+                  // پاک‌سازی localStorage
+                  localStorage.removeItem("amount");
+                  localStorage.removeItem("campaign_id");
+                  localStorage.removeItem("payment_url");
+                  localStorage.removeItem("campaign_name");
+
+                  // بازگشت به صفحه قبل
+                  window.history.back();
+                });
+              })
+              .catch((error) => {
+                console.error("Error fetching user data:", error);
+                alert("خطا در دریافت اطلاعات کاربر. لطفاً دوباره تلاش کنید.");
+              });
           })
           .catch((error) => {
-            console.error("Error fetching user data:", error);
-            alert("خطا در دریافت اطلاعات کاربر. لطفاً دوباره تلاش کنید.");
+            console.error("Error fetching payment URL:", error);
+            alert("خطا در دریافت درگاه پرداخت. لطفاً دوباره تلاش کنید.");
           });
+      });
+
+      // پاک‌سازی localStorage هنگام بازگشت به صفحه قبل (بدون کلیک روی دکمه انصراف)
+      window.addEventListener("beforeunload", function () {
+        localStorage.removeItem("amount");
+        localStorage.removeItem("campaign_id");
+        localStorage.removeItem("payment_url");
+        localStorage.removeItem("campaign_name");
       });
     </script>
     <script src="app/baseConfig.js"></script>
