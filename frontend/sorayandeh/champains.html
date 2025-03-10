@@ -491,7 +491,7 @@
 
         const steelNeededMoney = campaign.steel_needed_money || 0;
         const estimatedMoney = campaign.estimated_money || 0;
-        const collectedMoney = estimatedMoney - steelNeededMoney;
+        const collectedMoney = (estimatedMoney - steelNeededMoney) / 10;
         const progressPercentage =
           estimatedMoney === 0
             ? 0
