@@ -172,7 +172,7 @@
                     type="text"
                     class="form-control"
                     id="searchInput"
-                    placeholder="جستجوی کمپین‌ها..."
+                    placeholder="جستجوی مدرسه..."
                   />
                   <button
                     class="btn btn-primary"
@@ -279,7 +279,6 @@
     </footer>
 
     <script>
-      // متغیرهای全局
       let currentPage = 1;
       let nextPageUrl = null;
       let previousPageUrl = null;
@@ -498,38 +497,41 @@
             ? 0
             : Math.round((collectedMoney / estimatedMoney) * 100);
 
+        const schoolName =
+          campaign.applicant_info?.schoolName || "نام مدرسه نامشخص";
+        const description = campaign.description || "بدون توضیحات";
+
         return `
-          <div class="col-md-4">
-            <div class="card campaign-card">
-              <img src="${firstImage}" class="campaign-image" alt="${
+    <div class="col-md-4">
+      <div class="card campaign-card">
+        <img src="${firstImage}" class="campaign-image" alt="${
           campaign.title || "بدون عنوان"
         }">
-              <div class="card-body">
-                <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
-                <p class="card-text text-muted">دسته‌بندی: ${
-                  campaign.category || "بدون توضیحات"
-                }</p>
-                <p class="card-text">${
-                  campaign.description || "بدون توضیحات"
-                }</p>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
-                    <span>${progressPercentage}%</span>
-                  </div>
-                </div>
-                <div class="amount-info mt-3">
-                  <p><strong>${collectedMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
-                </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button class="btn btn-donate">کمک کردن</button>
-                  <a href="detailsChampain.html?id=${
-                    campaign.id
-                  }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
-                </div>
-              </div>
+        <div class="card-body">
+          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
+          <p class="card-text text-muted">دسته‌بندی: ${
+            campaign.category || "بدون توضیحات"
+          }</p>
+          <p class="card-text"><strong>توضیحات:</strong> ${description}</p>
+          <p class="school-name">مدرسه: ${schoolName}</p>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
+              <span>${progressPercentage}%</span>
             </div>
           </div>
-        `;
+          <div class="amount-info mt-3">
+            <p><strong>${collectedMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
+          </div>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-donate">کمک کردن</button>
+            <a href="detailsChampain.html?id=${
+              campaign.id
+            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
       }
 
       // تابع برای به‌روزرسانی صفحه‌بندی
