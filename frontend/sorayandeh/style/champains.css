@@ -325,3 +325,10 @@ select:focus {
   color: #fff;
   border-color: #007bff;
 }
+.school-name {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}

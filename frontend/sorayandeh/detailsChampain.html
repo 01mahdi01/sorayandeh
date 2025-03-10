@@ -137,6 +137,17 @@
         font-weight: bold;
         color: #28a745; /* رنگ متن درصد */
       }
+      #school-name {
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      #school-address {
+        font-size: 14px;
+        color: #555;
+      }
     </style>
   </head>
   <body>
@@ -276,19 +287,28 @@
                 </h1>
                 <!-- بخش جدید: آدرس مدرسه -->
                 <div class="mb-3">
-                  <p>
-                    <strong>آدرس مدرسه:</strong>
-                    <span id="school-address">در حال بارگذاری...</span>
-                  </p>
+                  <div id="school-info">
+                    <p>
+                      <strong>مدرسه:</strong> <span id="school-name"></span>
+                    </p>
+                    <!-- عبارت "مدرسه:" ثابت است -->
+                    <p>
+                      <strong>آدرس:</strong> <span id="school-address"></span>
+                    </p>
+                    <!-- عبارت "آدرس:" ثابت است -->
+                  </div>
                 </div>
 
                 <p id="campaign-category" class="text-muted">
                   دسته‌بندی: <span id="category-name">در حال بارگذاری...</span>
                 </p>
 
-                <p id="campaign-description" class="card-text">
-                  در حال بارگذاری...
-                </p>
+                <div id="campaign-description-container">
+                  <p>
+                    <strong>توضیحات:</strong>
+                    <span id="campaign-description"></span>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -638,6 +658,11 @@
           : "بدون تاریخ";
         campaignStartDate.textContent = formattedDate;
 
+        // نمایش نام مدرسه
+        const schoolName = document.getElementById("school-name");
+        schoolName.textContent =
+          campaign.applicant_info?.schoolName || "نام مدرسه نامشخص";
+
         // نمایش آدرس مدرسه
         const schoolAddress = document.getElementById("school-address");
         schoolAddress.textContent =
@@ -673,8 +698,8 @@
           campaignGallery.innerHTML = campaign.gallery
             .map(
               (image) => `
-          <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
-        `
+      <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
+    `
             )
             .join("");
         } else {
@@ -690,11 +715,11 @@
       document.addEventListener("DOMContentLoaded", function () {
         // داده‌های محلی برای کمک‌کنندگان
         const mockDonors = [
-          { full_name: "علی احمدی", amount: 1000000 },
-          { full_name: "مریم محمدی", amount: 500000 },
-          { full_name: "ناشناس", amount: 200000 },
-          { full_name: "رضا حسینی", amount: 300000 },
-          { full_name: "فاطمه کریمی", amount: 150000 },
+          // { full_name: "علی احمدی", amount: 1000000 },
+          // { full_name: "مریم محمدی", amount: 500000 },
+          // { full_name: "ناشناس", amount: 200000 },
+          // { full_name: "رضا حسینی", amount: 300000 },
+          // { full_name: "فاطمه کریمی", amount: 150000 },
         ];
 
         // تابع برای نمایش لیست کمک‌کنندگان
