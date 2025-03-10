@@ -143,7 +143,7 @@ class SearchCampaignBySchool(APIView):
         serializer.is_valid(raise_exception=True)
 
         school_name = serializer.validated_data["name"]
-        query = Q("wildcard", school_name=f"*{school_name}*")
+        query = Q("match_phrase", school_name=f"*{school_name}*")
 
         page = int(request.query_params.get("page", 1))
         page_size = 10
