@@ -1,5 +1,7 @@
 from symtable import Class
 
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -74,7 +76,7 @@ class ContributeCampaign(APIView):
 class CustomPagination(PageNumberPagination):
     page_size = 10  # Set the page size to 10
 
-
+@permission_classes([AllowAny])
 class CampaignList(APIView):
     class OutputCampaignListSerializer(serializers.ModelSerializer):
 
@@ -98,7 +100,7 @@ class CampaignList(APIView):
         # Return paginated response
         return paginator.get_paginated_response(serializer.data)
 
-
+@permission_classes([AllowAny])
 class FilterByCategory(APIView):
     class InputFilterByCategorySerializer(serializers.Serializer):
         category_id = serializers.IntegerField()
@@ -123,7 +125,7 @@ class FilterByCategory(APIView):
         serializer = self.OutputFilterByCategorySerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
-
+@permission_classes([AllowAny])
 class SearchCampaignBySchool(APIView):
     class InputSearchBySchoolSerializer(serializers.Serializer):
         name = serializers.CharField(max_length=100)
@@ -208,7 +210,7 @@ class SearchCampaignBySchool(APIView):
 #
 
 
-
+@permission_classes([AllowAny])
 class GetSingleCampaign(APIView):
     class InputGetSingleCampaignSerializer(serializers.Serializer):
         campaign_id = serializers.IntegerField()
@@ -228,7 +230,7 @@ class GetSingleCampaign(APIView):
         campaign = Campaign.objects.select_related("category", "school").get(pk=campaign_id)
         return Response(self.OutputGetSingleCampaignSerializer(campaign).data)
 
-
+@permission_classes([AllowAny])
 class GetCategories(APIView):
     class OutputGetCategoriesSerializer(serializers.ModelSerializer):
         class Meta:
