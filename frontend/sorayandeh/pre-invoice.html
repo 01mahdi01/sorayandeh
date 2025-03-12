@@ -135,7 +135,7 @@
               >
               <div class="col-8">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   id="champain-amount"
                   readonly
@@ -227,9 +227,9 @@
             purposeInput.value =
               localStorage.getItem("campaign_name") || "کمپین نامشخص";
 
-            // نمایش مبلغ
+            // نمایش مبلغ به صورت فرمت‌شده
             const amountInput = document.getElementById("champain-amount");
-            amountInput.value = amount;
+            amountInput.value = formatAmount(amount);
 
             // نمایش تاریخ
             const dateInput = document.getElementById("date");
@@ -265,7 +265,7 @@
                 },
                 body: JSON.stringify({
                   campaign_id: campaignId,
-                  amount: parseInt(amount), // ارسال مبلغ به تومان
+                  amount: parseInt(amount) * 10, // تبدیل تومان به ریال
                 }),
               })
                 .then((response) => {
@@ -309,6 +309,14 @@
             alert("خطا در دریافت اطلاعات کاربر. لطفاً دوباره تلاش کنید.");
           });
       });
+
+      // تابع برای فرمت‌کردن مبلغ و افزودن کلمه تومان
+      function formatAmount(amount) {
+        const formattedAmount = amount
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return `${formattedAmount} تومان`;
+      }
 
       // پاک‌سازی localStorage هنگام بازگشت به صفحه قبل (بدون کلیک روی دکمه انصراف)
       window.addEventListener("beforeunload", function () {
