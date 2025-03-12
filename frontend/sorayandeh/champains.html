@@ -322,13 +322,18 @@
       // تابع برای دریافت دسته‌بندی‌ها از API
       function fetchCategories() {
         const accessToken = localStorage.getItem("accessToken");
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        // اگر توکن وجود داشت، آن را به هدر اضافه کنید
+        if (accessToken) {
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
 
         return fetch(`${BASE_URL}campaigns/get_categories/`, {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
+          headers: headers,
         })
           .then((response) => response.json())
           .then((data) => {
@@ -362,13 +367,18 @@
       function fetchCampaignsByCategory(categoryId, page) {
         showLoading(); // نمایش لودینگ
         const accessToken = localStorage.getItem("accessToken");
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        // اگر توکن وجود داشت، آن را به هدر اضافه کنید
+        if (accessToken) {
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
 
         fetch(`${BASE_URL}campaigns/filter_by_category/?page=${page}`, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
+          headers: headers,
           body: JSON.stringify({ category_id: categoryId }),
         })
           .then((response) => response.json())
@@ -396,13 +406,18 @@
       function fetchCampaigns(page) {
         showLoading(); // نمایش لودینگ
         const accessToken = localStorage.getItem("accessToken");
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        // اگر توکن وجود داشت، آن را به هدر اضافه کنید
+        if (accessToken) {
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
 
         fetch(`${BASE_URL}campaigns/campaign_list/?page=${page}`, {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
+          headers: headers,
         })
           .then((response) => response.json())
           .then((data) => {
@@ -429,13 +444,18 @@
       function fetchCampaignsBySchool(schoolName, page) {
         showLoading(); // نمایش لودینگ
         const accessToken = localStorage.getItem("accessToken");
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        // اگر توکن وجود داشت، آن را به هدر اضافه کنید
+        if (accessToken) {
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
 
         fetch(`${BASE_URL}campaigns/search_by_school/?page=${page}`, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
+          headers: headers,
           body: JSON.stringify({ name: schoolName }),
         })
           .then((response) => response.json())
@@ -502,36 +522,36 @@
         const description = campaign.description || "بدون توضیحات";
 
         return `
-    <div class="col-md-4">
-      <div class="card campaign-card">
-        <img src="${firstImage}" class="campaign-image" alt="${
+        <div class="col-md-4">
+          <div class="card campaign-card">
+            <img src="${firstImage}" class="campaign-image" alt="${
           campaign.title || "بدون عنوان"
         }">
-        <div class="card-body">
-          <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
-          <p class="card-text text-muted">دسته‌بندی: ${
-            campaign.category || "بدون توضیحات"
-          }</p>
-          <p class="card-text"><strong>توضیحات:</strong> ${description}</p>
-          <p class="school-name">مدرسه: ${schoolName}</p>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
-              <span>${progressPercentage}%</span>
+            <div class="card-body">
+              <h5 class="card-title">${campaign.title || "بدون عنوان"}</h5>
+              <p class="card-text text-muted">دسته‌بندی: ${
+                campaign.category || "بدون توضیحات"
+              }</p>
+              <p class="card-text"><strong>توضیحات:</strong> ${description}</p>
+              <p class="school-name">مدرسه: ${schoolName}</p>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100">
+                  <span>${progressPercentage}%</span>
+                </div>
+              </div>
+              <div class="amount-info mt-3">
+                <p><strong>${collectedMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
+              </div>
+              <div class="d-flex justify-content-between mt-3">
+                <button class="btn btn-donate">کمک کردن</button>
+                <a href="detailsChampain.html?id=${
+                  campaign.id
+                }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
+              </div>
             </div>
           </div>
-          <div class="amount-info mt-3">
-            <p><strong>${collectedMoney.toLocaleString()} تومان از ${estimatedMoney.toLocaleString()} تومان</strong></p>
-          </div>
-          <div class="d-flex justify-content-between mt-3">
-            <button class="btn btn-donate">کمک کردن</button>
-            <a href="detailsChampain.html?id=${
-              campaign.id
-            }" class="btn btn-outline-primary btn-champain-details">جزئیات بیشتر</a>
-          </div>
         </div>
-      </div>
-    </div>
-  `;
+      `;
       }
 
       // تابع برای به‌روزرسانی صفحه‌بندی
@@ -627,7 +647,6 @@
         }
       });
     </script>
-
     <!-- اسکریپت فیلتر قیمت  -->
     <!-- <script>
       document.addEventListener("DOMContentLoaded", function () {

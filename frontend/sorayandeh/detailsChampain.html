@@ -146,7 +146,10 @@
 
       #school-address {
         font-size: 14px;
-        color: #555;
+      }
+
+      .value {
+        color: #555 !important;
       }
     </style>
   </head>
@@ -285,28 +288,30 @@
                 <h1 id="campaign-title" class="card-title">
                   در حال بارگذاری...
                 </h1>
+                <p id="campaign-category" class="text-muted">
+                  دسته‌بندی: <span id="category-name">در حال بارگذاری...</span>
+                </p>
+
                 <!-- بخش جدید: آدرس مدرسه -->
                 <div class="mb-3">
                   <div id="school-info">
                     <p>
-                      <strong>مدرسه:</strong> <span id="school-name"></span>
+                      <strong>مدرسه:</strong>
+                      <span id="school-name" class="value"></span>
                     </p>
                     <!-- عبارت "مدرسه:" ثابت است -->
                     <p>
-                      <strong>آدرس:</strong> <span id="school-address"></span>
+                      <strong>آدرس:</strong>
+                      <span id="school-address" class="value"></span>
                     </p>
                     <!-- عبارت "آدرس:" ثابت است -->
                   </div>
                 </div>
 
-                <p id="campaign-category" class="text-muted">
-                  دسته‌بندی: <span id="category-name">در حال بارگذاری...</span>
-                </p>
-
                 <div id="campaign-description-container">
                   <p>
                     <strong>توضیحات:</strong>
-                    <span id="campaign-description"></span>
+                    <span id="campaign-description" class="value"></span>
                   </p>
                 </div>
               </div>
@@ -324,7 +329,7 @@
 
             <!-- بخش کمک کردن -->
             <div class="donation-section">
-              <h5>کمک به این کمپین</h5>
+              <h5 id="donation-title">کمک به این کمپین</h5>
               <form id="donation-form">
                 <input
                   type="hidden"
@@ -521,12 +526,18 @@
         campaignIdInput.value = campaignId;
 
         // ارسال درخواست به سرور برای دریافت اطلاعات کمپین
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        // اگر توکن وجود داشت، آن را به هدر اضافه کنید
+        if (accessToken) {
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
+
         fetch(`${BASE_URL}campaigns/singe_campaign/`, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
+          headers: headers,
           body: JSON.stringify({ campaign_id: campaignId }),
         })
           .then((response) => {
@@ -568,6 +579,12 @@
         const donationForm = document.getElementById("donation-form");
         donationForm.addEventListener("submit", function (event) {
           event.preventDefault();
+
+          // بررسی وجود توکن
+          if (!accessToken) {
+            alert("لطفاً ابتدا وارد حساب کاربری خود شوید.");
+            return; // از ادامه فرآیند جلوگیری می‌کند
+          }
 
           const amount = donationAmountInput.value.replace(/,/g, "");
           const campaignId = campaignIdInput.value;
@@ -636,7 +653,7 @@
             ? 0
             : parseFloat(campaign.steel_needed_money);
         const estimatedMoney = parseFloat(campaign.estimated_money);
-        const collectedMoney = estimatedMoney - steelNeededMoney;
+        const collectedMoney = (estimatedMoney - steelNeededMoney) / 10;
 
         // نمایش مبلغ جمع‌آوری‌شده
         const campaignRaisedAmount = document.getElementById(
@@ -698,14 +715,16 @@
           campaignGallery.innerHTML = campaign.gallery
             .map(
               (image) => `
-      <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
-    `
+        <img src="${BASE_URL}media/${image}" class="img-thumbnail" alt="تصویر کمپین" />
+      `
             )
             .join("");
         } else {
           campaignGallery.innerHTML = "<p>هیچ تصویری وجود ندارد.</p>";
         }
-
+        // تغییر متن "کمک به این کمپین" به "کمک به کمپین {نام کمپین}"
+        const donationTitle = document.getElementById("donation-title");
+        donationTitle.textContent = `کمک به کمپین ${campaign.title}`;
         // ذخیره‌سازی نام کمپین در localStorage
         localStorage.setItem("campaign_name", campaign.title);
       }
