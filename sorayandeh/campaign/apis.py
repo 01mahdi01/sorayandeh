@@ -9,7 +9,7 @@ from drf_spectacular.utils import extend_schema
 from .models import Campaign, Participants, CampaignCategory
 from .services import create_campaign, contribute
 from rest_framework.pagination import PageNumberPagination
-from sorayandeh.users.documents import YourModelDocument
+from sorayandeh.users.documents import CampaignDocument
 from elasticsearch_dsl import Q
 from django.core.files.storage import default_storage
 import os
@@ -150,11 +150,11 @@ class SearchCampaignBySchool(APIView):
         from_value = (page - 1) * page_size
 
         # Get total count first
-        total_count = YourModelDocument.search().query(query).count()
+        total_count = CampaignDocument.search().query(query).count()
         total_pages = (total_count + page_size - 1) // page_size
 
         # Elasticsearch query with pagination
-        results = YourModelDocument.search().query(query).sort("id").extra(size=page_size, from_=from_value).execute()
+        results = CampaignDocument.search().query(query).sort("id").extra(size=page_size, from_=from_value).execute()
         campaigns_ids = [result.meta.id for result in results]
 
         # Fetch campaigns from DB
