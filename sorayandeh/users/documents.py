@@ -24,5 +24,5 @@ class YourModelDocument(Document):
     def get_instances_from_related(cls, related_instance):
         """Reindex related campaigns when a School is updated."""
         if isinstance(related_instance, School):
-            return list(related_instance.campaigns.all())  # Convert queryset to list (FIX)
+            return list(related_instance.campaign_set.all())  # Convert queryset to list (FIX)
         return None
