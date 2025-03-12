@@ -1,5 +1,8 @@
 from symtable import Class
 
+from django.db.models import Sum
+
+from sorayandeh.finance.models import FinancialLogs
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
@@ -13,6 +16,8 @@ from sorayandeh.users.documents import YourModelDocument
 from elasticsearch_dsl import Q
 from django.core.files.storage import default_storage
 import os
+
+from .. import campaign
 
 
 class CreateCampaign(APIView):
@@ -228,6 +233,7 @@ class GetSingleCampaign(APIView):
         serializer.is_valid(raise_exception=True)
         campaign_id = serializer.validated_data["campaign_id"]
         campaign = Campaign.objects.select_related("category", "school").get(pk=campaign_id)
+        update_still_needed_money(campaign=campaign)
         return Response(self.OutputGetSingleCampaignSerializer(campaign).data)
 
 @permission_classes([AllowAny])
@@ -241,3 +247,19 @@ class GetCategories(APIView):
         categories = CampaignCategory.objects.all()
         print(categories)
         return Response(self.OutputGetCategoriesSerializer(categories, many=True).data)
+
+
+def update_still_needed_money(campaign):
+    result = FinancialLogs.objects.filter(
+        campaign=campaign.id,
+        status="ok"
+    ).select_related("transaction").aggregate(Sum('transaction__amount'))
+
+    # If there are no records, result['transaction__amount__sum'] will be None
+    if result['transaction__amount__sum'] is not None:
+        campaign.steel_needed_money = result['transaction__amount__sum']
+        # Continue with the logic for when records are found
+    else:
+        # Do nothing or handle the case where no records are found
+        pass
+

@@ -50,10 +50,6 @@ class RequestPaymentUrl(APIView):
             amount=amount, callback_url=callback_url, user=user, campaign=campaign, request=request
         )
 
-        # d = {}
-
-        # for k, v in params.items():
-        #     d["name"] = value
 
         return Response(response_url)
 
