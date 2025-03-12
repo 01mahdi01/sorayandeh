@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from drf_spectacular.utils import extend_schema
 from .models import Campaign, Participants, CampaignCategory
-from .services import create_campaign, contribute
+from .services import create_campaign, contribute, update_still_needed_money
 from rest_framework.pagination import PageNumberPagination
 from sorayandeh.users.documents import YourModelDocument
 from elasticsearch_dsl import Q
@@ -250,22 +250,3 @@ class GetCategories(APIView):
         return Response(self.OutputGetCategoriesSerializer(categories, many=True).data)
 
 
-def update_still_needed_money(campaign):
-    with transaction.atomic():
-        # Lock the campaign row for update
-        campaign = Campaign.objects.select_for_update().get(pk=campaign.id)
-
-        # Sum the transaction amounts where status = "ok"
-        result = FinancialLogs.objects.filter(
-            campaign=campaign.id,
-            status="ok"
-        ).select_related("transaction").annotate(
-            amount_integer=Cast('transaction__amount', models.IntegerField())
-        ).aggregate(total_amount=Sum('amount_integer'))
-
-        # If no matching records, total_amount will be None, so default to 0
-        total_amount = result['total_amount'] if result['total_amount'] is not None else 0
-
-        # Update the steel_needed_money field
-        campaign.steel_needed_money = campaign.estimated_money - total_amount
-        campaign.save()
