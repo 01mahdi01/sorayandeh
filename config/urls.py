@@ -10,13 +10,13 @@ from drf_spectacular.views import (
 from azbankgateways.urls import az_bank_gateways_urls
 
 urlpatterns = [
-    path("schema/", SpectacularAPIView.as_view(api_version="v1"), name="schema"),
-    path("", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
-    path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
-    path('admin/', admin.site.urls),
-    path('users/', include(("sorayandeh.users.urls", 'users'))),
-    path('applicant/', include(("sorayandeh.applicant.urls", 'applicant'))),
-    path('campaigns/', include(("sorayandeh.campaign.urls", 'campaigns'))),
-    path('finance/', include(("sorayandeh.finance.urls", 'finance'))),
-    path("bankgateways/", az_bank_gateways_urls()),
+    path("api/schema/", SpectacularAPIView.as_view(api_version="v1"), name="schema"),
+    path("api/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path('api/admin/', admin.site.urls),
+    path('api/users/', include(("sorayandeh.users.urls", 'users'))),
+    path('api/applicant/', include(("sorayandeh.applicant.urls", 'applicant'))),
+    path('api/campaigns/', include(("sorayandeh.campaign.urls", 'campaigns'))),
+    path('api/finance/', include(("sorayandeh.finance.urls", 'finance'))),
+    path("api/bankgateways/", az_bank_gateways_urls()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
