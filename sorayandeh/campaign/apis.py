@@ -2,7 +2,7 @@ from symtable import Class
 
 from django.db.models import Sum
 from django.db.models.functions import Cast
-from django.db import models
+from django.db import models, transaction
 from sorayandeh.finance.models import FinancialLogs
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
@@ -251,18 +251,19 @@ class GetCategories(APIView):
 
 
 def update_still_needed_money(campaign):
-    result = FinancialLogs.objects.filter(
-        campaign=campaign.id,
-        status="ok"
-    ).select_related("transaction").annotate(
-        amount_integer=Cast('transaction__amount', models.IntegerField())
-    ).aggregate(Sum('amount_integer'))
+    with transaction.atomic():
+        # Lock the campaign row for update
+        campaign = Campaign.objects.select_for_update().get(pk=campaign.id)
 
-    # If there are no records, result['transaction__amount__sum'] will be None
-    if result['amount_integer__sum'] is not None:
-        campaign.steel_needed_money = campaign.estimated_money - result['amount_integer__sum']
-        # Continue with the logic for when records are found
-    else:
-        # Do nothing or handle the case where no records are found
-        pass
+        # Sum the transaction amounts
+        result = FinancialLogs.objects.filter(
+            campaign=campaign.id,
+            status="ok"
+        ).select_related("transaction").annotate(
+            amount_integer=Cast('transaction__amount', models.IntegerField())
+        ).aggregate(Sum('amount_integer'))
 
+        # If there are valid transaction amounts, update the campaign
+        if result['amount_integer__sum'] is not None:
+            campaign.steel_needed_money = campaign.estimated_money - result['amount_integer__sum']
+            campaign.save()
