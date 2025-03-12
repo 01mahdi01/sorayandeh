@@ -257,7 +257,7 @@ def update_still_needed_money(campaign):
 
     # If there are no records, result['transaction__amount__sum'] will be None
     if result['transaction__amount__sum'] is not None:
-        campaign.steel_needed_money = result['transaction__amount__sum']
+        campaign.steel_needed_money = campaign.estimated_money - result['transaction__amount__sum']
         # Continue with the logic for when records are found
     else:
         # Do nothing or handle the case where no records are found
