@@ -1,6 +1,9 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Sum
+from django.db.models.functions import Cast
+from django.db import models, transaction
+from sorayandeh.finance.models import FinancialLogs
 from .models import Campaign,Participants,CampaignCategory
 from sorayandeh.applicant.models import School
 import os

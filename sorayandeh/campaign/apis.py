@@ -1,9 +1,6 @@
 from symtable import Class
 
-from django.db.models import Sum
-from django.db.models.functions import Cast
-from django.db import models, transaction
-from sorayandeh.finance.models import FinancialLogs
+
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
