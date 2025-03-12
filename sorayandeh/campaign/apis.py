@@ -251,7 +251,7 @@ class GetCategories(APIView):
 
 def update_still_needed_money(campaign):
     result = FinancialLogs.objects.filter(
-        campaign=campaign.id,
+        campaign=campaign,
         status="ok"
     ).select_related("transaction").aggregate(Sum('transaction__amount'))
 
