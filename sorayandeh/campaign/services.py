@@ -1,3 +1,5 @@
+from datetime import timezone, timedelta
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
@@ -100,13 +102,13 @@ def update_still_needed_money(campaign):
         campaign = Campaign.objects.select_for_update().get(pk=campaign.id)
 
         # Sum the transaction amounts where status = "ok"
-        result = FinancialLogs.objects.filter(
+        result = FinancialLogs.objects.select_related("transaction").filter(
             campaign=campaign.id,
-            status="ok"
-        ).select_related("transaction").annotate(
+            status__in=["ok", "pending"],
+            transaction__created_at__lt=timezone.now() - timedelta(minutes=10)  # Corrected syntax
+        ).annotate(
             amount_integer=Cast('transaction__amount', models.IntegerField())
         ).aggregate(total_amount=Sum('amount_integer'))
-
         # If no matching records, total_amount will be None, so default to 0
         total_amount = result['total_amount'] if result['total_amount'] is not None else 0
 
