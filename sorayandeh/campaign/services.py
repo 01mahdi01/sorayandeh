@@ -103,7 +103,7 @@ def update_still_needed_money(campaign):
         ten_minutes_ago = timezone.now() - timedelta(minutes=10)
         # Sum the transaction amounts where status = "ok"
         result = FinancialLogs.objects.select_related("transaction").filter(
-            Q(status="ok") | Q(status="pending", transaction__created_at__gte=ten_minutes_ago)  # Apply OR condition
+            Q(status="ok") | Q(status="Pending", transaction__created_at__gte=ten_minutes_ago)  # Apply OR condition
         ).annotate(
             amount_integer=Cast('transaction__amount', models.IntegerField())
         ).aggregate(total_amount=Sum('amount_integer'))
