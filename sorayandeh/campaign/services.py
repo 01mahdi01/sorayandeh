@@ -2,7 +2,7 @@ from datetime import timezone, timedelta
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.db.models.functions import Cast
 from django.db import models, transaction
 from sorayandeh.finance.models import FinancialLogs
@@ -100,12 +100,10 @@ def update_still_needed_money(campaign):
     with transaction.atomic():
         # Lock the campaign row for update
         campaign = Campaign.objects.select_for_update().get(pk=campaign.id)
-
+        ten_minutes_ago = timezone.now() - timedelta(minutes=10)
         # Sum the transaction amounts where status = "ok"
         result = FinancialLogs.objects.select_related("transaction").filter(
-            campaign=campaign.id,
-            status__in=["ok", "pending"],
-            transaction__created_at__lt=timezone.now() - timedelta(minutes=10)  # Corrected syntax
+            Q(status="ok") | Q(status="pending", transaction__created_at__gte=ten_minutes_ago)  # Apply OR condition
         ).annotate(
             amount_integer=Cast('transaction__amount', models.IntegerField())
         ).aggregate(total_amount=Sum('amount_integer'))
